@@ -1,5 +1,5 @@
 {
-  "name": "panjai",
+  "name": "project_implement_override",
   "version": "1.0.0",
   "description": "- Keep time - Keep time - Keep time",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/opendream/punjai.git"
+    "url": "https://github.com/opendream/project_implement_override.git"
   },
   "author": "Opendream",
   "license": "Opendream",
   "bugs": {
-    "url": "https://github.com/opendream/punjai/issues"
+    "url": "https://github.com/opendream/project_implement_override/issues"
   },
-  "homepage": "https://github.com/opendream/punjai",
+  "homepage": "https://github.com/opendream/project_implement_override",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.1.0",
