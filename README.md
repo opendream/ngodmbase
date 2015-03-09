@@ -1,6 +1,5 @@
 ### setup
 
-    cd static
     mkdir -p static/app
     cd static/app
 
