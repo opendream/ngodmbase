@@ -23,6 +23,6 @@ gulp.task('watch', function() {
   gulp.watch('static/app/**/*.scss', ['styles']);
 });
 
-gulp.task('default', ['watch'], function() {
+gulp.task('default', ['styles', 'watch'], function() {
 
 });
