@@ -1,0 +1,53 @@
+@import "../../odmbase/common/mixin";
+
+.modal-title {
+	@include thaisans-reg;
+  font-size: 20px; 
+}
+
+// Form signin / register
+
+.btn-facebook {
+	@include thaisans-reg;
+	@include border-box;
+	width: 120px;
+	height: 31px;
+	border: 1px solid #849ACA;
+	border-radius: 2px;
+	padding: 2px 15px;
+	margin-top: 10px;
+	font-size: 13px;
+	.fa {
+		color: #fff;
+		position: absolute;
+		right: 2px;
+		bottom: -2px;
+		font-size: 18px;
+	}
+}
+
+.icon-fb-wrapper {
+	display: inline-block;
+	width: 19px;
+	height: 19px;
+	background-color: #3c5998;
+	position: relative;
+	border-radius: 2px;
+	top: 3px;
+}
+
+.account-action {
+	padding: 25px 0 50px;
+	.form-control {
+		background-color: #f5e0e2;
+		border: 0;
+		box-shadow: none;
+		background-position: 99% 50% !important;
+	}
+}
+
+.submit-group {
+	text-align: right;
+}
+
+.modal-signup { margin-top: 22px;}

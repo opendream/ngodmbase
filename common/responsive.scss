@@ -1,0 +1,27 @@
+@media screen and (max-width : 991px) {
+  /* TODO move to custom dir */
+  .circle {
+    .amount { margin-top: 10%; }
+  }
+}
+@media screen and (max-width : 767px) {
+  .banner {
+    background: none;
+    height: auto;
+  }
+}
+@media screen and (max-width : 736px) {
+  .item {
+    width: 50%;
+  }
+  /* TODO move to custom dir */
+  .product-amount {
+    .amount { font-size: 2.25em; }
+    .unit { margin-top: 60%; }
+  }
+}
+@media screen and (max-width: 480px) {
+  .item {
+      width: 100%;
+  }
+}

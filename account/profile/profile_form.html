@@ -1,0 +1,162 @@
+      <form class="form-horizontal row edit-profile" name="form" ng-submit="changeProfile(form)" novalidate>
+
+        <div class="col-sm-3 col-left"> <!-- wrapper -->
+
+          <div class="form-group action-picture" ng-class="{ 'has-success': form.image.$valid && (submitted || form.image.$dirty),
+                                              'has-error': form.image.$invalid && (submitted || form.image.$dirty) }">
+            
+            <label class="lead">รูปโปรไฟล์</label> 
+
+            <div ng-file-drop name="image" class="picture-area" drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false">
+   
+              <div class="film">
+                <div name="image" class="button upload-image" ng-file-select drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false">
+                  <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                  <span class="text-block">กดเลือกไฟล์ <br/>เพื่ออัพโหลด</span>
+                </div>
+              </div> <!-- action-image -->
+  
+              <!-- fake input -->
+  
+              <span class="picture">
+                <img ng-show="!user.imageDataUrl" ng-src="{{ user.getImage() }}"/>
+                <img ng-show="user.imageDataUrl" ng-src="{{ user.imageDataUrl }}"/>
+              </span>
+  
+            </div> <!-- End picture area -->
+  
+            <div name="image" class="button drop-image hidden-xs" ng-file-drop drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false"><span>หรือ <br />ลากไฟล์รูปมาวางที่นี่ <br />เพื่อเปลี่ยนรูป</span></div>
+            <a class="btn btn-default use-default-image" ng-show="user.image || user.imageDataUrl" href="" ng-click="removeImage()">หรือ กดเพื่อใช้รูปตั้งต้น</a>
+  
+          </div> <!-- End action picture -->
+
+        </div> <!-- End col-left -->
+
+        <div class="col-sm-8 col-sm-offset-1 col-right"> <!-- col-right -->
+
+          <label class="lead">ข้อมูลทั่วไป</label>
+
+          <div class="form-group" ng-class="{ 'has-success': form.first_name.$valid && submitted,
+                                              'has-error': form.first_name.$invalid && submitted }">
+            <label class="col-sm-4 control-label">ชื่อ</label>
+            <div class="col-sm-8">
+              <input type="text" name="first_name" class="form-control" ng-model="user.first_name"
+                   required/>
+            </div>
+            <p class="help-block" ng-show="form.first_name.$error.required && submitted">
+              จำเป็นต้องกรอก
+            </p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-success': form.last_name.$valid && submitted,
+                                              'has-error': form.last_name.$invalid && submitted }">
+            <label class="col-sm-4 control-label">นามสกุล</label>
+            <div class="col-sm-8">
+              <input type="text" name="last_name" class="form-control" ng-model="user.last_name"
+                   required/>
+            </div>       
+            <p class="help-block" ng-show="form.last_name.$error.required && submitted">
+              จำเป็นต้องกรอก
+            </p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-success': form.email.$valid && submitted,
+                                              'has-error': form.email.$invalid && submitted }">
+            <label class="col-sm-4 control-label">อีเมล</label>
+            <div class="col-sm-8">
+              <input type="text" name="email" class="form-control" ng-model="user.email" required/>
+            </div>  
+            <p class="help-block" ng-show="form.email.$error.required && submitted">
+              จำเป็นต้องกรอก
+            </p>
+          </div>
+
+          <div class="form-group" ng-class="{ 'has-success': form.address.$valid && submitted,
+                                              'has-error': form.address.$invalid && submitted }">
+            <label class="col-sm-4 control-label">ที่อยู่</label>
+            <div class="col-sm-8">
+              <textarea type="text" name="address" class="form-control" ng-model="user.address"/>
+            </div>
+            <p class="help-block" ng-show="form.address.$error.required && submitted">
+              จำเป็นต้องกรอก
+            </p>
+          </div>
+  
+          <div class="form-group" ng-class="{ 'has-success': form.phone.$valid && submitted,
+                                              'has-error': form.phone.$invalid && submitted }">
+            <label class="col-sm-4 control-label">เบอร์โทรศัพท์</label>
+            <div class="col-sm-8">
+              <input type="text" name="phone" class="form-control" ng-model="user.phone"/>
+            </div>
+            <p class="help-block" ng-show="form.phone.$error.required && submitted">
+              จำเป็นต้องกรอก
+            </p>
+          </div>
+  
+          <div class="form-group form-item-last"ng-class="{ 'has-success': form.description.$valid && submitted,
+                                              'has-error': form.description.$invalid && submitted }">
+            <label class="col-sm-4 control-label">อธิบายสั้นๆ เกี่ยวกับตัวคุณ</label>
+            <div class="col-sm-8">
+              <textarea type="text" name="description" class="form-control" ng-model="user.description" />
+            </div>          
+          </div>
+
+          <fieldset>
+
+            <label class="lead">บัญชีธนาคาร</label>
+
+            <div class="form-group" ng-class="{ 'has-success': form.bank_number.$valid && submitted,
+                                                'has-error': form.bank_number.$invalid && submitted }">
+              <label class="col-sm-4 control-label">เลขที่บัญชี</label>
+              <div class="col-sm-8">
+                <input type="text" name="bank_number" class="form-control" ng-model="user.bank_number"/>
+              </div>       
+              <p class="help-block" ng-show="form.bank_number.$error.required && submitted">
+                จำเป็นต้องกรอก
+              </p>
+            </div>
+  
+            <div class="form-group" ng-class="{ 'has-success': form.bank_name.$valid && submitted,
+                                                'has-error': form.bank_name.$invalid && submitted }">
+              <label class="col-sm-4 control-label">ชื่อธนาคาร</label>
+              <div class="col-sm-8">
+                <input type="text" name="bank_name" class="form-control" ng-model="user.bank_name"/>
+              </div>       
+              <p class="help-block" ng-show="form.bank_name.$error.required && submitted">
+                จำเป็นต้องกรอก
+              </p>
+            </div>
+  
+            <div class="form-group" ng-class="{ 'has-success': form.bank_user_name.$valid && submitted,
+                                                'has-error': form.bank_user_name.$invalid && submitted }">
+              <label class="col-sm-4 control-label">ชื่อบัญชี</label>
+              <div class="col-sm-8">
+                <input type="text" name="bank_user_name" class="form-control" ng-model="user.bank_user_name"/>
+              </div>       
+              <p class="help-block" ng-show="form.bank_user_name.$error.required && submitted">
+                จำเป็นต้องกรอก
+              </p>
+            </div>
+  
+            <div class="form-group form-item-last" ng-class="{ 'has-success': form.bank_branch.$valid && submitted,
+                                                'has-error': form.bank_branch.$invalid && submitted }">
+              <label class="col-sm-4 control-label">สาขา</label>
+              <div class="col-sm-8">
+                <input type="text" name="bank_branch" class="form-control" ng-model="user.bank_branch"/>
+              </div>       
+              <p class="help-block" ng-show="form.bank_branch.$error.required && submitted">
+                จำเป็นต้องกรอก
+              </p>
+            </div>
+  
+          </fieldset>
+
+          <div class="row">
+            <button class="btn-add-to-cart col-xs-12" type="submit">
+              บันทึก
+            </button>
+          </div>
+
+        </div>  <!-- End col-right -->
+
+      </form>

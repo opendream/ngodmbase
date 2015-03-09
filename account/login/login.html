@@ -1,0 +1,50 @@
+
+<div class="modal-container">
+  <div class="row">
+    <div class="form-group has-error col-md-5 col-md-offset-2">
+      <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
+         กรุณากรอกอีเมลและรหัสผ่าน
+      </p>
+      <p class="help-block" ng-show="form.email.$error.email && submitted">
+         อีเมลไม่ถูกต้อง
+      </p>
+
+      <p class="help-block">{{ errors.other }}</p>
+    </div>
+
+    <div class="col-sm-12">
+      <form class="form-horizontal" name="form" ng-submit="login(form)" novalidate>
+
+        <div class="form-group row">
+          <label class="col-sm-3 control-label" for="formGroupInputLarge">อีเมล</label>
+          <div class="col-sm-7">
+            <input type="email" name="email" class="form-control" ng-model="user.email" required>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 control-label">รหัสผ่าน</label>
+          <div class="col-sm-7">
+            <input type="password" name="password" class="form-control" ng-model="user.password" required>
+          </div>
+        </div>
+
+        <div class="row submit-group">
+          <div class="col-sm-3 col-sm-offset-7">
+            <button class="btn-add-to-cart btn-green btn-login" type="submit">
+              เข้าสู่ระบบ
+            </button>
+          </div>
+
+          <div class="col-sm-3 col-sm-offset-7">
+            <a class="btn btn-facebook" href="" ng-click="socialSign('facebook')">
+              เชื่อมต่อกับ <span class="icon-fb-wrapper"><i class="fa fa-facebook"></i></span>
+            </a>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

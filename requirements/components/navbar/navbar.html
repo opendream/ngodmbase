@@ -1,0 +1,41 @@
+<div class="navbar navbar-static-top my-nav" ng-controller="NavbarCtrl">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">Panjai</a>
+    </div>
+    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav">
+        <li ng-show="isStaff()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="" ng-click="modal.open('/static/app/odmbase/account/modal/signup_modal.html')">สมัครสมาชิก</a></li>
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}" ><a href="" ng-click="modal.open('/static/app/odmbase/account/modal/login_modal.html')">เข้าสู่ระบบ</a></li>
+
+        <li ng-show="isLoggedIn()" >
+          <a class="gravatar" href="/profile">
+              <span class="img-avatar-small-border circle">
+                <img class="img-avatar-small" ng-style="{'background-image': 'url(' + getCurrentUser().getImage() + ')'}">
+              </span>
+
+              <span class="unicode-string">{{ getCurrentUser().unicode_string }}</span>
+          </a>
+        </li>
+        <!-- <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li> -->
+        <li class="last"><a class="menu-cart" href="/cart" ><span class="text-cart">ตะกร้าปันใจ</span> <span ng-show="cart.getItems().length" class="badge">{{ cart.getItems().length }}</span></a></li>
+        <li class="last" ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()">ออกจากระบบ</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+
+

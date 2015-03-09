@@ -1,0 +1,68 @@
+.navbar-brand {
+	display: block;
+	background: url(/static/images/logo-punjai.png) no-repeat 15px;
+	height: 65px;
+	width: 160px;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+.my-nav{
+	padding: 20px 0;
+	font-size: 1.1em;
+}
+.my-nav li {
+	border-right: 1px solid #999;
+}
+.my-nav li.last {
+	border: 0;
+}
+.my-nav a {
+	color: #999999;
+	padding: 3px 15px !important;
+	line-height: 30px !important;
+}
+.my-nav a:hover {
+	color: #000;
+}
+.text-cart {
+	display: block;
+	background: url(/static/images/ic-cart.png) no-repeat left bottom;
+	height: 25px;
+	width: 17px;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+.menu-cart {
+	position: relative;
+}
+.badge {
+	background-color: #b5be00;
+	position: absolute;
+	right: 0;
+	top: 0px;
+}
+.nav>li>a:hover, .nav>li>a:focus {
+	background-color: transparent;
+}
+.img-avatar-small-border {
+    width: 34px;
+	height: 34px;
+    display: block;
+   	border: 1px solid #E6BBC0;
+	padding: 1px;
+	float: left;
+
+}
+.img-avatar-small {
+	width: 30px;
+	height: 30px;
+	display: block;
+    background-size: cover;
+    background-position: center;
+}
+
+.gravatar span.unicode-string {
+	float: left;
+	margin-left: 10px;
+	line-height: 34px;
+}

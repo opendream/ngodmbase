@@ -1,0 +1,94 @@
+<div class="form-group" ng-class="{ 'has-success': form[name].$valid && (submitted || form[name].$dirty),
+                                    'has-error': form[name].$invalid && (submitted || form[name].$dirty) }">
+  <label ng-if="label">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+
+  <div class="field-container">
+    <!-- text -->
+    <span ng-if="type=='text'">
+      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+    </span>
+
+    <!-- number -->
+    <span ng-if="type=='number'">
+      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" step="{{ step }}"/>
+      <span class="field-suffix" ng-if="suffix">{{ suffix }}</span>
+    </span>
+
+    <!-- text editor -->
+    <span ng-if="type=='text-angular'">
+      <div text-angular type="text" name="description" ng-model="model['description']" ng-required="required" ng-readonly="readonly" >
+      </div>
+    </span>
+
+    <span ng-if="type=='textarea'">
+      <textarea msd-elastic class="form-control" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      </textarea>
+    </span>
+
+    <span ng-if="type=='radio'">
+      <span class="radio" ng-repeat="option in options track by $index">
+        <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ option.key }}" value="{{  option.key }}" ng-required="!model[name]"/>
+        <label for="radio-{{ name }}-{{ option.key }}">{{  option.value }}</label>
+      </span>
+    </span>
+
+    <span ng-if="type=='select-reference'">
+      <select class="form-control" name="{{ name }}" ng-options="item.resource_uri as item.unicode_string for item in item_list" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      </select>
+    </span>
+
+    <span ng-if="type=='image-set'">
+        <!-- fake input -->
+      <input class="form-control" type="number" name="{{ name }}" min="1" ng-model="model[name].all.length" ng-show="false" required/>
+
+      <div class="product-form-edit-field-image">
+        <div class="product-form-edit-field-image-item" ng-repeat="image in imageList track by $index">
+          <div class="ratio-constraint" ng-class="{'has-image': image.data, '': !mage.data, 'has-add-image': $index==numImageFiles}">
+            <div class="img-bg">
+              <div ng-show="image.data" class="img-bg-img" ng-style="{'background-image': 'url(' + image.data.image_thumbnail_1x.url + ')'}">
+              </div>
+              <div ng-show="!image.data" class="img-bg-img">
+                <div class="img-bg-img-bg">
+
+                  <div ng-if="image.progressPercentage" class="progress-bar" ng-style="{'width': image.progressPercentage+'%'}">
+                  </div>
+                  <div  ng-if="image.progressPercentage" class="img-progress-percentage">
+                    {{ image.progressPercentage }}%
+                  </div>
+                </div>
+
+                <div ng-show="$index==numImageFiles" name="{{ nameItem }}" class="drop-image" ng-file-drop drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="true">
+                  <div name="{{ nameItem }}" class="select-image glyphicon" ng-file-select drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="true">
+                    <div class="glyphicon glyphicon-plus add-image-image"></div>
+                    <div class="add-image-label">เพิ่มภาพ</div>
+                  </div>
+                </div>
+
+              </div>
+              <span ng-show="image.data" class="remove-image glyphicon glyphicon-remove-sign" href="" ng-click="removeImage(image.data, $index)"></span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </span>
+
+  </div>
+
+  <p class="help-block" ng-show="help">
+      {{ help }}
+  </p>
+  <p class="help-block" ng-show="form[name].$error.required && (submitted || form[name].$dirty)">
+    {{ label }} จำเป็นต้องกรอก
+  </p>
+
+
+  <p class="help-block" ng-show="isNotValid && key != 'required' && key != 'mongoose' && (submitted || form[name].$dirty)" ng-repeat="(key, isNotValid) in form[name].$error">
+    {{ error[key] }}
+  </p>
+  <p class="help-block" ng-show="form[name].$error.mongoose">
+    {{ errors.title }}
+  </p>
+
+</div>
