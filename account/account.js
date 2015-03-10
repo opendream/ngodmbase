@@ -21,13 +21,13 @@ angular.module('odmbase')
       })
       .state('profile', {
         url: '/profile',
-        templateUrl: 'static/app/odmbase/account/profile/profile.html',
+        templateUrl: 'static/app/account/profile/profile.html',
         controller: 'ProfileCtrl',
         authenticate: true
       })
-//      .state('accountDetail', {
-//        url: '/:id',
-//        templateUrl: '/static/app/odmbase/account/detail/detail.html',
-//        controller: 'AccountDetailCtrl'
-//      });
+      .state('accountDetail', {
+        url: '/:id',
+        templateUrl: '/static/app/account/detail/detail.html',
+        controller: 'AccountDetailCtrl'
+      });
   }]);
