@@ -1,6 +1,6 @@
 .navbar-brand {
 	display: block;
-	background: url(/static/images/logo-punjai.png) no-repeat 15px;
+	background: url(/static/images/default/default.png) no-repeat 15px;
 	height: 65px;
 	width: 160px;
 	text-indent: -9999px;
@@ -24,17 +24,7 @@
 .my-nav a:hover {
 	color: #000;
 }
-.text-cart {
-	display: block;
-	background: url(/static/images/ic-cart.png) no-repeat left bottom;
-	height: 25px;
-	width: 17px;
-	text-indent: -9999px;
-	overflow: hidden;
-}
-.menu-cart {
-	position: relative;
-}
+
 .badge {
 	background-color: #b5be00;
 	position: absolute;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('punjai')
+angular.module('odmbase')
   .config(function ($stateProvider) {
     $stateProvider
       .state('main', {

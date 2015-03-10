@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('punjai')
+angular.module('project_implement_override')
   .controller('NavbarCtrl', ['$scope', '$location', 'Auth', 'ngCart', 'Modal', function ($scope, $location, Auth, ngCart, Modal) {
 
     $scope.modal = Modal;

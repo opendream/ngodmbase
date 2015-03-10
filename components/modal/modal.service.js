@@ -30,7 +30,7 @@ angular.module('odmbase')
   return modal;
 }]);
 
-angular.module('punjai').controller('ModalInstanceCtrl', function ($scope, $modalInstance, param) {
+angular.module('odmbase').controller('ModalInstanceCtrl', function ($scope, $modalInstance, param) {
   $scope.param = param || {};
 
   $scope.cancel = function () {
