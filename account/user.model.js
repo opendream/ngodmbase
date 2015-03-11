@@ -9,7 +9,7 @@ angular.module('odmbase')
       var buildModel = function (element) {
           element.getImage = function() {
              if (this.image) {
-               return this.image
+               return this.image_thumbnail_1x.url;
              }
              else {
                return 'http://www.gravatar.com/avatar/' + md5(this.email) + '?d=mm';
@@ -39,10 +39,6 @@ angular.module('odmbase')
       });
 
     });
-
-
-
-
 
     var user = restangular.service(modelName);
 
