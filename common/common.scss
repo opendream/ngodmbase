@@ -125,41 +125,7 @@ h2 strong {
 
 .banner {
   height: 400px;
-  background: url(/static/images/punjai-banner.png) no-repeat #e7bcc0 center;
-  background-size: auto 100%;
-}
-
-  /* TODO move to custom dir */
-.recommend-org {
-  .front-heading {
-    display: block;
-    width: 100px;
-    height: 67px;
-    margin: 40px auto;
-    text-indent: -999em;
-    overflow: hidden;
-    background: url(/static/images/recommend-heading.png) transparent no-repeat center;
-  }
-}
-/* TODO move to custom dir */
-.choose-org {
-  background-color: #E6E6E6;
-  .front-heading {
-    display: block;
-    width: 210px;
-    height: 72px;
-    margin: 40px auto;
-    margin-right: auto;
-    margin-left: auto;
-    text-indent: -999em;
-    overflow: hidden;
-    background: url(/static/images/choose-org-heading.png) transparent no-repeat center;
-  }
-  .more-org {
-    background-color: transparent;
-    margin-top: 20px;
-    margin-bottom: 30px;
-  }
+  background-color: #eeeeee;
 }
 
 img {
