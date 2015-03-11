@@ -21,14 +21,14 @@ angular.module('odmbase')
           step: '@',
           error: '=',
           suffix: '@',
-          options: '='
+          options: '=',
+          labelClass: '@',
+          fieldClass: '@',
+          helpClass: '@',
         },
         // TODO: split one file per one field type T_T
         controller: function($scope, $injector, $upload, Modal) {
-
-            //$scope.options = [{key: 'ems', value: 'ส่งไปรษณีย์'}, {key: 'promise', value: 'นัดรับของ'}];
-            console.log($scope.options);
-
+            
             if ($scope.type == 'text-angular') {
                 // Holy bug of text-angular
                $scope.model[$scope.name] = $scope.model[$scope.name] || "";
