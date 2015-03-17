@@ -19,6 +19,7 @@ body { background-color: red;}
 
 body {
 	background-color: #FFFFFF;
+  color: #666;
 }
 
 .container { margin-bottom: 50px; }
@@ -59,6 +60,7 @@ h2 strong {
 
 .page-title {
   font-size: 22px;
+  margin-bottom: 20px;
 }
 
 .navbar {
@@ -71,6 +73,16 @@ h2 strong {
   .icon-bar { background-color: #5f3c30; }
   .navbar-toggle { border: 1px solid #5f3c30; }
   .nav-right { margin-top: 10px; }
+}
+
+.badge {
+  @include border-box;
+  text-align: center;
+  font-weight: normal;
+  padding: 4px 0;
+  font-size: 9px;
+  width: 18px;
+  height: 18px;
 }
 
 .circles{
@@ -262,21 +274,6 @@ img {
   border-radius: 3px 0 0 3px;
 }
 
-/* TODO move to custom dir */
-.name-price {
-  display: table;
-  .listing-user,
-  .listing-price {
-    display: table-cell;
-    vertical-align: middle;
-  }
-}
-
-.quantity {
-  border-left: 1px solid #e7bcc0;
-  border-right: 1px solid #e7bcc0;
-}
-
 #loading-bar .bar {
   background: #E776C0;
 }
@@ -299,16 +296,28 @@ img {
   border-radius: 50%;
 }
 
+.btn-edit {
+  font-size: 15px;
+}
+
 button.btn-add-to-cart {
   border: 0;
 }
 
-button.btn-green {
-  @include border-box;
-  border: 0;
-  width: 120px;
+button.btn-green, button.btn-red {
+  min-width: 120px;
 }
 
+button {
+  @include border-box;
+  border: 0;
+}
+
+button.btn-delete {
+  width: 50px;
+  text-align: center;
+  padding: 10px 0;
+}
 
 
 
@@ -326,7 +335,10 @@ button.btn-green {
 	}
 }
 
-.help-block { font-size: 12px;}
+.help-block { 
+  font-size: 12px;
+  color: #b46d7b;
+}
 
 
 .item-head {
@@ -452,6 +464,12 @@ button.btn-green {
 	margin: -10px 0;
 }
 
+.product-item:hover {
+  .item-edit-link {
+    opacity: 1;
+  }
+}
+
 /* input form */
 input.form-control,
 textarea.form-control,
@@ -471,3 +489,65 @@ select.form-control {
   margin-right: 18px;
   color: #6f6f6f;
 }
+
+.radio, .checkbox {
+  margin: 0 0 15px;
+}
+
+.radio label, .checkbox label {
+  padding-left: 5px;
+}
+
+.radio input[type="radio"], 
+.radio-inline input[type="radio"], 
+.checkbox input[type="checkbox"], 
+.checkbox-inline input[type="checkbox"] {
+  margin-left: 0;
+  position: static;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+.fix-to-top {
+  position: fixed;
+  top: 0;
+}
+
+
+// Page Error
+.error-page {
+	color: #ddd;
+	text-align: center;
+	margin-bottom: 80px;
+	.page-title { font-size: 50px;}
+	.description { color: #ccc; font-size: 18px; letter-spacing: 1px;}
+	.btn { text-transform: uppercase;}
+}
+.big-text {
+	font-size: 110px;
+	text-transform: uppercase;
+}
+.error-number {
+	font-size: 270px;
+	line-height: 190px;
+	margin: 50px 0 20px;
+	&.icon-tools {
+		font-size: 190px;
+		margin: 20px;
+	}
+}
+
+@media (max-width: 480px) {
+	.error-page {
+		.page-title { font-size: 30px;}
+		.btn { margin-top: 10px; display: inline-block;}
+	}
+	.big-text { font-size: 50px;}
+	.error-number { font-size:100px; line-height: 80px;}
+	.error-number.icon-tools { font-size: 100px;}
+}
+
