@@ -250,6 +250,19 @@ angular.module('odmbase')
       return $cookieStore.get('key');
     };
 
+    Auth.getDetail = function (username, cb) {
+
+        if (!username && Auth.isLoggedIn) {
+                var user = Auth.getCurrentUser();
+                cb(user, true);
+        }
+        else {
+            User.one(username).get().then(function (user) {
+                cb(user, Auth.getCurrentUser().id == user.id);
+            });
+        }
+    }
+
     return Auth;
 
   }]);

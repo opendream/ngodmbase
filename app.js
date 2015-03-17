@@ -82,6 +82,14 @@ angular.module('odmbase', [
           $cookieStore.remove('key');
           return $q.reject(response);
         }
+        else if(response.status === 404) {
+          window.location = '/404';
+          return $q.reject(response);
+        }
+        else if (response.status === 500) {
+          window.location = '/500';
+          return $q.reject(response);
+        }
         else {
           return $q.reject(response);
         }
