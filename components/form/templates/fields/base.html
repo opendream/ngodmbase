@@ -1,8 +1,8 @@
 <div class="form-group" ng-class="{ 'has-success': form[name].$valid && (submitted || form[name].$dirty),
                                     'has-error': form[name].$invalid && (submitted || form[name].$dirty) }">
-  <label ng-if="label">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+  <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
 
-  <div class="field-container">
+  <div class="field-container" ng-class="fieldClass">
     <!-- text -->
     <span ng-if="type=='text'">
       <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
@@ -76,15 +76,15 @@
 
   </div>
 
-  <p class="help-block" ng-show="help">
+  <p class="help-block" ng-show="help" ng-class="helpClass">
       {{ help }}
   </p>
-  <p class="help-block" ng-show="form[name].$error.required && (submitted || form[name].$dirty)">
+  <p class="help-block" ng-show="form[name].$error.required && (submitted || form[name].$dirty)" ng-class="helpClass">
     {{ label }} จำเป็นต้องกรอก
   </p>
 
 
-  <p class="help-block" ng-show="isNotValid && key != 'required' && key != 'mongoose' && (submitted || form[name].$dirty)" ng-repeat="(key, isNotValid) in form[name].$error">
+  <p class="help-block" ng-show="isNotValid && key != 'required' && key != 'mongoose' && (submitted || form[name].$dirty)"  ng-class="helpClass" ng-repeat="(key, isNotValid) in form[name].$error">
     {{ error[key] }}
   </p>
   <p class="help-block" ng-show="form[name].$error.mongoose" ng-repeat="error in errors[name]">

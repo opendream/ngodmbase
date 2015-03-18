@@ -1,8 +1,8 @@
 @import "components/modal/modal.scss";
-
+@import "common/mixin";
 @import "common/common.scss";
 @import "common/responsive.scss";
-@import "common/mixin";
+
 
 /* TODO Move later to odmcommon */
 @import "../account/detail/detail.scss";

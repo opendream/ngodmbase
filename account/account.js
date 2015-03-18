@@ -25,9 +25,14 @@ angular.module('odmbase')
         controller: 'ProfileCtrl',
         authenticate: true
       })
-      //.state('accountDetail', {
-      //  url: '/:id',
-      //  templateUrl: '/static/app/account/detail/detail.html',
-      //  controller: 'AccountDetailCtrl'
-      //});
+      .state('me', {
+        url: '/me',
+        templateUrl: '/static/app/account/detail/detail.html',
+        controller: 'AccountDetailCtrl'
+      })
+      .state('accountDetail', {
+        url: '/:username',
+        templateUrl: '/static/app/account/detail/detail.html',
+        controller: 'AccountDetailCtrl'
+      });
   }]);

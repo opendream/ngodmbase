@@ -17,23 +17,9 @@
 	padding: 2px 15px;
 	margin-top: 10px;
 	font-size: 13px;
-	.fa {
-		color: #fff;
-		position: absolute;
-		right: 2px;
-		bottom: -2px;
-		font-size: 18px;
+	.icon-fb-wrapper {
+		top: 3px;
 	}
-}
-
-.icon-fb-wrapper {
-	display: inline-block;
-	width: 19px;
-	height: 19px;
-	background-color: #3c5998;
-	position: relative;
-	border-radius: 2px;
-	top: 3px;
 }
 
 .account-action {

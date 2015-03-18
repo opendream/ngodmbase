@@ -6,28 +6,28 @@ angular.module('odmbase')
         restrict: 'A',
         templateUrl: '/static/app/odmbase/components/form/templates/fields/base.html',
         scope: {
-            model: '=',
-            form: '=',
-            submitted: '=',
-            maxUploads: '@',
-            referenceModel: '@',
-            type: '@',
-            label: '@',
-            name: '@',
-            help: '@',
-            required: '=',
-            readonly: '=',
-            min: '@',
-            step: '@',
-            error: '=',
-            suffix: '@',
-            options: '='
+          model: '=',
+          form: '=',
+          submitted: '=',
+          maxUploads: '@',
+          referenceModel: '@',
+          type: '@',
+          label: '@',
+          name: '@',
+          help: '@',
+          required: '=',
+          readonly: '=',
+          min: '@',
+          step: '@',
+          error: '=',
+          suffix: '@',
+          options: '=',
+          labelClass: '@',
+          fieldClass: '@',
+          helpClass: '@'
         },
         // TODO: split one file per one field type T_T
         controller: function($scope, $injector, $upload, Modal) {
-
-            //$scope.options = [{key: 'ems', value: 'ส่งไปรษณีย์'}, {key: 'promise', value: 'นัดรับของ'}];
-            console.log($scope.options);
 
             if ($scope.type == 'text-angular') {
                 // Holy bug of text-angular
@@ -62,6 +62,17 @@ angular.module('odmbase')
                         $scope.imageList.push(imageData);
                     }
                 }
+                var removeImageClient = function (index) {
+                    $scope.imageList.splice(index, 1);
+                    $scope.imageList.push(null);
+                    $scope.numImageFiles--;
+
+                    if ($scope.model[$scope.name].all.length == 1) {
+                        $scope.model[$scope.name].all = [];
+                    } else {
+                        $scope.model[$scope.name].all.splice(index, 1);
+                    }
+                }
 
                 $scope.upload = function (files) {
 
@@ -86,7 +97,6 @@ angular.module('odmbase')
                                     evt.config.index = $scope.numImageFiles;
                                     $scope.numImageFiles++;
                                 }
-                                console.log(evt.loaded);
                                 $scope.imageList[evt.config.index] = {
                                     'progressPercentage': parseInt(100.0 * evt.loaded / evt.total)
                                 };
@@ -94,26 +104,27 @@ angular.module('odmbase')
                             }).success(function (data, status, headers, config) {
                                 $scope.model.image_set.all.push(data);
                                 $scope.imageList[config.index]['data'] = data;
-                            }).error(function () {
-                                // ??
+                            }).error(function (data, status, headers, config) {
+                                if (status == 413) {
+                                  // TODO: alert custom message
+                                }
+                                else {
+                                  // TODO: alert default message
+                                }
+                                removeImageClient(config.index)
+
                             });
                         }
                     }
                 };
 
+
+
                 $scope.removeImage = function (image, index) {
 
                     $scope.model.image_set.deleteImageSet.push(image);
+                    removeImageClient(index);
 
-                    $scope.imageList.splice(index, 1);
-                    $scope.imageList.push(null);
-                    $scope.numImageFiles--;
-
-                    if ($scope.model[$scope.name].all.length == 1) {
-                        $scope.model[$scope.name].all = [];
-                    } else {
-                        $scope.model[$scope.name].all.splice(index, 1);
-                    }
                 };
 
 
