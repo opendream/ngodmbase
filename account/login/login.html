@@ -1,15 +1,23 @@
 
 <div class="modal-container">
   <div class="row">
-    <div class="form-group has-error col-md-5 col-md-offset-2">
-      <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
-         กรุณากรอกอีเมลและรหัสผ่าน
-      </p>
-      <p class="help-block" ng-show="form.email.$error.email && submitted">
-         อีเมลไม่ถูกต้อง
-      </p>
+    <div class="form-group has-error col-sm-7 col-sm-offset-3">
 
-      <p class="help-block">{{ errors.other }}</p>
+      <div class="alert alert-danger" role="alert" ng-show="form.email.$error.required && form.password.$error.required && submitted">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+         กรุณากรอกอีเมลและรหัสผ่าน
+      </div>
+
+      <div class="alert alert-danger" role="alert" ng-show="form.email.$error.email && submitted">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+         อีเมลไม่ถูกต้อง
+      </div>
+
+      <div class="alert alert-danger" role="alert" ng-show="errors.other && submitted">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+         {{ errors.other }}
+      </div>
+
     </div>
 
     <div class="col-sm-12">
