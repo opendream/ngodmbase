@@ -16,9 +16,10 @@
               ใส่อีเมลไม่ถูกต้อง
             </p>
             <p class="help-block" ng-show="form.email.$error.required && submitted">
-              จำเป็นต้องกรอก            </p>
-            <p class="help-block" ng-show="form.email.$error.mongoose">
-              {{ errors.email }}
+              จำเป็นต้องกรอก
+            </p>
+            <p class="help-block" ng-show="errors.email.length" ng-repeat="error in errors.email">
+              {{ error }}
             </p>
           </div>  
         </div>
@@ -37,8 +38,8 @@
                ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
               กรุณาระบุอย่างน้อย 3 ตัวอักษร
             </p>
-            <p class="help-block" ng-show="form.password.$error.mongoose">
-              {{ errors.password }}
+            <p class="help-block" ng-show="errors.password.length" ng-repeat="error in errors.password">
+              {{ error }}
             </p>
           </div>  
         </div>
