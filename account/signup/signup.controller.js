@@ -14,7 +14,6 @@ angular.module('odmbase')
           if (err) {
             angular.forEach(err.data.error, function(message, field) {
               form[field].$setValidity('mongoose', false);
-              console.log(message);
               $scope.errors[field] = message;
             });
           } else {

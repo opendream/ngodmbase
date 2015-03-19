@@ -10,16 +10,13 @@
 	padding: 20px 0;
 	font-size: 1.1em;
 }
-.my-nav li {
-	border-right: 1px solid #999;
-}
+
 .my-nav li.last {
 	border: 0;
 }
 .my-nav a {
-	color: #999999;
-	padding: 3px 15px !important;
-	line-height: 30px !important;
+	color: #999;
+	line-height: 30px;
 }
 .my-nav a:hover {
 	color: #000;

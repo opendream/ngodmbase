@@ -2,10 +2,12 @@
 
 angular
     .module('odmbase')
-    .factory('ProfileForm', ['$rootScope', 'User', 'Auth', '$upload', '$timeout', ProfileForm]);
+    .factory('ProfileForm', ['$rootScope', 'User', 'Auth', '$upload', '$timeout', '$location', ProfileForm]);
 
 
-function ProfileForm($scope, User, Auth, $upload, $timeout) {
+function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
+
+    $scope.redirectPath = '/me';
 
     var ProfileForm = {
         extraFields: [],
@@ -20,6 +22,20 @@ function ProfileForm($scope, User, Auth, $upload, $timeout) {
         },
         afterSave: function () {
             //implement me
+        },
+        afterConfirm: null,
+        defaultAfterConfirm: function () {
+            swal({
+                title: "บันทึกข้อมูลแล้ว",
+                confirmButtonText: 'คลิกเพื่อไปดูหน้าโปรไฟล์ของคุณ'
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $timeout(function () {
+                        $location.path($scope.redirectPath);
+                    }, 1);
+                }
+
+            });
         }
     };
 
@@ -36,7 +52,13 @@ function ProfileForm($scope, User, Auth, $upload, $timeout) {
         Auth.setCurrentUser(user);
         Auth.isLoggedInAsync(function(loggedIn) {
           $scope.submitted = false;
-          swal("บันทึกข้อมูลแล้ว")
+
+          if (ProfileForm.afterConfirm) {
+              ProfileForm.afterConfirm();
+          }
+          else {
+              ProfileForm.defaultAfterConfirm();
+          }
         });
     };
 
