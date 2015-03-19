@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Auth', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q', 'Facebook', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Facebook) {
+  .factory('Auth', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q', 'Facebook', '$interval', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Facebook, $interval) {
     var Auth = {};
-    var currentUser = {};
+    var currentUser = null;
     if($cookieStore.get('key')) {
       currentUser = User;
       User.one().me().then(function(model) {
@@ -200,7 +200,7 @@ angular.module('odmbase')
      * @return {Boolean}
      */
     Auth.isLoggedIn = function() {
-      return currentUser.hasOwnProperty('username');
+      return $cookieStore.get('key') && currentUser.hasOwnProperty('username');
     };
 
     /**
@@ -217,7 +217,7 @@ angular.module('odmbase')
         });
       }
       else
-        if(currentUser.hasOwnProperty('username')) {
+        if($cookieStore.get('key') && currentUser.hasOwnProperty('username')) {
         cb(true);
       }
       else {
@@ -252,9 +252,16 @@ angular.module('odmbase')
 
     Auth.getDetail = function (username, cb) {
 
-        if (!username && Auth.isLoggedIn) {
-                var user = Auth.getCurrentUser();
-                cb(user, true);
+        if (!username && $cookieStore.get('key')) {
+
+            var stop = $interval(function() {
+                if (currentUser && currentUser.id) {
+                    cb(currentUser, true);
+                    $interval.cancel(stop);
+                    stop = undefined;
+                }
+            }, 100);
+
         }
         else {
             User.one(username).get().then(function (user) {
