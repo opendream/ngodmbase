@@ -4,6 +4,7 @@ angular.module('odmbase', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngRoute',
   'ui.router',
   'ui.bootstrap',
   'ngTouch',
@@ -19,8 +20,8 @@ angular.module('odmbase', [
   'ngCart.directives',
   'angularFileUpload',
   'angular-ellipses',
-  'facebook'
-
+  'facebook',
+  'angularMoment'
 ])
 
 

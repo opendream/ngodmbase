@@ -25,9 +25,18 @@ angular.module('odmbase')
       }
     }
 
-    $scope.socialSign = function(provider) {
-      $scope.cancel(); // Close modal first for faster feeling
-      Auth.socialSign(provider);
+    $scope.socialSign = function(provider, cb) {
+
+      // Close modal first for faster feeling
+      if ($scope.cancel) {
+          $scope.cancel();
+      }
+      // do callback ex redirect to page
+      cb = cb || function () {
+          $location.path('/');
+      }
+
+      Auth.socialSign(provider, cb);
     };
 
 

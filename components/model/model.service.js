@@ -27,7 +27,18 @@ angular.module('odmbase').factory('Model', [function Model() {
         return data;
     };
 
+    // Deprecate to buildWithDataList
     Model.objects.manyToManyWithDataList = function (modelClass, dataList, callback) {
+
+        if (dataList && dataList.length) {
+            angular.forEach(dataList, function (data) {
+                callback(data);
+            });
+            return dataList;
+        }
+    };
+
+    Model.objects.buildWithDataList = function (modelClass, dataList, callback) {
 
         if (dataList && dataList.length) {
             angular.forEach(dataList, function (data) {
