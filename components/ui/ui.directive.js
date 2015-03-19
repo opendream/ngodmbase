@@ -33,3 +33,27 @@ angular.module('odmbase').directive('lineBreaks', function() {
     }
   };
 });
+
+angular.module('odmbase').directive('imageRender', function() {
+  return {
+    restrict: 'A',
+    templateUrl: '/static/app/odmbase/components/ui/templates/render/image.html',
+    scope: {
+      style: '@',
+      url: '=',
+      elementClass: '@',
+      ratio: '@',
+      crop: '='
+    },
+    controller: function($scope) {
+        $scope.style = $scope.style || 'ratio'; // ratio, static
+        $scope.ratio = $scope.ratio || (1/1);
+
+        $scope.padding = 1/$scope.ratio*100;
+        if ($scope.crop) {
+            $scope.cropClass = 'image-crop'
+        }
+    }
+
+  };
+});

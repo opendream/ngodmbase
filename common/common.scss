@@ -368,7 +368,7 @@ button.btn-delete {
 	position: relative;
 }
 
-.ratio-constraint {
+.ratio-constraint, .ratio-inline-constraint {
 	display: inline-block;
 	position: relative;
 	width: 100%;
@@ -379,6 +379,10 @@ button.btn-delete {
   /* 4:3 ratio can override */
   display: block;
   content: '';
+}
+
+.image-crop {
+  overflow: hidden;
 }
 
 .vcenter {
