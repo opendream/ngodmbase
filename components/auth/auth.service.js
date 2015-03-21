@@ -8,6 +8,7 @@ angular.module('odmbase')
       currentUser = User;
       User.one().me().then(function(model) {
         currentUser = model;
+          console.log('vvvvvv', model);
       });
 
     }
@@ -94,7 +95,6 @@ angular.module('odmbase')
             var accessToken = response.authResponse.accessToken;
             // Post to facebook api
             var user = User.one();
-                          console.log(user);
 
             user.access_token = accessToken;
             user.provider = provider;
@@ -103,7 +103,8 @@ angular.module('odmbase')
             user.social_sign().then(function(model) {
 
               Auth.setApiKey(model);
-              Auth.setCurrentUser(model)
+              Auth.setCurrentUser(model);
+
 
               callback(null, model);
             }, function(err) {

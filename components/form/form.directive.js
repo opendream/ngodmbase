@@ -42,6 +42,14 @@ angular.module('odmbase')
               });
             }
 
+            else if ($scope.type == 'select-multiple-reference') {
+              $scope.referenceModel = $injector.get($scope.referenceModel);
+
+              $scope.referenceModel.one().get().then(function (data) {
+                $scope.item_list = data.objects;
+              });
+            }
+
             else if ($scope.type == 'image-set') {
 
                 $scope.model.image_set = {all: []};

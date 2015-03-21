@@ -1,42 +1,70 @@
 'use strict';
-angular.module('odmbase')
-  .controller('SignupCtrl', ['$scope', 'Auth', '$location', function ($scope, Auth, $location) {
+angular
+    .module('odmbase')
+    .controller('SignupCtrl', ['$scope', 'Auth', '$location', 'Modal', '$window', SignupCtrl ]);
+
+function SignupCtrl ($scope, Auth, $location, Modal, $window) {
+
+    $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
 
     $scope.user = {};
     $scope.errors = {};
-    $scope.register = function(form) {
-      $scope.submitted = true;
-      if(form.$valid) {
-        Auth.createUser({
-          email: $scope.user.email,
-          password: $scope.user.password
-        }, function (err, model) {
-          if (err) {
-            angular.forEach(err.data.error, function(message, field) {
-              form[field].$setValidity('mongoose', false);
-              $scope.errors[field] = message;
+    $scope.register = function(form, redirectUrl) {
+        $scope.submitted = true;
+        if(form.$valid) {
+            Auth.createUser({
+                email: $scope.user.email,
+                password: $scope.user.password
+            }, function (err, model) {
+                if (err) {
+                    angular.forEach(err.data.error, function(message, field) {
+                        form[field].$setValidity('mongoose', false);
+                        $scope.errors[field] = message;
+                    });
+                } else {
+                    var redirect = true;
+                    if ($scope.cancel) {
+                        $scope.cancel();
+                        redirect =false;
+                    }
+
+                    // do callback ex redirect to page
+                    redirectUrl = redirectUrl || 'profile';
+                    $location.path(redirectUrl);
+                }
             });
-          } else {
-            $scope.cancel();
-            $location.path('/profile');
-          }
-        });
-      }
+        }
     }
 
-    $scope.socialSign = function(provider, cb) {
+    $scope.socialSign = function(provider, redirectUrl) {
 
-      // Close modal first for faster feeling
-      if ($scope.cancel) {
-          $scope.cancel();
-      }
-      // do callback ex redirect to page
-      cb = cb || function () {
-          $location.path('/');
-      }
+        // Close modal first for faster feeling
+        var redirect = true;
+        if ($scope.cancel) {
+            $scope.cancel();
+            redirect =false;
+        }
 
-      Auth.socialSign(provider, cb);
+        // do callback ex redirect to page
+        redirectUrl = redirectUrl || 'profile';
+        var cb = function () {
+            //if (redirect) {
+                $location.path(redirectUrl);
+            //}
+            //$window.location.reload();
+        }
+
+        Auth.socialSign(provider, cb);
+    };
+
+    $scope.loginClick = function () {
+        if($scope.$parent.openUserForm) {
+            $scope.$parent.openUserForm('login');
+        }
+        else {
+            Modal.open('/static/app/odmbase/account/modal/login_modal.html', 'LoginCtrl');
+        }
     };
 
 
-  }]);
+}
