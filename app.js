@@ -21,7 +21,9 @@ angular.module('odmbase', [
   'angularFileUpload',
   'angular-ellipses',
   'facebook',
-  'angularMoment'
+  'angularMoment',
+  'ui.bootstrap.datetimepicker',
+  'ngTagsInput'
 ])
 
 
@@ -40,7 +42,7 @@ angular.module('odmbase', [
     RestangularProvider.setBaseUrl(apiVersion);
 
     FacebookProvider.init(FACEBOOK_APP_ID);
-    FacebookProvider.setInitCustomOption('scope', 'email,user_friends');
+    FacebookProvider.setInitCustomOption('scope', FACEBOOK_EXTENDED_PERMISSIONS);
 
 
     $provide.decorator('taOptions', ['$delegate', function(taOptions){
@@ -49,7 +51,7 @@ angular.module('odmbase', [
         taOptions.toolbar = [
             ['bold', 'italics', 'ul', 'ol', 'quote'],
             // ['justifyLeft','justifyCenter','justifyRight'],
-            ['insertLink', 'insertVideo']
+            ['insertLink']
         ];
         taOptions.classes = {
             focussed: 'focussed',
@@ -103,7 +105,7 @@ angular.module('odmbase', [
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
-          $location.path('/login');
+          //$location.path('/login');
           Modal.open('/static/app/odmbase/account/modal/login_modal.html', 'LoginCtrl');
         }
       });

@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Modal', ['$modal', '$log', function ($modal, $log) {
+  .factory('Modal', ['$modal', '$modalStack', function ($modal, $modalStack) {
 
   var modal = {};
   modal.open = function (templateUrl, size, paramReturn) {
+
+    $modalStack.dismissAll();
 
     var param = function () { return paramReturn; };
 

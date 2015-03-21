@@ -2,7 +2,7 @@
 
 angular.module('odmbase').factory('Model', [function Model() {
 
-    var Model = {field: {}, objects: {}, build: {}};
+    var Model = {field: {}, objects: {}, build: {}, request: {}};
 
     Model.field.foreignKeyWithData = function (modelClass, data) {
         var model = modelClass.one();
@@ -24,6 +24,24 @@ angular.module('odmbase').factory('Model', [function Model() {
             }
             data[field] = fieldData;
         });
+        return data;
+    };
+
+    Model.request.manyToManyWithData = function (fieldList, data) {
+        angular.forEach(fieldList, function (field) {
+            var fieldData = [];
+
+            angular.forEach(data[field].all, function (item, ignore) {
+                if (typeof item == 'string') {
+                    fieldData.push(item);
+                }
+                else if (item.resource_uri) {
+                    fieldData.push(item.resource_uri);
+                }
+            });
+            data[field] = fieldData;
+        });
+
         return data;
     };
 

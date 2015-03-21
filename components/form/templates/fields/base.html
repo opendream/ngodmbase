@@ -37,6 +37,11 @@
       </select>
     </span>
 
+    <span ng-if="type=='select-multiple-reference'">
+      <select multiple ng-multiple="true" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in item_list track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
+      </select>
+    </span>
+
     <span ng-if="type=='image-set'">
         <!-- fake input -->
       <input class="form-control" type="number" name="{{ name }}" min="1" ng-model="model[name].all.length" ng-show="false" required/>
