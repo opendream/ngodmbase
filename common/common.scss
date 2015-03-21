@@ -174,31 +174,6 @@ img {
 }
 .circle { display: block; }
 
-/* TODO move to custom dir */
-.product-amount {
-  display: block;
-  position: relative;
-  img {
-    //position: absolute;
-    z-index: 1;
-  }
-  .amount {
-    font-size: 2.5em;
-    position: absolute;
-    z-index: 2;
-    margin-top: 20%;
-    width: 100%;
-    text-align: center;
-    color: #FFF;
-  }
-  .unit {
-    position: absolute;
-    z-index: 2;
-    margin-top: 70%;
-    width: 100%;
-    text-align: center;
-  }
-}
 .wrapper-pad-10 {
   padding: 10px;
 }
@@ -231,6 +206,7 @@ img {
     padding-right: 10px;
   }
 }
+
 .row.col-pad-5 {
   margin-left: -5px;
   margin-right: -5px;
