@@ -45,6 +45,18 @@ angular.module('odmbase').factory('Model', [function Model() {
         return data;
     };
 
+    Model.request.foreignKeyWithData = function(fieldList, data) {
+
+        angular.forEach(fieldList, function (field) {
+            if (typeof data[field] == 'object' && data[field].resource_uri) {
+                data[field] = data[field].resource_uri;
+            }
+        });
+
+        return data;
+    };
+
+
     // Deprecate to buildWithDataList
     Model.objects.manyToManyWithDataList = function (modelClass, dataList, callback) {
 

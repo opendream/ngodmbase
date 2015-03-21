@@ -33,7 +33,7 @@
     </span>
 
     <span ng-if="type=='select-reference'">
-      <select class="form-control" name="{{ name }}" ng-options="item.resource_uri as item.unicode_string for item in item_list" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      <select class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in item_list track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
       </select>
     </span>
 
