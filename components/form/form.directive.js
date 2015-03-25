@@ -71,6 +71,9 @@ angular.module('odmbase')
                     }
                 }
                 var removeImageClient = function (index) {
+
+                    $scope.form[$scope.name].$dirty = true;
+
                     $scope.imageList.splice(index, 1);
                     $scope.imageList.push(null);
                     $scope.numImageFiles--;
@@ -110,6 +113,7 @@ angular.module('odmbase')
                                 };
 
                             }).success(function (data, status, headers, config) {
+                                $scope.form[$scope.name].$dirty = true;
                                 $scope.model.image_set.all.push(data);
                                 $scope.imageList[config.index]['data'] = data;
                             }).error(function (data, status, headers, config) {
@@ -119,6 +123,7 @@ angular.module('odmbase')
                                 else {
                                   // TODO: alert default message
                                 }
+                                $scope.form[$scope.name].$dirty = true;
                                 removeImageClient(config.index)
 
                             });

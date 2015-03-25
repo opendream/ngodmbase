@@ -23,7 +23,8 @@ angular.module('odmbase', [
   'facebook',
   'angularMoment',
   'ui.bootstrap.datetimepicker',
-  'ngTagsInput'
+  'ngTagsInput',
+  '720kb.socialshare'
 ])
 
 
