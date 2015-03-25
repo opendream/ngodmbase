@@ -95,3 +95,22 @@ angular.module('odmbase').directive('dateParser', function () {
   }
 
 });
+
+angular.module('odmbase').directive('templateItem', function () {
+  return {
+    restrict: 'A',
+    templateUrl: '/static/app/odmbase/components/ui/templates/render/template_item.html',
+    scope: {
+      model: '=',
+      templateUrl: '=',
+      createdBy: '='
+    },
+    controller: function($scope) {
+      if ($scope.createdBy) {
+        $scope.model.created_by = $scope.createdBy;
+      }
+    }
+
+  };
+
+});

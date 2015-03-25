@@ -23,7 +23,9 @@ angular.module('odmbase', [
   'facebook',
   'angularMoment',
   'ui.bootstrap.datetimepicker',
-  'ngTagsInput'
+  'ngTagsInput',
+  'ngDropdowns',
+  'infinite-scroll'
 ])
 
 
@@ -90,8 +92,8 @@ angular.module('odmbase', [
           return $q.reject(response);
         }
         else if (response.status === 500) {
-          window.location = '/500';
-          return $q.reject(response);
+          //window.location = '/500';
+          //return $q.reject(response);
         }
         else {
           return $q.reject(response);
