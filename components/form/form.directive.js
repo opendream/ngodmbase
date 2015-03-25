@@ -11,6 +11,7 @@ angular.module('odmbase')
           submitted: '=',
           maxUploads: '@',
           referenceModel: '@',
+          params: '=',
           type: '@',
           label: '@',
           name: '@',
@@ -18,13 +19,16 @@ angular.module('odmbase')
           required: '=',
           readonly: '=',
           min: '@',
+          max: '@',
           step: '@',
           error: '=',
           suffix: '@',
           options: '=',
           labelClass: '@',
           fieldClass: '@',
-          helpClass: '@'
+          helpClass: '@',
+          itemClass: '@',
+          itemTemplateUrl: '='
         },
         // TODO: split one file per one field type T_T
         controller: function($scope, $injector, $upload, Modal) {
@@ -35,19 +39,58 @@ angular.module('odmbase')
             }
 
             else if ($scope.type == 'select-reference') {
-              $scope.referenceModel = $injector.get($scope.referenceModel);
+                $scope.referenceModel = $injector.get($scope.referenceModel);
 
-              $scope.referenceModel.one().get().then(function (data) {
-                $scope.item_list = data.objects;
-              });
+                $scope.referenceModel.one().get($scope.params).then(function (data) {
+                    $scope.item_list = data.objects;
+                });
             }
 
             else if ($scope.type == 'select-multiple-reference') {
-              $scope.referenceModel = $injector.get($scope.referenceModel);
+                $scope.referenceModel = $injector.get($scope.referenceModel);
 
-              $scope.referenceModel.one().get().then(function (data) {
-                $scope.item_list = data.objects;
-              });
+                $scope.referenceModel.one().get().then(function (data) {
+                    $scope.item_list = data.objects;
+                });
+            }
+
+            else if ($scope.type == 'checkbox-multiple-reference') {
+                $scope.referenceModel = $injector.get($scope.referenceModel);
+
+                $scope.referenceModel.one().get().then(function (data) {
+                    $scope.item_list = data.objects;
+
+                });
+
+                $scope.$watch('model', function (newValue, oldValue) {
+                    updateSelectedList();
+                });
+
+                var updateSelectedList = function () {
+                    if (!$scope.model) {
+                        return;
+                    }
+                    var allDict = {};
+                    angular.forEach($scope.model[$scope.name].all, function(item, ignore) {
+                        allDict[item.resource_uri] = true;
+                    });
+                    $scope.model[$scope.name].allDict = allDict;
+                };
+
+                $scope.selectItem = function (item) {
+                    updateSelectedList()
+
+                    if ($scope.model[$scope.name].allDict[item.resource_uri]) {
+                        _.remove($scope.model[$scope.name].all, {
+                            resource_uri: item.resource_uri
+                        });
+                    }
+                    else {
+                        $scope.model[$scope.name].all.push(item);
+                    }
+                    updateSelectedList()
+                }
+
             }
 
             else if ($scope.type == 'image-set') {
@@ -142,6 +185,7 @@ angular.module('odmbase')
 
 
             }
+
         }
     }
 });

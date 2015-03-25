@@ -10,7 +10,7 @@
 
     <!-- number -->
     <span ng-if="type=='number'">
-      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" step="{{ step }}"/>
+      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
       <span class="field-suffix" ng-if="suffix">{{ suffix }}</span>
     </span>
 
@@ -40,6 +40,24 @@
     <span ng-if="type=='select-multiple-reference'">
       <select multiple ng-multiple="true" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in item_list track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
       </select>
+    </span>
+
+    <span ng-if="type=='checkbox-multiple-reference'">
+      <span class="checkbox-item" ng-class="itemClass" ng-repeat="item in item_list">
+        <span class="checkbox-input-wrapper" ng-class="{'checked': model[name].allDict[item.resource_uri]}">
+          <input
+              type="checkbox"
+              name="{{ name }}[]"
+              value="{{ item.resource_uri }}"
+              ng-model="model[name].allDict[item.resource_uri]"
+              ng-change="selectItem(item)"
+          />
+          <label ng-click="selectItem(item)">
+            <span ng-if="itemTemplateUrl" ng-include="itemTemplateUrl"></span>
+            <span ng-if="!itemTemplateUrl">{{ item.unicode_string }}</span>
+          </label>
+        </span>
+      </span>
     </span>
 
     <span ng-if="type=='image-set'">

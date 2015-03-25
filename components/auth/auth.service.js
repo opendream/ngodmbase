@@ -8,7 +8,6 @@ angular.module('odmbase')
       currentUser = User;
       User.one().me().then(function(model) {
         currentUser = model;
-          console.log('vvvvvv', model);
       });
 
     }

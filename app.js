@@ -24,6 +24,8 @@ angular.module('odmbase', [
   'angularMoment',
   'ui.bootstrap.datetimepicker',
   'ngTagsInput',
+  'ngDropdowns',
+  'infinite-scroll',
   '720kb.socialshare'
 ])
 
@@ -91,8 +93,8 @@ angular.module('odmbase', [
           return $q.reject(response);
         }
         else if (response.status === 500) {
-          window.location = '/500';
-          return $q.reject(response);
+          //window.location = '/500';
+          //return $q.reject(response);
         }
         else {
           return $q.reject(response);
