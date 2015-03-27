@@ -534,3 +534,98 @@ select.form-control {
 .field-container .wrap-dd-select {
     width: auto;
 }
+
+// Image set field form
+.image-set-form-edit-field-image {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+.image-set-form-edit-field-image-item {
+	padding: 5px;
+	position: relative;
+	min-height: 1px;
+	float: left;
+	width: 20%;
+}
+.image-set-form-edit-field-image-item > * {
+	border: 1px dashed #E4B6BB;
+}
+
+.image-set-form-edit-field-image-item .has-add-image,
+.image-set-form-edit-field-image-item .has-image {
+	border-style: solid;
+}
+.image-set-form-edit-field-image-item .img-bg {
+	padding: 4px;
+}
+.image-set-form-edit-field-image-item .img-bg-img {
+
+}
+.image-set-form-edit-field-image-item .img-bg-img-bg {
+	position: relative;
+	display: block;
+	height: 100%;
+	width: 100%;
+	border: 1px solid #F0D8DB;
+	background: repeating-linear-gradient(
+		45deg,
+		#F0D8DB,
+		#F0D8DB 5px,
+		#fff 5px,
+		#fff 10px
+	);
+	opacity: 0.2;
+}
+.image-set-form-edit-field-image-item .has-image {
+	background-color: #E6E7E8;
+}
+
+.image-set-form-edit-field-image-item .drop-image {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	color: #E4B6BB;
+}
+.image-set-form-edit-field-image-item .select-image {
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	padding: 15px 0;
+}
+.image-set-form-edit-field-image-item .select-image > * {
+	margin: 0 auto;
+	display: block;
+
+}
+.image-set-form-edit-field-image-item .add-image-image {
+	text-align: center;
+}
+
+@media only screen and (max-width: 420px) {
+	.add-image-label { display: none;}
+}
+.image-set-form-edit-field-image-item .add-image-label {
+	font-size: 12px;
+	text-align: center;
+	padding-top: 5px;
+}
+
+.image-set-form-edit-field-image-item .img-progress-percentage {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	font-size: 22px;
+	text-align: center;
+	margin-top: -15px;
+	color: #FFF;
+}
+
+.image-set-form-edit-field-image-item .progress-bar {
+	height: 100%;
+	background-color: #F0D8DB;
+	position: absolute;
+	top: 0;
+	left: 0;
+}

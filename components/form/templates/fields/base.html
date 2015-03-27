@@ -64,8 +64,8 @@
         <!-- fake input -->
       <input class="form-control" type="number" name="{{ name }}" min="{{ min }}" ng-model="model[name].all.length" ng-show="false" ng-required="required" ng-readonly="readonly"/>
 
-      <div class="product-form-edit-field-image">
-        <div class="product-form-edit-field-image-item" ng-repeat="image in imageList track by $index">
+      <div class="image-set-form-edit-field-image">
+        <div class="image-set-form-edit-field-image-item" ng-repeat="image in imageList track by $index">
           <div class="ratio-constraint" ng-class="{'has-image': image.data, '': !mage.data, 'has-add-image': $index==numImageFiles}">
             <div class="img-bg">
               <div ng-show="image.data" class="img-bg-img" ng-style="{'background-image': 'url(' + image.data.image_thumbnail_1x.url + ')'}">
