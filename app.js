@@ -26,7 +26,8 @@ angular.module('odmbase', [
   'ngTagsInput',
   'ngDropdowns',
   'infinite-scroll',
-  'angular-carousel'
+  'angular-carousel',
+  '720kb.socialshare'
 ])
 
 
