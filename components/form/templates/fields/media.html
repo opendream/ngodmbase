@@ -1,0 +1,41 @@
+<div class="media-field-list">
+
+    <div class="media-field media-field-quote" ng-show="model.media_selected=='image_set'">
+          <div field form="form" submitted="submitted" model="model"
+               label="รูปภาพ"
+               name="image_set"
+               type="image-set"
+               max-uploads="5"
+               min="0"
+               error="{min: 'ต้องมีรูปไม่น้อยกว่า 1 รูป'}"
+               required="false"
+               help="กรุณาตรวจสอบรูปของคุณที่กำลังอัพโหลด โดยจะต้องไม่เกิน 2MB ถ้าเกินระบบจะลบรูปออกโดยอัตโนมัติ"
+               label-class="col-md-12"
+               field-class="col-md-12"
+               help-class="col-md-12">
+          </div>
+    </div>
+
+    <div class="media-field media-field-quote" ng-show="model.media_selected=='quote'">
+        <div field form="form" submitted="submitted" model="model"
+             label="Quote"
+             name="quote"
+             type="text"
+             required="false"
+             label-class="col-md-12"
+             field-class="col-md-12"
+             help-class="col-md-12">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="field-container" ng-class="fieldClass">
+            <div class="btn-group media-field-control">
+                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>Images</label>
+                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>Youtube</label>
+                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>Quote</label>
+            </div>
+        </div>
+    </div>
+
+</div>

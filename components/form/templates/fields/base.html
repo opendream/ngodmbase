@@ -62,7 +62,7 @@
 
     <span ng-if="type=='image-set'">
         <!-- fake input -->
-      <input class="form-control" type="number" name="{{ name }}" min="1" ng-model="model[name].all.length" ng-show="false" required/>
+      <input class="form-control" type="number" name="{{ name }}" min="{{ min }}" ng-model="model[name].all.length" ng-show="false" ng-required="required"/>
 
       <div class="product-form-edit-field-image">
         <div class="product-form-edit-field-image-item" ng-repeat="image in imageList track by $index">

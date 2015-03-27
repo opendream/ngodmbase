@@ -1,12 +1,15 @@
 'use strict';
 
-angular.module('odmbase').factory('Model', [function Model() {
+angular.module('odmbase').factory('Model', ['$q', 'Image', function Model($q, Image) {
 
     var Model = {field: {}, objects: {}, build: {}, request: {}};
 
     Model.field.foreignKeyWithData = function (modelClass, data) {
         var model = modelClass.one();
         _.extend(model, data);
+        if (model.buildModel) {
+            model = model.buildModel(model);
+        }
         return model;
     };
 
@@ -16,15 +19,52 @@ angular.module('odmbase').factory('Model', [function Model() {
 
             if (fieldData && !fieldData.all) {
                 fieldData = {
-                    all: fieldData || [],
-                    saveList: function () {
-                        //TODO: make it work
-                    }
+                    all: fieldData || []
                 }
             }
             data[field] = fieldData;
         });
         return data;
+    };
+
+
+    Model.build.imageSaveList = function (element) {
+        if (!element['image_set']) {
+            element['image_set'] = {};
+        }
+        element['image_set'].saveList = function (callback) {
+
+            console.log(element);
+
+            var promises = [];
+            var deletePromsies = [];
+
+            var createPromisesFn = function(model, method, promiseCollectors) {
+                return function(image, key) {
+
+                    var apiCommon = '/api/v1/common/';
+
+                    var _image = Image.one(image.id);
+                    _image.attach_to = apiCommon + model.id + "/";
+                    promiseCollectors.push(_image[method].call(_image, undefined));
+
+                }
+            }
+
+            // update all images
+
+            angular.forEach(element['image_set'].all, createPromisesFn(element, 'put', promises));
+            angular.forEach(element['image_set'].deleteImageSet, createPromisesFn(element, 'remove', deletePromsies));
+
+            $q.all([
+                $q.all(promises).then(function() { return arguments }),
+                $q.all(deletePromsies).then(function() { return arguments })
+            ]).then(function(somethingIDontKnow) {
+                callback(somethingIDontKnow);
+            });
+
+        }
+        return element;
     };
 
     Model.request.manyToManyWithData = function (fieldList, data) {

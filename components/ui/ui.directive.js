@@ -114,3 +114,30 @@ angular.module('odmbase').directive('templateItem', function () {
   };
 
 });
+
+angular.module('odmbase').directive('mediaRender', function () {
+  return {
+    restrict: 'A',
+    templateUrl: '/static/app/odmbase/components/ui/templates/render/template_item.html',
+    scope: {
+      model: '=',
+      media: '=',
+      isModal: '@'
+    },
+    controller: function($scope, Modal) {
+      var _isModal;
+      if ($scope.isModal) {
+        _isModal = '_'.concat($scope.isModal);
+      } else {
+        _isModal = '';
+      }
+      $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
+
+      $scope.modalOpen = function (modalUrl) {
+        Modal.open(modalUrl, null, {model: $scope.model});
+      };
+    }
+
+  };
+
+});

@@ -31,7 +31,11 @@ angular.module('odmbase')
           itemTemplateUrl: '='
         },
         // TODO: split one file per one field type T_T
-        controller: function($scope, $injector, $upload, Modal) {
+        controller: function($scope, $injector, $upload, $q, Modal, Model, Image) {
+
+            if ($scope.referenceModel) {
+                $scope.referenceModel = $injector.get($scope.referenceModel);
+            }
 
             if ($scope.type == 'text-angular') {
                 // Holy bug of text-angular
@@ -39,7 +43,6 @@ angular.module('odmbase')
             }
 
             else if ($scope.type == 'select-reference') {
-                $scope.referenceModel = $injector.get($scope.referenceModel);
 
                 $scope.referenceModel.one().get($scope.params).then(function (data) {
                     $scope.item_list = data.objects;
@@ -47,7 +50,6 @@ angular.module('odmbase')
             }
 
             else if ($scope.type == 'select-multiple-reference') {
-                $scope.referenceModel = $injector.get($scope.referenceModel);
 
                 $scope.referenceModel.one().get().then(function (data) {
                     $scope.item_list = data.objects;
@@ -55,7 +57,6 @@ angular.module('odmbase')
             }
 
             else if ($scope.type == 'checkbox-multiple-reference') {
-                $scope.referenceModel = $injector.get($scope.referenceModel);
 
                 $scope.referenceModel.one().get().then(function (data) {
                     $scope.item_list = data.objects;
@@ -95,7 +96,8 @@ angular.module('odmbase')
 
             else if ($scope.type == 'image-set') {
 
-                $scope.model.image_set = {all: []};
+
+                $scope.model[$scope.name] = {all: []};
                 $scope.nameItem = $scope.name.replace('_set', '');
 
                 $scope.$watch('model', function (newValue, oldValue) {
@@ -103,12 +105,24 @@ angular.module('odmbase')
                 });
 
                 var updateImageList = function () {
-                    $scope.numImageFiles = $scope.model.image_set.all.length;
+                    console.log('updateImageList', $scope.model[$scope.name]);
+
+                    // case model build form empty
+                    if (!$scope.model[$scope.name]) {
+                        $scope.model[$scope.name] = {};
+                    }
+                    // case model build form empty object
+                    if (!$scope.model[$scope.name].all) {
+                        $scope.model[$scope.name].all = [];
+                    }
+
+
+                    $scope.numImageFiles = $scope.model[$scope.name].all.length;
                     $scope.imageList = []
-                    $scope.model.image_set.deleteImageSet = [];
+                    $scope.model[$scope.name].deleteImageSet = [];
 
                     for (var i = 0; i < $scope.maxUploads; i++) {
-                        var imageData = $scope.model.image_set.all[i];
+                        var imageData = $scope.model[$scope.name].all[i];
                         imageData = imageData ? {data: imageData} : null;
                         $scope.imageList.push(imageData);
                     }
@@ -130,7 +144,7 @@ angular.module('odmbase')
                     if (files && files.length) {
 
                         if ($scope.numImageFiles + files.length > $scope.maxUploads) {
-                            Modal.open('/static/components/modal/upload_limit_modal.html', null, {
+                            Modal.open('/static/app/odmbase/components/modal/upload_limit_modal.html', null, {
                                 numRemaining: $scope.maxUploads - $scope.numImageFiles
                             });
                             return false;
@@ -153,7 +167,7 @@ angular.module('odmbase')
                                 };
 
                             }).success(function (data, status, headers, config) {
-                                $scope.model.image_set.all.push(data);
+                                $scope.model[$scope.name].all.push(data);
                                 $scope.imageList[config.index]['data'] = data;
                             }).error(function (data, status, headers, config) {
                                 if (status == 413) {
@@ -173,10 +187,11 @@ angular.module('odmbase')
 
                 $scope.removeImage = function (image, index) {
 
-                    $scope.model.image_set.deleteImageSet.push(image);
+                    $scope.model[$scope.name].deleteImageSet.push(image);
                     removeImageClient(index);
 
                 };
+
 
 
             }

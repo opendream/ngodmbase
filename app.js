@@ -25,7 +25,8 @@ angular.module('odmbase', [
   'ui.bootstrap.datetimepicker',
   'ngTagsInput',
   'ngDropdowns',
-  'infinite-scroll'
+  'infinite-scroll',
+  'angular-carousel'
 ])
 
 
@@ -88,7 +89,7 @@ angular.module('odmbase', [
           return $q.reject(response);
         }
         else if(response.status === 404) {
-          window.location = '/404';
+          //window.location = '/404';
           return $q.reject(response);
         }
         else if (response.status === 500) {

@@ -1,0 +1,9 @@
+<div class="item-images">
+    <ul rn-carousel rn-carousel-controls class="image" style="height: 480px; width: auto;">
+        <li ng-repeat="image in model.image_set.all">
+            <div image-render
+                 url="image.image_thumbnail_1x.url"
+                 crop="true"></div>
+        </li>
+    </ul>
+</div>
