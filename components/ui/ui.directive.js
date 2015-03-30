@@ -103,41 +103,79 @@ angular.module('odmbase').directive('templateItem', function () {
     scope: {
       model: '=',
       templateUrl: '=',
-      createdBy: '='
+      createdBy: '=',
+      isDetail: '=',
+      param: '='
     },
     controller: function($scope) {
       if ($scope.createdBy) {
         $scope.model.created_by = $scope.createdBy;
       }
+        if ($scope.model && $scope.model.resource_uri) {
+          $scope.model.elemId = $scope.model.resource_uri.replace(/\//g, '-').substr(0, $scope.model.resource_uri.length - 1).replace('-api-v1-', '');
+        }
     }
 
   };
 
 });
 
-angular.module('odmbase').directive('mediaRender', function () {
-  return {
-    restrict: 'A',
-    templateUrl: '/static/app/odmbase/components/ui/templates/render/template_item.html',
-    scope: {
-      model: '=',
-      media: '=',
-      isModal: '@'
-    },
-    controller: function($scope, Modal) {
-      var _isModal;
-      if ($scope.isModal) {
-        _isModal = '_'.concat($scope.isModal);
-      } else {
-        _isModal = '';
-      }
-      $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
-
-      $scope.modalOpen = function (modalUrl) {
-        Modal.open(modalUrl, null, {model: $scope.model});
-      };
+var mediaRenderOrModalLink = {
+  restrict: 'A',
+  scope: {
+    model: '=',
+    media: '=',
+    isModal: '@',
+    templateItemUrl: '=',
+    param: '=?'
+  },
+  controller: function($scope, Modal) {
+    var _isModal;
+    if ($scope.isModal) {
+      _isModal = '_'.concat($scope.isModal);
+    } else {
+      _isModal = '';
     }
+    $scope.param = $scope.param || {};
+    $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
+    $scope.modalOpen = function (modalUrl) {
+      $scope.param = _.extend({model: $scope.model}, $scope.param);
+      Modal.open(modalUrl, 'lg', $scope.param);
+    };
+  }
 
+};
+
+angular.module('odmbase').directive('mediaRender', function () {
+
+  var mediaRender = _.cloneDeep(mediaRenderOrModalLink);
+  mediaRender['templateUrl'] = '/static/app/odmbase/components/ui/templates/render/template_item.html';
+
+  return mediaRender;
+
+});
+
+angular.module('odmbase').directive('mediaModalLink', function () {
+
+  var mediaModalLink = _.cloneDeep(mediaRenderOrModalLink);
+  mediaModalLink['template'] = function(elem, attr){
+    return angular.element('<a href="" ng-click="modalOpen(templateItemUrl)"></a>').append(elem.html());
   };
 
+  return mediaModalLink;
+});
+
+angular.module('odmbase').directive('focusMe', function($timeout, $parse) {
+  return {
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.focusMe);
+      scope.$watch(model, function(value) {
+        if(value === true) {
+          $timeout(function() {
+            element[0].focus();
+          });
+        }
+      });
+    }
+  };
 });

@@ -89,12 +89,14 @@ angular.module('odmbase')
                     else {
                         $scope.model[$scope.name].all.push(item);
                     }
-                    updateSelectedList()
+                    updateSelectedList();
                 }
 
             }
 
             else if ($scope.type == 'image-set') {
+
+                //$scope.maxUploads = $scope.maxUploads || 9999999;
 
 
                 $scope.model[$scope.name] = {all: []};
@@ -105,7 +107,6 @@ angular.module('odmbase')
                 });
 
                 var updateImageList = function () {
-                    console.log('updateImageList', $scope.model[$scope.name]);
 
                     // case model build form empty
                     if (!$scope.model[$scope.name]) {
@@ -118,15 +119,25 @@ angular.module('odmbase')
 
 
                     $scope.numImageFiles = $scope.model[$scope.name].all.length;
-                    $scope.imageList = []
+                    $scope.imageList = [];
                     $scope.model[$scope.name].deleteImageSet = [];
 
-                    for (var i = 0; i < $scope.maxUploads; i++) {
-                        var imageData = $scope.model[$scope.name].all[i];
-                        imageData = imageData ? {data: imageData} : null;
-                        $scope.imageList.push(imageData);
+                    if ($scope.maxUploads) {
+                        for (var i = 0; i < $scope.maxUploads; i++) {
+                            var imageData = $scope.model[$scope.name].all[i];
+                            imageData = imageData ? {data: imageData} : null;
+                            $scope.imageList.push(imageData);
+                        }
                     }
-                }
+                    else {
+                        angular.forEach($scope.model[$scope.name].all, function(imageData, key) {
+                            $scope.imageList.push(imageData)
+                            //a.splice(a.length-1, 0, 'z')
+                        });
+                        $scope.imageList.push(null);
+                    }
+                };
+
                 var removeImageClient = function (index) {
 
                     $scope.form[$scope.name].$dirty = true;
@@ -140,13 +151,16 @@ angular.module('odmbase')
                     } else {
                         $scope.model[$scope.name].all.splice(index, 1);
                     }
-                }
+                    if (!$scope.maxUploads) {
+                        $scope.imageList = $scope.imageList.slice(0, $scope.numImageFiles+1);
+                    }
+                };
 
                 $scope.upload = function (files) {
 
                     if (files && files.length) {
 
-                        if ($scope.numImageFiles + files.length > $scope.maxUploads) {
+                        if ($scope.maxUploads && $scope.numImageFiles + files.length > $scope.maxUploads) {
                             Modal.open('/static/app/odmbase/components/modal/upload_limit_modal.html', null, {
                                 numRemaining: $scope.maxUploads - $scope.numImageFiles
                             });
@@ -169,6 +183,9 @@ angular.module('odmbase')
                                     'progressPercentage': parseInt(100.0 * evt.loaded / evt.total)
                                 };
 
+                                if (!$scope.maxUploads) {
+                                    $scope.imageList[$scope.numImageFiles] = null;
+                                }
                             }).success(function (data, status, headers, config) {
                                 $scope.model[$scope.name].all.push(data);
                                 $scope.form[$scope.name].$dirty = true;
@@ -181,14 +198,13 @@ angular.module('odmbase')
                                   // TODO: alert default message
                                 }
                                 $scope.form[$scope.name].$dirty = true;
-                                removeImageClient(config.index)
+                                removeImageClient(config.index);
 
                             });
                         }
+                        console.log($scope.imageList);
                     }
                 };
-
-
 
                 $scope.removeImage = function (image, index) {
 
@@ -196,8 +212,6 @@ angular.module('odmbase')
                     removeImageClient(index);
 
                 };
-
-
 
             }
 

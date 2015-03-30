@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('odmbase').factory('Model', ['$q', 'Image', function Model($q, Image) {
+angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function Model($q, Image, $injector) {
 
     var Model = {field: {}, objects: {}, build: {}, request: {}};
 
@@ -15,6 +15,15 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', function Model($q, Im
 
     Model.build.manyToManyWithData = function (fieldList, data) {
         angular.forEach(fieldList, function (field) {
+
+            if (typeof(field) == 'object') {
+                var modelName = field[1];
+                var modelClass = $injector.get(modelName);
+                var model = modelClass.one();
+
+                field = field[0];
+            }
+
             var fieldData = data[field];
 
             if (fieldData && !fieldData.all) {
@@ -22,6 +31,11 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', function Model($q, Im
                     all: fieldData || []
                 }
             }
+
+            if (fieldData && model && model.buildModel) {
+                Model.objects.buildWithDataList(modelClass, fieldData.all, model.buildModel)
+            }
+
             data[field] = fieldData;
         });
         return data;
@@ -33,8 +47,6 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', function Model($q, Im
             element['image_set'] = {};
         }
         element['image_set'].saveList = function (callback) {
-
-            console.log(element);
 
             var promises = [];
             var deletePromsies = [];

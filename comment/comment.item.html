@@ -1,0 +1,33 @@
+<div class="item comment-item row">
+    <div class="col-xs-3">
+        <div class="field-created_by_image">
+            <a ng-href="/{{ model.src.username }}">
+                <div image-render
+                    url="model.src.getImage()"
+                    crop="true"
+                ></div>
+            </a>
+        </div>
+    </div>
+    <div class="col-xs-9">
+        <div class="comment-item-body">
+            <a ng-href="/{{ model.src.username }}">
+                <strong class="field-created_by_name">
+                    {{ model.src.unicode_string }}
+                </strong>
+            </a>
+            <span class="field-message">
+                {{ model.message }}
+            </span>
+        </div>
+        <div class="comment-item-footer">
+
+            <span class="field-created" am-time-ago="model.created">
+            </span>
+
+            <span class="field-like-action">
+                <button>ชอบ</button>
+            </span>
+        </div>
+    </div>
+</div>

@@ -5,8 +5,6 @@
                label="รูปภาพ"
                name="image_set"
                type="image-set"
-               max-uploads="5"
-               min="0"
                error="{min: 'ต้องมีรูปไม่น้อยกว่า 1 รูป'}"
                required="false"
                help="กรุณาตรวจสอบรูปของคุณที่กำลังอัพโหลด โดยจะต้องไม่เกิน 2MB ถ้าเกินระบบจะลบรูปออกโดยอัตโนมัติ"
@@ -16,7 +14,7 @@
           </div>
     </div>
 
-    <div class="media-field media-field-quote" ng-show="model.media_selected=='quote'">
+    <div class="media-field media-field-quote col-xs-12" ng-show="model.media_selected=='quote'">
         <div field form="form" submitted="submitted" model="model"
              label="Quote"
              name="quote"
@@ -28,13 +26,13 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="field-container" ng-class="fieldClass">
-            <div class="btn-group media-field-control">
-                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>Images</label>
-                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>Youtube</label>
-                <label class="btn btn-primary" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>Quote</label>
-            </div>
+    <div class="media-btn-wrapper col-sm-8 col-no-pad">
+        <div class="field-container col-no-pad" ng-class="fieldClass">
+            <div class="media-field-control">
+                <button class="col-xs-4 btn btn-default btn-cube corner-bottom-left" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>Add Photos</button>
+                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>Add Video</button>
+                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>Make Quote</button>
+            </div>   
         </div>
     </div>
 

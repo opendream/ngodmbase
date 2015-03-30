@@ -1,0 +1,33 @@
+<div ng-controller="CommentCtrl" discard-modal-on-state-change>
+    <h4>ความคิดเห็น</h4>
+    <div class="comment-list">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="model in commentList">
+                <div ng-include="'/static/app/odmbase/comment/comment.item.html'">
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <form class="form" name="form" ng-submit="submitComment(form)" novalidate>
+
+        <div class="form-group" ng-class="{ 'has-success': form.message.$valid && (submitted || form.message.$dirty),
+                                            'has-error': form.message.$invalid && (submitted || form.message.$dirty) }">
+            <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+
+            <div class="field-container" class="col-md-12">
+
+                <span>
+                    <textarea msd-elastic focus-me="param.fromCommentLink" class="form-control" name="message" ng-model="model.message" required="required">
+                    </textarea>
+                </span>
+            </div>
+
+            <div class="pull-right">
+                <button type="submit" class="btn btn-default">ส่ง</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>

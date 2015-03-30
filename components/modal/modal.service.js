@@ -39,3 +39,25 @@ angular.module('odmbase').controller('ModalInstanceCtrl', function ($scope, $mod
     $modalInstance.dismiss('cancel');
   };
 });
+
+
+angular.module('odmbase').directive('discardModalOnStateChange', ['$rootScope', '$modalStack',
+    function($rootScope, $modalStack) {
+        return {
+            restrict: 'A',
+            link: function() {
+                /**
+                * If you are using ui-router, use $stateChangeStart method otherwise use $locationChangeStart
+                 * StateChangeStart will trigger as soon as the user clicks browser back button or keyboard backspace and modal will be removed from modal stack
+                 */
+                $rootScope.$on('$stateChangeStart', function (event) {
+                    console.log('$stateChangeStart');
+                    var top = $modalStack.getTop();
+                    if (top) {
+                        $modalStack.dismiss(top.key);
+                    }
+                });
+            }
+        };
+    }
+ ]);
