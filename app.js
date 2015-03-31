@@ -27,7 +27,8 @@ angular.module('odmbase', [
   'ngDropdowns',
   'infinite-scroll',
   'angular-carousel',
-  '720kb.socialshare'
+  '720kb.socialshare',
+  'youtube-embed'
 ])
 
 
@@ -107,6 +108,7 @@ angular.module('odmbase', [
   .run(['$rootScope', '$location', 'Auth', 'Modal', function ($rootScope, $location, Auth, Modal) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
+      $rootScope.hideNavbar = false;
       Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
           //$location.path('/login');

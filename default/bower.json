@@ -50,6 +50,7 @@
     "angular-dropdowns": "~1.0.0",
     "angular-carousel": "~0.3.10",
     "ngInfiniteScroll": "1.0.0",
-    "angularjs-socialshare": "~0.1.6"
+    "angularjs-socialshare": "~0.1.6",
+    "angular-youtube-mb": "~1.0.0"
   }
 }

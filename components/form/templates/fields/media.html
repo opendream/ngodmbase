@@ -14,6 +14,19 @@
           </div>
     </div>
 
+    <div class="media-field media-field-youtube col-xs-12" ng-show="model.media_selected=='youtube'">
+        <div field form="form" submitted="submitted" model="model"
+             label="Youtube"
+             name="youtube_url"
+             type="url"
+             required="false"
+             error="{url: 'รูปแบบของ url ไม่ถูกต้อง.'}"
+             label-class="col-md-12"
+             field-class="col-md-12"
+             help-class="col-md-12">
+        </div>
+    </div>
+
     <div class="media-field media-field-quote col-xs-12" ng-show="model.media_selected=='quote'">
         <div field form="form" submitted="submitted" model="model"
              label="Quote"

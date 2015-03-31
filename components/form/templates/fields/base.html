@@ -8,6 +8,11 @@
       <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
     </span>
 
+    <!-- url -->
+    <span ng-if="type=='url'">
+      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+    </span>
+
     <!-- number -->
     <span ng-if="type=='number'">
       <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
@@ -21,7 +26,7 @@
     </span>
 
     <span ng-if="type=='textarea'">
-      <textarea msd-elastic class="form-control" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      <textarea msd-elastic class="form-control" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ng-change="odmChange()" ng-focus="ngFocus()" ng-blur="ngBlur()">
       </textarea>
     </span>
 

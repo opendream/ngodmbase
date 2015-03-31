@@ -12,11 +12,16 @@ function User (Restangular, md5, Model) {
 
     self.buildModel = function (element) {
         element.getImage = function() {
+            if (this.get_image) {
+                return this.get_image;
+            }
+
             if (this.image) {
                 return this.image_thumbnail_1x.url;
             }
             else {
-                return 'http://www.gravatar.com/avatar/' + md5(this.email) + '?d=mm';
+                var email = this.email || '';
+                return 'http://www.gravatar.com/avatar/' + md5(email) + '?d=mm';
             }
         };
 

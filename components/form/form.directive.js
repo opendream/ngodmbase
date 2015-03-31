@@ -28,7 +28,10 @@ angular.module('odmbase')
           fieldClass: '@',
           helpClass: '@',
           itemClass: '@',
-          itemTemplateUrl: '='
+          itemTemplateUrl: '=',
+          odmChange: '=',
+          ngFocus: '=',
+          ngBlur: '='
         },
         // TODO: split one file per one field type T_T
         controller: function($scope, $injector, $upload, $q, Modal, Model, Image) {

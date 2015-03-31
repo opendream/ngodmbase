@@ -2,19 +2,27 @@
 
 angular
     .module('odmbase')
-    .controller('CommentCtrl', ['$scope', 'Comment', CommentCtrl]);
+    .controller('CommentCtrl', ['$scope', 'Model', 'Comment', CommentCtrl]);
 
-function CommentCtrl ($scope, Comment) {
+function CommentCtrl ($scope, Model, Comment) {
 
     $scope.dst = $scope.$parent.model;
     $scope.model = {
         dst: $scope.dst.common_resource_uri
     };
 
+
     $scope.commentList = [];
-    Comment.one().get({dst: $scope.dst.id}).then(function (resp) {
-        $scope.commentList = resp.objects.reverse();
+    $scope.commentDataSource = Model.objects.dataSource({
+        modelClass: Comment,
+        orderBy: '-id',
+        params: {dst: $scope.dst.id},
+        $scope: $scope,
+        itemListProp: 'commentList',
+        reverse: true
     });
+    $scope.commentDataSource.loadMore();
+
 
     $scope.submitComment = function (form) {
 

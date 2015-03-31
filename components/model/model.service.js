@@ -81,16 +81,19 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
     Model.request.manyToManyWithData = function (fieldList, data) {
         angular.forEach(fieldList, function (field) {
-            var fieldData = [];
+            var fieldData = null;
 
-            angular.forEach(data[field].all, function (item, ignore) {
-                if (typeof item == 'string') {
-                    fieldData.push(item);
-                }
-                else if (item.resource_uri) {
-                    fieldData.push(item.resource_uri);
-                }
-            });
+            if (data[field]) {
+                fieldData = [];
+                angular.forEach(data[field].all, function (item, ignore) {
+                    if (typeof item == 'string') {
+                        fieldData.push(item);
+                    }
+                    else if (item.resource_uri) {
+                        fieldData.push(item.resource_uri);
+                    }
+                });
+            }
             data[field] = fieldData;
         });
 
@@ -130,7 +133,14 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
         }
     };
 
-    Model.objects.dataSource = function (modelClass, orderBy, params, $scope, itemListProp) {
+    Model.objects.dataSource = function (options) {
+
+        var modelClass = options.modelClass;
+        var orderBy = options.orderBy;
+        var params = options.params;
+        var $scope = options.$scope;
+        var itemListProp = options.itemListProp;
+        var reverse = options.reverse;
 
         var self = this;
         params = params || {};
@@ -141,9 +151,11 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
         self.ordering = null;
         self.disableLoadMore = false;
         self.busy = false;
+        self.limit = null; // When first time api request, we know this limit
+        self.remain = null; // When first time api request, we know this limit
 
         self.load = function (ordering, callback) {
-            console.log(self.busy);
+
             if (self.disableLoadMore || self.busy) {
                 return;
             }
@@ -160,8 +172,23 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
             }
 
             modelClass.one().get(self.params).then(function (resp) {
+
+                self.limit = resp.meta.limit;
+                self.remain = Math.max(0, resp.meta.total_count - self.limit);
+
+                if (self.remain <= 0) {
+                    self.disableLoadMore = true;
+                }
+
                 if (resp.objects.length) {
-                    $scope[itemListProp] = $scope[itemListProp].concat(resp.objects);
+                    if (reverse) {
+                        resp.objects = resp.objects.reverse();
+                        $scope[itemListProp] = resp.objects.concat($scope[itemListProp]);
+                    }
+                    else {
+                        $scope[itemListProp] = $scope[itemListProp].concat(resp.objects);
+                    }
+
                     if (callback) {
                         callback(resp);
                     }
@@ -176,7 +203,9 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
         self.loadMore = function () {
             self.load(self.ordering, function (resp) {
-                self.ordering = resp.objects[resp.objects.length-1][orderBy.replace('-', '')];
+                //self.ordering = resp.objects[resp.objects.length-1][orderBy.replace('-', '')];
+                var latestIndex = reverse? 0: resp.objects.length-1;
+                self.ordering = resp.objects[latestIndex][orderBy.replace('-', '')];
             });
         }
 

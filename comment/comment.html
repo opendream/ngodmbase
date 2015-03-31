@@ -1,6 +1,12 @@
 <div ng-controller="CommentCtrl" discard-modal-on-state-change>
     <h4>ความคิดเห็น</h4>
     <div class="comment-list">
+        <a href=""
+           ng-show="!commentDataSource.disableLoadMore"
+           ng-click="commentDataSource.loadMore()"
+        >
+            ดูอีก {{ commentDataSource.remain }} ความคิดเห็นก่อนหน้า
+        </a>
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="model in commentList">
                 <div ng-include="'/static/app/odmbase/comment/comment.item.html'">
