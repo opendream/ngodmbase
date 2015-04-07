@@ -115,6 +115,9 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
                 }
             }
+            else if (typeof data[field] != 'string') {
+                data[field] = null;
+            }
         });
 
         return data;

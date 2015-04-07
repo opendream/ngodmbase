@@ -11,6 +11,7 @@ function CommonField () {
         scope: {
             model: '=',
             form: '=',
+            errors: '=',
             submitted: '=',
             maxUploads: '@',
             referenceModel: '@',

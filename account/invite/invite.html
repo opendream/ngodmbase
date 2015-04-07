@@ -1,0 +1,45 @@
+<div class="container">
+
+    <div class="col-sm-8 form-wrapper invite-form-wrapper">
+        <div class="alert alert-warning">
+        ทางเราขอจำกัดจำนวนการชวนเพื่อนของคุณ เพื่อที่จะให้สิทธิ์ผู้ที่จะมาปันของก่อน <br/>
+        กรุณาชวนเพื่อนที่คุณคิดว่าเขาจะมีของที่ไม่ได้ใช้และอยากแบ่งปันก่อนนะคะ <br/><br/>
+
+        ผู้ที่ได้รับการเชิญจากคุณ จะได้สิทธิ์ในการโพสต์ของเพิ่มอีก 5 ชิ้น<br/>
+        คุณจะสามารถชวนเพื่อนได้อีก {{ remain }} คน
+        </div>
+        <form class="form" name="form" ng-submit="sendInvite(form)" novalidate>
+            <div class="form-group" ng-class="{valid: model.isValid == true, invalid: model.isValid == false}" ng-repeat="model in inviteList track by $index">
+                <span ng-show="!model.isInvited && (model.inFocus || model.isValid != false)" class="glyphicon glyphicon-user user-icon" ng-class="{'in-focus': model.inFocus}"> </span>
+                <span ng-show="!model.isInvited && !model.inFocus && model.isValid == false" class="glyphicon glyphicon-exclamation-sign user-icon"> </span>
+                <span ng-show="model.isInvited" class="glyphicon glyphicon-ok-sign user-icon"> </span>
+                <input
+                    class="form-control"
+                    focus-me="$first"
+                    type="text"
+                    name="email[]"
+                    ng-model="model.email"
+                    ng-focus="addMoreInvite($last, $index)"
+                    ng-blur="checkValid(model, $index)"
+                    ng-readonly="model.isValid"
+                />
+                <span ng-show="model.isValid" ng-click="deleteInvite($index)" class="glyphicon glyphicon-remove-circle delete"> </span>
+            </div>
+
+            <div field form="form" submitted="submitted" model="inviteModel"
+                 label="ข้อความ"
+                 name="message"
+                 type="textarea"
+                 help=""
+            >
+            </div>
+
+            <button class="btn btn-default">ส่งคำชวน</button>
+        </form>
+    </div>
+
+    <div class="col-sm-4">
+
+    </div>
+
+</div>

@@ -5,14 +5,20 @@ angular
 
 function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
+
     $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
 
     $scope.user = {};
     $scope.errors = {};
-    $scope.$watch('user', function (newValue, oldVale) {
+    if ($scope.param && $scope.param.email) {
+        $scope.user.email = $scope.param.email;
+    }
 
-    });
-    $scope.register = function(form, redirectUrl) {
+    $scope.register = function(form, redirectUrl, successCallback) {
+
+        redirectUrl = redirectUrl || $scope.param.redirectUrl;
+        successCallback = successCallback || $scope.param.successCallback;
+
         $scope.submitted = true;
         if(form.$valid) {
             Auth.createUser({
@@ -31,9 +37,14 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
                         redirect =false;
                     }
 
-                    // do callback ex redirect to page
-                    redirectUrl = redirectUrl || 'profile';
-                    $location.path(redirectUrl);
+                    if (successCallback) {
+                        successCallback();
+                    }
+                    else {
+                        // do callback ex redirect to page
+                        redirectUrl = redirectUrl || 'profile';
+                        $location.path(redirectUrl);
+                    }
                 }
             });
         }
