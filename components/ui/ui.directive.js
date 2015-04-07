@@ -110,6 +110,12 @@ angular.module('odmbase').directive('dateParser', function () {
 
 });
 
+angular.module('odmbase').filter("sanitize", ['$sce', function($sce) {
+  return function(htmlCode){
+    return $sce.trustAsHtml(htmlCode);
+  }
+}]);
+
 angular.module('odmbase').directive('templateItem', function () {
     return {
         restrict: 'A',
@@ -117,9 +123,9 @@ angular.module('odmbase').directive('templateItem', function () {
         scope: {
             model: '=',
             templateUrl: '=',
-            createdBy: '=',
-            isDetail: '=',
-            param: '='
+            createdBy: '=?',
+            isDetail: '=?',
+            param: '=?'
         },
         controller: function($scope) {
             if ($scope.createdBy) {
@@ -128,10 +134,10 @@ angular.module('odmbase').directive('templateItem', function () {
             if ($scope.model && $scope.model.resource_uri) {
                 $scope.model.elemId = $scope.model.resource_uri.replace(/\//g, '-').substr(0, $scope.model.resource_uri.length - 1).replace('-api-v1-', '');
             }
+
+            this.scope = $scope;
         }
-
     };
-
 });
 
 var mediaRenderOrModalLink = {
@@ -152,9 +158,9 @@ var mediaRenderOrModalLink = {
         }
         $scope.param = $scope.param || {};
         $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
-        $scope.modalOpen = function (modalUrl) {
+        $scope.modalOpen = function () {
             $scope.param = _.extend({model: $scope.model}, $scope.param);
-            Modal.open(modalUrl, 'lg', $scope.param);
+            Modal.open($scope.templateItemUrl, 'lg', $scope.param);
         };
     }
 
@@ -169,19 +175,54 @@ angular.module('odmbase').directive('mediaRender', function () {
 
 });
 
-angular.module('odmbase').directive('likeLink', function () {
+angular.module('odmbase').directive('mediaModalLink', function () {
 
-    return {
-        restrict: 'A',
-        templateUrl: '/static/app/odmbase/components/ui/templates/render/template_item.html',
-        scope: {
-            model: '='
-        },
-        controller: function ($scope, Modal) {
+    var mediaModalLink = _.cloneDeep(mediaRenderOrModalLink);
 
-        }
-    }
+    mediaModalLink['transclude'] = true;
+    mediaModalLink['template'] = '<a href="" ng-click="modalOpen()"><span ng-transclude></span></a>';
 
+    return mediaModalLink;
 });
 
 
+
+
+
+angular.module('odmbase').directive('textfill', function ($timeout) {
+    return {
+      restrict: 'A',
+      scope: {
+        textfill: '=',
+        textfillOnSuccess: '=',
+        textfillOnFail: '=',
+        textfillOnComplete: '='
+      },
+      template: '<span ng-bind-html="textfill"></span>',
+      controller: function($scope) {
+        $scope.textfill = $scope.textfill.replace('<p>', '').replace('</p>', '');
+      },
+      link: function (scope, element, attr) {
+
+        var container = element,
+            options = {
+              innerTag: attr.innerTag || "span",
+              debug: attr.debug || false,
+              minFontPixels: parseInt(attr.minFontPixels) || 4,
+              maxFontPixels: parseInt(attr.maxFontPixels) || 40,
+              widthOnly: attr.widthOnly || false,
+              explicitHeight: attr.explicitHeight || null,
+              explicitWidth: attr.explicitWidth || null,
+              success: scope.textfillOnSuccess || null,
+              fail: scope.textfillOnFail || null,
+              complete: scope.textfillOnComplete || null
+            };
+
+        container.textfill(options);
+
+        scope.$watch('textfill', function () {
+          container.textfill(options);
+        });
+      }
+    };
+  });

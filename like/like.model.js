@@ -1,10 +1,10 @@
 angular
     .module('odmbase')
-    .factory('Comment', ['Restangular', 'User', 'Model', Comment]);
+    .factory('Like', ['Restangular', 'User', 'Model', Like]);
 
-function Comment (Restangular, User, Model) {
+function Like (Restangular, User, Model) {
 
-    var modelName = 'comment';
+    var modelName = 'like';
 
     var self = this;
 
@@ -25,7 +25,7 @@ function Comment (Restangular, User, Model) {
             return element;
         }
         var requestModel = function (element, operation, route, url) {
-            Model.request.foreignKeyWithData(['dst'], element);
+            Model.request.foreignKeyWithData(['dst'], element, true);
             return element;
         };
 

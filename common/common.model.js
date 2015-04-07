@@ -1,21 +1,16 @@
 angular
     .module('odmbase')
-    .factory('Comment', ['Restangular', 'User', 'Model', Comment]);
+    .factory('Common', ['Restangular', 'Model', Common]);
 
-function Comment (Restangular, User, Model) {
+function Common (Restangular, Model) {
 
-    var modelName = 'comment';
+    var modelName = 'common';
 
     var self = this;
 
     var restangular = Restangular.withConfig(function(RestangularConfigurer) {
 
         var _buildModel = function (element) {
-
-            element.src = Model.field.foreignKeyWithData(User, element.src);
-            if (element.created) {
-                element.created = typeof(element.created) == 'string' && Date(element.created);
-            }
             return element;
         };
 
@@ -25,7 +20,6 @@ function Comment (Restangular, User, Model) {
             return element;
         }
         var requestModel = function (element, operation, route, url) {
-            Model.request.foreignKeyWithData(['dst'], element);
             return element;
         };
 

@@ -1,40 +1,53 @@
 'use strict';
 
-angular.module('odmbase')
-    .directive('field', function() {
+angular
+    .module('odmbase')
+    .directive('field', CommonField);
+
+function CommonField () {
     return {
         restrict: 'A',
         templateUrl: '/static/app/odmbase/components/form/templates/fields/base.html',
         scope: {
-          model: '=',
-          form: '=',
-          submitted: '=',
-          maxUploads: '@',
-          referenceModel: '@',
-          params: '=',
-          type: '@',
-          label: '@',
-          name: '@',
-          help: '@',
-          required: '=',
-          readonly: '=',
-          min: '@',
-          max: '@',
-          step: '@',
-          error: '=',
-          suffix: '@',
-          options: '=',
-          labelClass: '@',
-          fieldClass: '@',
-          helpClass: '@',
-          itemClass: '@',
-          itemTemplateUrl: '=',
-          odmChange: '=',
-          ngFocus: '=',
-          ngBlur: '='
+            model: '=',
+            form: '=',
+            submitted: '=',
+            maxUploads: '@',
+            referenceModel: '@',
+            params: '=',
+            type: '@',
+            label: '@',
+            placeholder: '@',
+            name: '@',
+            help: '@',
+            required: '=',
+            readonly: '=',
+            min: '@',
+            max: '@',
+            step: '@',
+            error: '=',
+            suffix: '@',
+            options: '=?',
+            labelClass: '@',
+            fieldClass: '@',
+            helpClass: '@',
+            itemClass: '@',
+            itemTemplateUrl: '=',
+            itemList: '=?',
+            itemLabel: '@',
+            itemKey: '@',
+            tagsLoad: '=',
+            tagsDisplayProperty: '@',
+            odmChange: '=',
+            ngFocus: '=',
+            ngBlur: '='
         },
         // TODO: split one file per one field type T_T
-        controller: function($scope, $injector, $upload, $q, Modal, Model, Image) {
+        controller: function($scope, $element, $injector, $upload, $q, Modal, Model, Image) {
+
+            // simple lib include
+            $scope.Math = window.Math;
+            $scope.moment = window.moment;
 
             if ($scope.referenceModel) {
                 $scope.referenceModel = $injector.get($scope.referenceModel);
@@ -45,24 +58,29 @@ angular.module('odmbase')
                $scope.model[$scope.name] = $scope.model[$scope.name] || "";
             }
 
+            else if ($scope.type == 'text-angular-inline') {
+                // Holy bug of text-angular
+               $scope.model[$scope.name] = $scope.model[$scope.name] || "";
+            }
+
             else if ($scope.type == 'select-reference') {
 
                 $scope.referenceModel.one().get($scope.params).then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
                 });
             }
 
             else if ($scope.type == 'select-multiple-reference') {
 
                 $scope.referenceModel.one().get().then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
                 });
             }
 
             else if ($scope.type == 'checkbox-multiple-reference') {
 
                 $scope.referenceModel.one().get().then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
 
                 });
 
@@ -96,6 +114,29 @@ angular.module('odmbase')
                 }
 
             }
+
+            else if ($scope.type == 'select-list') {
+
+                //$scope.referenceModel.one().get($scope.params).then(function (data) {
+                //    $scope.itemList = data.objects;
+                //});
+                $scope.$watch('model.' + $scope.name, function (newValue, oldValue) {
+
+                    if (!newValue) {
+                        $scope.selectedItem = null;
+                    }
+                    console.log('model', newValue);
+                    //console.log($scope.itemLabel);
+                    //$scope.options = $scope.itemList;
+                });
+                $scope.selectSingleItem = function (item) {
+                    $scope.selectedItem = item;
+                    console.log('item', item);
+                    //console.log('model', $scope.model[$scope.name]);
+                    //$scope.model[$scope.name] = item;
+                };
+            }
+
 
             else if ($scope.type == 'image-set') {
 
@@ -218,6 +259,7 @@ angular.module('odmbase')
 
             }
 
+
         }
     }
-});
+}

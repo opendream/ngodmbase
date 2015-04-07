@@ -9,6 +9,9 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
     $scope.user = {};
     $scope.errors = {};
+    $scope.$watch('user', function (newValue, oldVale) {
+
+    });
     $scope.register = function(form, redirectUrl) {
         $scope.submitted = true;
         if(form.$valid) {

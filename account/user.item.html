@@ -1,0 +1,19 @@
+<div class="user-list-item row">
+    <div class="col-xs-2">
+        <div class="field-created_by_image">
+            <a ng-href="/{{ user.username }}">
+                <div image-render
+                    url="user.getImage()"
+                    crop="true"
+                ></div>
+            </a>
+        </div>
+    </div>
+    <div class="col-xs-10">
+        <a ng-href="{{ user.absolute_url }}">
+            <strong>
+                {{ user.unicode_string }}
+            </strong>
+        </a>
+    </div>
+</div>
