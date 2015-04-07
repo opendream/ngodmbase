@@ -1,5 +1,5 @@
 angular
-    .module('mtd')
+    .module('odmbase')
     .factory('Comment', ['Restangular', 'User', 'Model', Comment]);
 
 function Comment (Restangular, User, Model) {

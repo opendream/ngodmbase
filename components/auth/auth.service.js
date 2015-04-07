@@ -200,7 +200,7 @@ angular.module('odmbase')
      * @return {Boolean}
      */
     Auth.isLoggedIn = function() {
-      return $cookieStore.get('key') && currentUser.hasOwnProperty('username');
+      return $cookieStore.get('key');
     };
 
     /**
@@ -253,7 +253,7 @@ angular.module('odmbase')
     Auth.getDetail = function (username, cb) {
 
         if (!username && $cookieStore.get('key')) {
-
+            /*
             var stop = $interval(function() {
                 if (currentUser && currentUser.id) {
                     cb(currentUser, true);
@@ -261,7 +261,11 @@ angular.module('odmbase')
                     stop = undefined;
                 }
             }, 100);
-
+            */
+            User.one().me().then(function(model) {
+                currentUser = model;
+                cb(currentUser, true);
+            });
         }
         else {
             User.one(username).get().then(function (user) {

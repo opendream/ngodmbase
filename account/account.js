@@ -30,9 +30,21 @@ angular.module('odmbase')
         templateUrl: '/static/app/account/detail/detail.html',
         controller: 'AccountDetailCtrl'
       })
+      .state('invite', {
+        url: '/invite',
+        templateUrl: '/static/app/odmbase/account/invite/invite.html',
+        controller: 'InviteCtrl'
+      })
+      .state('inviteConfirm', {
+        url: '/invite/:code',
+        templateUrl: '/static/app/account/detail/detail.html',
+        controller: 'InviteConfirmCtrl'
+      })
       .state('accountDetail', {
         url: '/:username',
         templateUrl: '/static/app/account/detail/detail.html',
         controller: 'AccountDetailCtrl'
       });
+
+
   }]);

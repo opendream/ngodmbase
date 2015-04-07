@@ -8,6 +8,7 @@ angular.module('odmbase')
         scope: {
           model: '=',
           form: '=',
+          errors: '=',
           submitted: '=',
           maxUploads: '@',
           referenceModel: '@',

@@ -625,3 +625,51 @@ select.form-control {
 	top: 0;
 	left: 0;
 }
+
+// Invite form
+.invite-form-wrapper {
+    .form-group {
+        position: relative;
+    }
+    input {
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 0px none !important;
+        box-shadow: none !important;
+        border-bottom: solid 1px #cecece !important;
+    }
+    input:focus {
+        outline: 0;
+    }
+    input[readonly] {
+        cursor: auto;
+        background-color: #FFF;
+    }
+    .delete {
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        top:50%;
+        margin-top: -7px;
+        z-index: 1;
+    }
+    .user-icon {
+        position: absolute;
+        left: 0px;
+        top:50%;
+        margin-top: -7px;
+        z-index: 1;
+        color: #CCC;
+    }
+
+    .valid .glyphicon-user, .user-icon.in-focus {
+        color: green;
+    }
+    .invalid .glyphicon-exclamation-sign {
+        color: orange;
+    }
+
+    .glyphicon-ok-sign {
+        color: dodgerblue;
+    }
+}

@@ -106,6 +106,9 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
             if (typeof data[field] == 'object' && data[field].resource_uri) {
                 data[field] = data[field].resource_uri;
             }
+            else if (typeof data[field] != 'string') {
+                data[field] = null;
+            }
         });
 
         return data;
