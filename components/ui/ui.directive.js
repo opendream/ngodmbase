@@ -53,6 +53,9 @@ angular.module('odmbase').directive('imageRender', function() {
             if ($scope.crop) {
                 $scope.cropClass = 'image-crop'
             }
+            else {
+                $scope.cropClass = 'image-contain'
+            }
         }
 
     };
@@ -226,3 +229,32 @@ angular.module('odmbase').directive('textfill', function ($timeout) {
       }
     };
   });
+
+angular.module('odmbase').directive('activeLink', ['$location', function(location) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs, controller) {
+            var clazz = attrs.activeLink;
+            var path = attrs.href;
+
+            scope.location = location;
+            scope.$watch('location.path()', function(newPath) {
+
+                if (element.parent()[0].tagName == 'LI') {
+                     element.parent()[0];
+                }
+                if (path === newPath) {
+                    element.addClass(clazz);
+                    if (element.parent()[0].tagName == 'LI') {
+                         $(element.parent()[0]).addClass(clazz);
+                    }
+                } else {
+                    element.removeClass(clazz);
+                    if (element.parent()[0].tagName == 'LI') {
+                         $(element.parent()[0]).removeClass(clazz);
+                    }
+                }
+            });
+        }
+    };
+}]);

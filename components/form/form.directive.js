@@ -44,7 +44,7 @@ function CommonField () {
             ngBlur: '='
         },
         // TODO: split one file per one field type T_T
-        controller: function($scope, $element, $injector, $upload, $q, Modal, Model, Image) {
+        controller: function($scope, $element, $injector, $upload, $q, $timeout, Modal, textAngularManager, Model, Image) {
 
             // simple lib include
             $scope.Math = window.Math;
@@ -62,6 +62,13 @@ function CommonField () {
             else if ($scope.type == 'text-angular-inline') {
                 // Holy bug of text-angular
                $scope.model[$scope.name] = $scope.model[$scope.name] || "";
+               $scope.handlePaste = function ($html) {
+
+                   //var pastedData = event.originalEvent.clipboardData;
+                   $html = $.htmlClean($html, {allowedTags: ["br"]});
+                   return $html;
+
+               }
             }
 
             else if ($scope.type == 'select-reference') {
@@ -116,28 +123,34 @@ function CommonField () {
 
             }
 
-            else if ($scope.type == 'select-list') {
+            else if ($scope.type == 'select-list' || $scope.type == 'select-list-reference') {
 
-                //$scope.referenceModel.one().get($scope.params).then(function (data) {
-                //    $scope.itemList = data.objects;
-                //});
+                var initialData = $scope.model[$scope.name];
+                if (initialData && $scope.type == 'select-list') {
+                    $scope.selectedItem = _.find($scope.itemList, $scope.itemKey, initialData);
+                }
+
+                if ($scope.type == 'select-list-reference') {
+                    $scope.referenceModel.one().get($scope.params).then(function (data) {
+                        $scope.itemList = data.objects;
+
+                        if (initialData) {
+                            var filterParam = {};
+                            filterParam[$scope.itemKey] = initialData;
+                            $scope.selectedItem = _.find($scope.itemList, filterParam);
+                        }
+                    });
+                }
                 $scope.$watch('model.' + $scope.name, function (newValue, oldValue) {
-
                     if (!newValue) {
                         $scope.selectedItem = null;
                     }
-                    console.log('model', newValue);
-                    //console.log($scope.itemLabel);
-                    //$scope.options = $scope.itemList;
                 });
                 $scope.selectSingleItem = function (item) {
                     $scope.selectedItem = item;
-                    console.log('item', item);
-                    //console.log('model', $scope.model[$scope.name]);
-                    //$scope.model[$scope.name] = item;
                 };
-            }
 
+            }
 
             else if ($scope.type == 'image-set') {
 

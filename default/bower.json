@@ -51,6 +51,9 @@
     "ngInfiniteScroll": "1.0.0",
     "angularjs-socialshare": "~0.1.6",
     "angular-youtube-mb": "~1.0.0",
-    "jquery-textfill": "~0.6.0"
+    "jquery-textfill": "~0.6.0",
+    "jquery-htmlclean": "~1.4.0",
+    "angular-validation-match": "~1.4.1",
+    "angular-blocks": "~0.1.9"
   }
 }

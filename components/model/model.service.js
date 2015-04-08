@@ -17,6 +17,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
     };
 
     Model.build.manyToManyWithData = function (fieldList, data) {
+        if (!data) {
+            return data;
+        }
+
         angular.forEach(fieldList, function (field) {
 
             if (typeof(field) == 'object') {
@@ -46,6 +50,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
 
     Model.build.imageSaveList = function (element) {
+        if (!element) {
+            return element;
+        }
+
         if (!element['image_set']) {
             element['image_set'] = {};
         }
@@ -64,7 +72,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
                     promiseCollectors.push(_image[method].call(_image, undefined));
 
                 }
-            }
+            };
 
             // update all images
 
@@ -78,7 +86,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
                 callback(somethingIDontKnow);
             });
 
-        }
+        };
         return element;
     };
 

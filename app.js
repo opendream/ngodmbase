@@ -28,7 +28,9 @@ angular.module('odmbase', [
   'infinite-scroll',
   'angular-carousel',
   '720kb.socialshare',
-  'youtube-embed'
+  'youtube-embed',
+  'validation.match',
+  'angular-blocks'
 ])
 
 

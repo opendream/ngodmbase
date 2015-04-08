@@ -16,15 +16,12 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
     $scope.register = function(form, redirectUrl, successCallback) {
 
-        redirectUrl = redirectUrl || $scope.param.redirectUrl;
-        successCallback = successCallback || $scope.param.successCallback;
+        redirectUrl = redirectUrl || ($scope.param && $scope.param.redirectUrl);
+        successCallback = successCallback || ($scope.param && $scope.param.successCallback);
 
         $scope.submitted = true;
         if(form.$valid) {
-            Auth.createUser({
-                email: $scope.user.email,
-                password: $scope.user.password
-            }, function (err, model) {
+            Auth.createUser($scope.user, function (err, model) {
                 if (err) {
                     angular.forEach(err.data.error, function(message, field) {
                         form[field].$setValidity('mongoose', false);
