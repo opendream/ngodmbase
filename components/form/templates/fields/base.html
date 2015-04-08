@@ -116,7 +116,7 @@
   <p class="help-block" ng-show="isNotValid && key != 'required' && key != 'mongoose' && (submitted || form[name].$dirty)"  ng-class="helpClass" ng-repeat="(key, isNotValid) in form[name].$error">
     {{ error[key] }}
   </p>
-  <p class="help-block" ng-show="form[name].$error.mongoose" ng-repeat="error in errors[name]">
+  <p class="help-block" ng-show="form[name].$error.mongoose" ng-repeat="error in errors[name]" ng-class="helpClass">
     {{ error }}
   </p>
 
