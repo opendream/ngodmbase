@@ -46,6 +46,8 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
         var user = User.one();
         _.extend(user, model);
 
+        console.log('user', user);
+
         ProfileForm.afterSave($scope);
 
 
@@ -167,8 +169,9 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
     };
 
     $scope.removeImage = function () {
-        $scope.user.imageDataUrl = '';
-        $scope.user.image = '';
+        $scope.user.imageDataUrl = null;
+        $scope.user.image = null;
+        $scope.user.get_image = null;
         removeImage = true;
     }
 

@@ -28,7 +28,9 @@ angular.module('odmbase', [
   'infinite-scroll',
   'angular-carousel',
   '720kb.socialshare',
-  'youtube-embed'
+  'youtube-embed',
+  'validation.match',
+  'angular-blocks'
 ])
 
 
@@ -85,9 +87,9 @@ angular.module('odmbase', [
       // Intercept 401s and redirect you to login
       responseError: function(response) {
         if(response.status === 401) {
-          $location.path('/login');
+          //$location.path('/login');
           // remove any stale keys
-          $cookieStore.remove('key');
+          // $cookieStore.remove('key');
           return $q.reject(response);
         }
         else if(response.status === 404) {
@@ -96,7 +98,7 @@ angular.module('odmbase', [
         }
         else if (response.status === 500) {
           //window.location = '/500';
-          //return $q.reject(response);
+          return $q.reject(response);
         }
         else {
           return $q.reject(response);

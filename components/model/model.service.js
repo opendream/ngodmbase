@@ -5,6 +5,9 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
     var Model = {field: {}, objects: {}, build: {}, request: {}};
 
     Model.field.foreignKeyWithData = function (modelClass, data) {
+        if (!data) {
+            return data;
+        }
         var model = modelClass.one();
         _.extend(model, data);
         if (model.buildModel) {
@@ -14,6 +17,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
     };
 
     Model.build.manyToManyWithData = function (fieldList, data) {
+        if (!data) {
+            return data;
+        }
+
         angular.forEach(fieldList, function (field) {
 
             if (typeof(field) == 'object') {
@@ -43,6 +50,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
 
     Model.build.imageSaveList = function (element) {
+        if (!element) {
+            return element;
+        }
+
         if (!element['image_set']) {
             element['image_set'] = {};
         }
@@ -61,7 +72,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
                     promiseCollectors.push(_image[method].call(_image, undefined));
 
                 }
-            }
+            };
 
             // update all images
 
@@ -75,7 +86,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
                 callback(somethingIDontKnow);
             });
 
-        }
+        };
         return element;
     };
 
@@ -100,11 +111,17 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
         return data;
     };
 
-    Model.request.foreignKeyWithData = function(fieldList, data) {
+    Model.request.  foreignKeyWithData = function(fieldList, data, use_common) {
 
         angular.forEach(fieldList, function (field) {
-            if (typeof data[field] == 'object' && data[field].resource_uri) {
-                data[field] = data[field].resource_uri;
+            if (typeof data[field] == 'object') {
+                if (use_common && data[field].common_resource_uri) {
+                    data[field] = data[field].common_resource_uri;
+                }
+                else if (data[field].resource_uri) {
+                    data[field] = data[field].resource_uri;
+
+                }
             }
             else if (typeof data[field] != 'string') {
                 data[field] = null;
@@ -130,7 +147,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
 
         if (dataList && dataList.length) {
             angular.forEach(dataList, function (data) {
+
                 callback(data);
+                var args = data.resource_uri.split('/');
+                _.merge(data, modelClass.one(args[args.length-2]));
             });
             return dataList;
         }
@@ -144,6 +164,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
         var $scope = options.$scope;
         var itemListProp = options.itemListProp;
         var reverse = options.reverse;
+        var infinite = options.infinite;
 
         var self = this;
         params = params || {};
@@ -179,7 +200,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
                 self.limit = resp.meta.limit;
                 self.remain = Math.max(0, resp.meta.total_count - self.limit);
 
-                if (self.remain <= 0) {
+                if (!infinite && self.remain <= 0) {
                     self.disableLoadMore = true;
                 }
 

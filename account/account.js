@@ -13,10 +13,10 @@ angular.module('odmbase')
         templateUrl: 'static/app/odmbase/account/signup/signup.html',
         controller: 'SignupCtrl'
       })
-      .state('settings', {
-        url: '/settings',
-        templateUrl: 'static/app/odmbase/account/settings/settings.html',
-        controller: 'SettingsCtrl',
+      .state('profilePassword', {
+        url: '/profile/password',
+        templateUrl: 'static/app/odmbase/account/settings/password.html',
+        controller: 'ProfilePasswordCtrl',
         authenticate: true
       })
       .state('profile', {

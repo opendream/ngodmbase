@@ -6,11 +6,16 @@ angular
 
 function CommentCtrl ($scope, Model, Comment) {
 
-    $scope.dst = $scope.$parent.model;
+    if ($scope.param && $scope.param.model) {
+        $scope.dst = $scope.param.model;
+    }
+    else {
+        $scope.dst = $scope.$parent.model;
+    }
+
     $scope.model = {
         dst: $scope.dst.common_resource_uri
     };
-
 
     $scope.commentList = [];
     $scope.commentDataSource = Model.objects.dataSource({
@@ -23,7 +28,6 @@ function CommentCtrl ($scope, Model, Comment) {
     });
     $scope.commentDataSource.loadMore();
 
-
     $scope.submitComment = function (form) {
 
         if(form.$valid) {
@@ -34,10 +38,18 @@ function CommentCtrl ($scope, Model, Comment) {
 
             $scope.model.save().then(function (updateModel) {
 
+
                 $scope.model = {
                     dst: $scope.dst.common_resource_uri
                 };
                 $scope.commentList.push(updateModel);
+
+                // Update from client first because is faster feeling
+                $scope.dst.comments_count = $scope.dst.comments_count || 0;
+                $scope.dst.comments_count++;
+
+                // Make sure server side return and update later
+                $scope.dst.comments_count = updateModel.get_dst.comments_count
 
                 form.$setPristine();
             });

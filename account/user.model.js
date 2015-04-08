@@ -12,6 +12,7 @@ function User (Restangular, md5, Model) {
 
     self.buildModel = function (element) {
         element.getImage = function() {
+
             if (this.get_image) {
                 return this.get_image;
             }
@@ -57,6 +58,7 @@ function User (Restangular, md5, Model) {
 
             element.addRestangularMethod('me', 'get', 'me', undefined);
             element.addRestangularMethod('social_sign', 'post', 'social_sign', undefined);
+            element.addRestangularMethod('change_password', 'post', 'change_password', undefined);
 
             return element;
         });

@@ -1,6 +1,5 @@
 <div class="item-quote">
-    <blockquote>
-        <p>{{ model.quote }}</p>
-        <footer>{{ model.created_by.unicode_string }}</footer>
-    </blockquote>
+    <div class="block-quote lead" textfill="model.quote" max-font-pixels="100">
+    </div>
+    <div ng-show="model.quote_source" class="block-quote-source">— {{ model.quote_source }}</div>
 </div>

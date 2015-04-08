@@ -1,33 +1,45 @@
 <div class="form-group" ng-class="{ 'has-success': form[name].$valid && (submitted || form[name].$dirty),
                                     'has-error': form[name].$invalid && (submitted || form[name].$dirty) }">
-  <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+  <label ng-if="label" ng-class="labelClass" for="edit-field-{{ name }}">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
 
   <div class="field-container" ng-class="fieldClass">
     <!-- text -->
     <span ng-if="type=='text'">
-      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
     </span>
 
     <!-- url -->
     <span ng-if="type=='url'">
-      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
     </span>
 
     <!-- number -->
     <span ng-if="type=='number'">
-      <input class="form-control" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
+      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
       <span class="field-suffix" ng-if="suffix">{{ suffix }}</span>
     </span>
 
     <!-- text editor -->
     <span ng-if="type=='text-angular'">
-      <div text-angular type="text" name="description" ng-model="model['description']" ng-required="required" ng-readonly="readonly" >
+      <div text-angular id="edit-field-{{ name }}" placeholder="{{ placeholder }}" type="text" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
       </div>
     </span>
 
+    <span ng-if="type=='text-angular-inline'" class="text-angular-inline">
+      <span text-angular ta-toolbar="[]" ta-text-editor-class="{{ fieldClass }}-inline" ta-html-editor-class="{{ fieldClass }}-inline" id="edit-field-{{ model.route }}-{{ name }}" placeholder="{{ placeholder }}" type="text" name="{{ model.route }}-{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ta-paste="handlePaste($html)">
+      </span>
+    </span>
+
     <span ng-if="type=='textarea'">
-      <textarea msd-elastic class="form-control" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ng-change="odmChange()" ng-focus="ngFocus()" ng-blur="ngBlur()">
+      <textarea msd-elastic id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ng-change="odmChange()" ng-focus="ngFocus()" ng-blur="ngBlur()">
       </textarea>
+    </span>
+
+    <!-- tags -->
+    <span ng-if="type=='tags'">
+        <tags-input ng-model="model[name]" display-property="{{ tagsDisplayProperty }}" add-on-space="true" placeholder="{{ placeholder }}">
+            <auto-complete source="tagsLoad($query)" ng-if="tagsLoad"></auto-complete>
+        </tags-input>
     </span>
 
     <span ng-if="type=='radio'">
@@ -38,17 +50,17 @@
     </span>
 
     <span ng-if="type=='select-reference'">
-      <select class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in item_list track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      <select id="edit-field-{{ name }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
       </select>
     </span>
 
     <span ng-if="type=='select-multiple-reference'">
-      <select multiple ng-multiple="true" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in item_list track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
+      <select multiple ng-multiple="true" id="edit-field-{{ name }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
       </select>
     </span>
 
     <span ng-if="type=='checkbox-multiple-reference'">
-      <span class="checkbox-item" ng-class="itemClass" ng-repeat="item in item_list">
+      <span class="checkbox-item" ng-class="itemClass" ng-repeat="item in itemList">
         <span class="checkbox-input-wrapper" ng-class="{'checked': model[name].allDict[item.resource_uri]}">
           <input
               type="checkbox"
@@ -56,6 +68,7 @@
               value="{{ item.resource_uri }}"
               ng-model="model[name].allDict[item.resource_uri]"
               ng-change="selectItem(item)"
+              ng-class="{checked: model[name].allDict[item.resource_uri]}"
           />
           <label ng-click="selectItem(item)">
             <span ng-if="itemTemplateUrl" ng-include="itemTemplateUrl"></span>
@@ -63,6 +76,35 @@
           </label>
         </span>
       </span>
+    </span>
+
+    <span ng-if="type=='select-list' || type == 'select-list-reference'" class="select-list dropdown select-modify ">
+      <button id="{{ name }}-drop" type="button" data-toggle="dropdown">
+          <span class="text truncate" ng-if="selectedItem && itemTemplateUrl && !itemLabel">
+              <div template-item
+                   template-url="itemTemplateUrl"
+                   model="selectedItem">
+              </div>
+          </span>
+          <span class="text truncate" ng-if="selectedItem && itemLabel">
+              {{ selectedItem[itemLabel] }}
+          </span>
+          <span class="text truncate" ng-if="!selectedItem">
+              เลือก{{ label }}
+          </span>
+          <span class="caret">
+          </span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="{{ model.route }}-{{ name }}-drop">
+        <li class="radio" ng-class="{checked: model[name]}" ng-click="selectSingleItem(item)" ng-repeat="item in itemList track by $index">
+          <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ item[itemKey] }}" ng-value="item[itemKey]" ng-required="required"/>
+          <label ng-if="itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}" template-item
+                 template-url="itemTemplateUrl"
+                 model="item">
+          </label>
+          <label ng-if="!itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}">{{ item[itemLabel] }}</label>
+        </li>
+      </ul>
     </span>
 
     <span ng-if="type=='image-set'">
@@ -97,11 +139,14 @@
 
             </div>
           </div>
-          <span ng-show="$index==0" class="help-block">รูปหลัก</span>
+          <div ng-show="$index==0" class="help-block">
+            <div>รูปหลัก</div>
+          </div>
         </div>
       </div>
 
     </span>
+
 
   </div>
 

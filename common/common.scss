@@ -23,7 +23,7 @@ body {
 }
 
 .container { margin-bottom: 50px; }
-.navbar .container,
+
 .banner .container { margin-bottom: 0; }
 h2 strong {
   font-size: 1.5em;
@@ -61,18 +61,6 @@ h2 strong {
 .page-title {
   font-size: 22px;
   margin-bottom: 20px;
-}
-
-.navbar {
-  border-radius: 0;
-  margin-bottom: 0;
-  a.gravatar {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .icon-bar { background-color: #5f3c30; }
-  .navbar-toggle { border: 1px solid #5f3c30; }
-  .nav-right { margin-top: 10px; }
 }
 
 .badge {
@@ -260,6 +248,14 @@ img {
   box-shadow: #E776C0 1px 0 6px 1px;
 }
 
+.truncate {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 // btn
 
 .btn-round {
@@ -312,6 +308,35 @@ button.btn-delete {
   color: #b46d7b;
 }
 
+.select-list {
+    button {
+        max-width: 310px;
+        width: 100%;
+        text-align: left;
+        .caret {
+            top: 50%;
+            position: absolute;
+            right: 15px;
+            margin-top: -4px;
+        }
+    }
+    ul {
+        max-width: 310px;
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 0; // TODO: use mixin
+        li {
+            margin-bottom: 0;
+        }
+    }
+    input { display: none; }
+    label {
+        padding: 15px 0;
+        float: left;
+        width: 100%;
+    }
+}
+
 
 .item-head {
 	position: relative;
@@ -323,6 +348,9 @@ button.btn-delete {
 	background-repeat: no-repeat;
 	width: 100%;
 	height: 100%;
+}
+.image-contain .img-bg-img {
+  	background-size: contain;
 }
 .img-bg {
 	position: absolute;
@@ -356,6 +384,39 @@ button.btn-delete {
 .image-crop {
   overflow: hidden;
 }
+
+ul.carousel-images[rn-carousel] {
+
+    width: 100%;
+    margin-bottom: 0;
+    background-color: #000;
+
+    li {
+        position: relative;
+        margin-right: -100%;
+        vertical-align: middle;
+    }
+    .rn-carousel-control {
+        top: 50%;
+        margin-top: -15px;
+        text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
+        color: #FFF;
+    }
+
+    .rn-carousel-control.rn-carousel-control-next:before {
+        content: "\e258";
+        font-family: 'Glyphicons Halflings';
+        font-weight: bold;
+        font-size: 30px;
+    }
+    .rn-carousel-control.rn-carousel-control-prev:before {
+        content: "\e257";
+        font-family: 'Glyphicons Halflings';
+        font-weight: bold;
+        font-size: 30px;
+    }
+}
+
 
 .vcenter {
 	display: table-cell;
@@ -573,7 +634,7 @@ select.form-control {
 	opacity: 0.2;
 }
 .image-set-form-edit-field-image-item .has-image {
-	background-color: #E6E7E8;
+	//background-color: #E6E7E8;
 }
 
 .image-set-form-edit-field-image-item .drop-image {
@@ -626,6 +687,147 @@ select.form-control {
 	left: 0;
 }
 
+// Quote
+.block-quote {
+
+    height: 200px;
+    position: relative;
+    display: block;
+    border-left: 0;
+    padding: 0px 30px 0 35px;
+    margin: 12px 10px 30px 10px;
+    word-wrap: break-word;
+
+    a, span {
+        position: relative;
+        //line-height: 0.8em;
+    }
+
+    &:before {
+        content: "“";
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+
+    a:after, span:after {
+        content: "”";
+        display: inline-block;
+        margin-right: -33px;
+        margin-left: 10px;
+        position: absolute;
+        //bottom: 0;
+        z-index: 1;
+    }
+
+    &:before, a:after, span:after {
+        font-size: 40px;
+        line-height: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+
+    }
+
+    br:last-child { // First focus cusor style here
+        content: " ";
+    }
+}
+.block-quote-source {
+    padding: 0px 30px 0 47px;
+    font-size: 18px;
+    font-weight: lighter;
+}
+
+.edit-block-quote-inline {
+
+    height: 200px;
+    position: relative;
+    display: block;
+    border-left: 0;
+    padding: 0px 30px 0 35px;
+    margin: 12px 10px 10px 10px;
+    word-wrap: break-word;
+
+
+    div[contenteditable] {
+        position: relative;
+        line-height: 0.8em;
+        br:last-child { // First focus cusor style here
+          content: " ";
+          display: inline-block;
+          height: 1em;
+          line-height: 1em;
+        }
+    }
+
+    &:before {
+        content: "“";
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+
+    div[contenteditable]:after {
+        content: "”";
+        display: inline-block;
+        margin-right: -33px;
+        margin-left: 10px;
+        position: absolute;
+        //bottom: 0;
+        z-index: 1;
+    }
+
+    &:before, div[contenteditable]:after {
+        font-size: 40px;
+        line-height: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+
+    }
+}
+
+.media-field-quote .quote-source {
+
+    padding-left: 20px;
+
+    .field-container, .form-control, .form-group {
+        display: inline !important;
+        width: auto !important;
+        float: none !important;
+    }
+    input, input:focus {
+        border: none 0px;
+        box-shadow: none;
+    }
+
+}
+
+.text-angular-inline {
+    .ta-editor {
+        display: inline-block;
+        height: auto;
+        min-height: 0;
+    }
+    div[contenteditable], p {
+        display: inline;
+        padding: 0;
+    }
+
+    *:focus {
+        outline: 0;
+    }
+
+}
+
+
+// select-list
+.select-list {
+    label {
+        display: block;
+        cursor: default;
+    }
+}
+
 // Invite form
 .invite-form-wrapper {
     .form-group {
@@ -671,5 +873,17 @@ select.form-control {
 
     .glyphicon-ok-sign {
         color: dodgerblue;
+    }
+}
+
+
+/*
+**  Profile
+*/
+.col-right .action-picture .drop-image {
+    margin-top: 0px;
+    &:after {
+        content: "";
+        padding-top: 100%;
     }
 }

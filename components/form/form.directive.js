@@ -1,41 +1,54 @@
 'use strict';
 
-angular.module('odmbase')
-    .directive('field', function() {
+angular
+    .module('odmbase')
+    .directive('field', CommonField);
+
+function CommonField () {
     return {
         restrict: 'A',
         templateUrl: '/static/app/odmbase/components/form/templates/fields/base.html',
         scope: {
-          model: '=',
-          form: '=',
-          errors: '=',
-          submitted: '=',
-          maxUploads: '@',
-          referenceModel: '@',
-          params: '=',
-          type: '@',
-          label: '@',
-          name: '@',
-          help: '@',
-          required: '=',
-          readonly: '=',
-          min: '@',
-          max: '@',
-          step: '@',
-          error: '=',
-          suffix: '@',
-          options: '=',
-          labelClass: '@',
-          fieldClass: '@',
-          helpClass: '@',
-          itemClass: '@',
-          itemTemplateUrl: '=',
-          odmChange: '=',
-          ngFocus: '=',
-          ngBlur: '='
+            model: '=',
+            form: '=',
+            errors: '=',
+            submitted: '=',
+            maxUploads: '@',
+            referenceModel: '@',
+            params: '=',
+            type: '@',
+            label: '@',
+            placeholder: '@',
+            name: '@',
+            help: '@',
+            required: '=',
+            readonly: '=',
+            min: '@',
+            max: '@',
+            step: '@',
+            error: '=',
+            suffix: '@',
+            options: '=?',
+            labelClass: '@',
+            fieldClass: '@',
+            helpClass: '@',
+            itemClass: '@',
+            itemTemplateUrl: '=',
+            itemList: '=?',
+            itemLabel: '@',
+            itemKey: '@',
+            tagsLoad: '=',
+            tagsDisplayProperty: '@',
+            odmChange: '=',
+            ngFocus: '=',
+            ngBlur: '='
         },
         // TODO: split one file per one field type T_T
-        controller: function($scope, $injector, $upload, $q, Modal, Model, Image) {
+        controller: function($scope, $element, $injector, $upload, $q, $timeout, Modal, textAngularManager, Model, Image) {
+
+            // simple lib include
+            $scope.Math = window.Math;
+            $scope.moment = window.moment;
 
             if ($scope.referenceModel) {
                 $scope.referenceModel = $injector.get($scope.referenceModel);
@@ -46,24 +59,36 @@ angular.module('odmbase')
                $scope.model[$scope.name] = $scope.model[$scope.name] || "";
             }
 
+            else if ($scope.type == 'text-angular-inline') {
+                // Holy bug of text-angular
+               $scope.model[$scope.name] = $scope.model[$scope.name] || "";
+               $scope.handlePaste = function ($html) {
+
+                   //var pastedData = event.originalEvent.clipboardData;
+                   $html = $.htmlClean($html, {allowedTags: ["br"]});
+                   return $html;
+
+               }
+            }
+
             else if ($scope.type == 'select-reference') {
 
                 $scope.referenceModel.one().get($scope.params).then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
                 });
             }
 
             else if ($scope.type == 'select-multiple-reference') {
 
                 $scope.referenceModel.one().get().then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
                 });
             }
 
             else if ($scope.type == 'checkbox-multiple-reference') {
 
                 $scope.referenceModel.one().get().then(function (data) {
-                    $scope.item_list = data.objects;
+                    $scope.itemList = data.objects;
 
                 });
 
@@ -95,6 +120,35 @@ angular.module('odmbase')
                     }
                     updateSelectedList();
                 }
+
+            }
+
+            else if ($scope.type == 'select-list' || $scope.type == 'select-list-reference') {
+
+                var initialData = $scope.model[$scope.name];
+                if (initialData && $scope.type == 'select-list') {
+                    $scope.selectedItem = _.find($scope.itemList, $scope.itemKey, initialData);
+                }
+
+                if ($scope.type == 'select-list-reference') {
+                    $scope.referenceModel.one().get($scope.params).then(function (data) {
+                        $scope.itemList = data.objects;
+
+                        if (initialData) {
+                            var filterParam = {};
+                            filterParam[$scope.itemKey] = initialData;
+                            $scope.selectedItem = _.find($scope.itemList, filterParam);
+                        }
+                    });
+                }
+                $scope.$watch('model.' + $scope.name, function (newValue, oldValue) {
+                    if (!newValue) {
+                        $scope.selectedItem = null;
+                    }
+                });
+                $scope.selectSingleItem = function (item) {
+                    $scope.selectedItem = item;
+                };
 
             }
 
@@ -219,6 +273,7 @@ angular.module('odmbase')
 
             }
 
+
         }
     }
-});
+}

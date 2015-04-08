@@ -183,6 +183,7 @@ angular.module('odmbase')
      * @param  {Function} callback    - optional
      * @return {Promise}
      */
+    /*
     Auth.changePassword = function(oldPassword, newPassword, callback) {
       var cb = callback || angular.noop;
 
@@ -192,6 +193,7 @@ angular.module('odmbase')
         return cb(err);
       }).$promise;
     };
+    */
 
 
     /**

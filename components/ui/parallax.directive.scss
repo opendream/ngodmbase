@@ -13,7 +13,6 @@
 
   display: table-row;
   overflow: hidden;
-  // border: solid 5px;
 }
 
 .parallax-story {
@@ -36,11 +35,4 @@
   display: table-cell;
   position: absolute;
   height: 1000px;
-}
-
-.odm-parallax .story {
-  width: 750px;
-  min-width: 750px;
-  padding: 8px;
-  margin: 0 auto;
 }

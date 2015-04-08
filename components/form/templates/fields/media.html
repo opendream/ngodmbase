@@ -1,50 +1,68 @@
 <div class="media-field-list">
 
-    <div class="media-field media-field-quote" ng-show="model.media_selected=='image_set'">
+    <div class="media-field media-field-image col-xs-12" ng-show="model.media_selected=='image_set'">
           <div field form="form" submitted="submitted" model="model"
                label="รูปภาพ"
                name="image_set"
                type="image-set"
                error="{min: 'ต้องมีรูปไม่น้อยกว่า 1 รูป'}"
-               required="false"
+               required="model.media_selected=='image_set'"
                help="กรุณาตรวจสอบรูปของคุณที่กำลังอัพโหลด โดยจะต้องไม่เกิน 2MB ถ้าเกินระบบจะลบรูปออกโดยอัตโนมัติ"
                label-class="col-md-12"
                field-class="col-md-12"
-               help-class="col-md-12">
+               help-class="col-md-12 pull-left">
           </div>
     </div>
 
     <div class="media-field media-field-youtube col-xs-12" ng-show="model.media_selected=='youtube'">
         <div field form="form" submitted="submitted" model="model"
              label="Youtube"
+             placeholder="http://youtube.com/example"
              name="youtube_url"
              type="url"
-             required="false"
+             required="model.media_selected=='youtube'"
              error="{url: 'รูปแบบของ url ไม่ถูกต้อง.'}"
              label-class="col-md-12"
              field-class="col-md-12"
-             help-class="col-md-12">
+             help-class="col-md-12 pull-left">
         </div>
     </div>
 
     <div class="media-field media-field-quote col-xs-12" ng-show="model.media_selected=='quote'">
+
         <div field form="form" submitted="submitted" model="model"
-             label="Quote"
+             placeholder="Quote"
              name="quote"
-             type="text"
-             required="false"
-             label-class="col-md-12"
-             field-class="col-md-12"
-             help-class="col-md-12">
+             type="text-angular-inline"
+             required="model.media_selected=='quote'"
+             field-class="edit-block-quote"
+        >
         </div>
+        <div class="quote-source">
+            <span>— </span>
+            <span field form="form" submitted="submitted" model="model"
+                 placeholder="Source"
+                 name="quote_source"
+                 type="text"
+                 required="false"
+            >
+            </span>
+        </div>
+
     </div>
 
     <div class="media-btn-wrapper col-sm-8 col-no-pad">
         <div class="field-container col-no-pad" ng-class="fieldClass">
             <div class="media-field-control">
-                <button class="col-xs-4 btn btn-default btn-cube corner-bottom-left" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>Add Photos</button>
-                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>Add Video</button>
-                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>Make Quote</button>
+                <button class="col-xs-4 btn btn-default btn-cube corner-bottom-left" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>
+                  <i class="fa fa-camera"></i>Add Photos
+                </button>
+                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>
+                  <i class="fa fa-video-camera"></i>Add Video
+                </button>
+                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>
+                  <i class="fa fa-quote-right"></i>Make Quote
+                </button>
             </div>   
         </div>
     </div>
