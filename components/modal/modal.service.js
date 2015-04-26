@@ -15,7 +15,9 @@ angular.module('odmbase')
       controller: 'ModalInstanceCtrl',
       size: size,
       windowClass: 'odm-modal',
-      resolve: {param: param}
+      resolve: {param: param},
+      keyboard: false,
+      backdrop : 'static'
     });
 
     $('#content-wrapper').addClass('blur');

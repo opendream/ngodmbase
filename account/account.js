@@ -37,7 +37,7 @@ angular.module('odmbase')
       })
       .state('inviteConfirm', {
         url: '/invite/:code',
-        templateUrl: '/static/app/account/detail/detail.html',
+        templateUrl: '/static/app/main/main.html',
         controller: 'InviteConfirmCtrl'
       })
       .state('accountDetail', {
