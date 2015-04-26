@@ -690,7 +690,7 @@ select.form-control {
 // Quote
 .block-quote {
 
-    height: 200px;
+    height: 150px;
     position: relative;
     display: block;
     border-left: 0;
@@ -716,15 +716,14 @@ select.form-control {
         margin-right: -33px;
         margin-left: 10px;
         position: absolute;
-        //bottom: 0;
         z-index: 1;
     }
 
     &:before, a:after, span:after {
-        font-size: 40px;
-        line-height: 20px;
-        font-weight: bold;
-        margin-top: 10px;
+        font-size: 120px;
+        line-height: 45px;
+        font-weight: normal;
+        margin-top: 23px;
 
     }
 
@@ -734,20 +733,18 @@ select.form-control {
 }
 .block-quote-source {
     padding: 0px 30px 0 47px;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: lighter;
 }
 
 .edit-block-quote-inline {
-
     height: 200px;
     position: relative;
     display: block;
     border-left: 0;
-    padding: 0px 30px 0 35px;
-    margin: 12px 10px 10px 10px;
+    padding: 0 30px 0 35px;
+    margin: 0 0 20px 0;
     word-wrap: break-word;
-
 
     div[contenteditable] {
         position: relative;
@@ -781,14 +778,12 @@ select.form-control {
         font-size: 40px;
         line-height: 20px;
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 5px;
 
     }
 }
 
 .media-field-quote .quote-source {
-
-    padding-left: 20px;
 
     .field-container, .form-control, .form-group {
         display: inline !important;
@@ -826,6 +821,9 @@ select.form-control {
         display: block;
         cursor: default;
     }
+}
+.select-list-template-item {
+    display: block;
 }
 
 // Invite form

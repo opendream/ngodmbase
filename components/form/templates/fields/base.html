@@ -26,7 +26,7 @@
     </span>
 
     <span ng-if="type=='text-angular-inline'" class="text-angular-inline">
-      <span text-angular ta-toolbar="[]" ta-text-editor-class="{{ fieldClass }}-inline" ta-html-editor-class="{{ fieldClass }}-inline" id="edit-field-{{ model.route }}-{{ name }}" placeholder="{{ placeholder }}" type="text" name="{{ model.route }}-{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ta-paste="handlePaste($html)">
+      <span text-angular ta-toolbar="[]" ta-text-editor-class="{{ fieldClass }}-inline" ta-html-editor-class="{{ fieldClass }}-inline" id="edit-field-{{ name }}-{{ randnum }}" placeholder="{{ placeholder }}" type="text" name="{{ name }}-{{ randnum }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" ta-paste="handlePaste($html)">
       </span>
     </span>
 
@@ -79,7 +79,7 @@
     </span>
 
     <span ng-if="type=='select-list' || type == 'select-list-reference'" class="select-list dropdown select-modify ">
-      <button id="{{ name }}-drop" type="button" data-toggle="dropdown">
+      <button id="{{ name }}-drop" type="button" data-toggle="dropdown" ng-disabled="disabled">
           <span class="text truncate" ng-if="selectedItem && itemTemplateUrl && !itemLabel">
               <div template-item
                    template-url="itemTemplateUrl"

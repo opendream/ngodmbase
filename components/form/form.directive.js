@@ -41,7 +41,8 @@ function CommonField () {
             tagsDisplayProperty: '@',
             odmChange: '=',
             ngFocus: '=',
-            ngBlur: '='
+            ngBlur: '=',
+            disabled: '='
         },
         // TODO: split one file per one field type T_T
         controller: function($scope, $element, $injector, $upload, $q, $timeout, Modal, textAngularManager, Model, Image) {
@@ -49,10 +50,17 @@ function CommonField () {
             // simple lib include
             $scope.Math = window.Math;
             $scope.moment = window.moment;
+            $scope.randnum = _.random(0, 10000);
 
             if ($scope.referenceModel) {
                 $scope.referenceModel = $injector.get($scope.referenceModel);
             }
+
+            $scope.$watch('model.' + $scope.name, function (newValue, oldValue) {
+                if (newValue != oldValue && $scope.form[$scope.name] && $scope.form[$scope.name].$invalid) {
+                    $scope.form[$scope.name].$setValidity('mongoose', true);
+                }
+            });
 
             if ($scope.type == 'text-angular') {
                 // Holy bug of text-angular
@@ -108,7 +116,7 @@ function CommonField () {
                 };
 
                 $scope.selectItem = function (item) {
-                    updateSelectedList()
+                    updateSelectedList();
 
                     if ($scope.model[$scope.name].allDict[item.resource_uri]) {
                         _.remove($scope.model[$scope.name].all, {
@@ -127,7 +135,9 @@ function CommonField () {
 
                 var initialData = $scope.model[$scope.name];
                 if (initialData && $scope.type == 'select-list') {
-                    $scope.selectedItem = _.find($scope.itemList, $scope.itemKey, initialData);
+                    var filterParam = {};
+                    filterParam[$scope.itemKey] = initialData;
+                    $scope.selectedItem = _.find($scope.itemList, filterParam);
                 }
 
                 if ($scope.type == 'select-list-reference') {
@@ -139,15 +149,38 @@ function CommonField () {
                             filterParam[$scope.itemKey] = initialData;
                             $scope.selectedItem = _.find($scope.itemList, filterParam);
                         }
+
+                        if ($scope.model[$scope.name]) {
+                            $scope.selectedItem = $scope.model[$scope.name];
+                        }
                     });
                 }
+
                 $scope.$watch('model.' + $scope.name, function (newValue, oldValue) {
-                    if (!newValue) {
+                    if (newValue == undefined && newValue == oldValue) {
                         $scope.selectedItem = null;
+                    } else if (newValue != undefined && newValue != oldValue) {
+                        if ($scope.type == 'select-list') {
+                            var filterParam = {};
+                            filterParam[$scope.itemKey] = newValue;
+                            $scope.selectedItem = _.find($scope.itemList, filterParam);
+                        }
                     }
                 });
+
+                $scope.$watch('itemList', function (newValue, oldValue) {
+                    if (newValue != undefined && newValue != oldValue) {
+                        if (initialData && $scope.type == 'select-list') {
+                            var filterParam = {};
+                            filterParam[$scope.itemKey] = initialData;
+                            $scope.selectedItem = _.find($scope.itemList, filterParam);
+                        }
+                    }
+                });
+
                 $scope.selectSingleItem = function (item) {
                     $scope.selectedItem = item;
+                    $scope.model[$scope.name] = item[$scope.itemKey];
                 };
 
             }
@@ -157,7 +190,9 @@ function CommonField () {
                 //$scope.maxUploads = $scope.maxUploads || 9999999;
 
 
-                $scope.model[$scope.name] = {all: []};
+                if ($scope.model[$scope.name] && !$scope.model[$scope.name].all) {
+                    $scope.model[$scope.name] = {all: []};
+                }
                 $scope.nameItem = $scope.name.replace('_set', '');
 
                 $scope.$watch('model', function (newValue, oldValue) {
@@ -189,7 +224,7 @@ function CommonField () {
                     }
                     else {
                         angular.forEach($scope.model[$scope.name].all, function(imageData, key) {
-                            $scope.imageList.push(imageData)
+                            $scope.imageList.push({data: imageData});
                             //a.splice(a.length-1, 0, 'z')
                         });
                         $scope.imageList.push(null);
@@ -260,12 +295,10 @@ function CommonField () {
 
                             });
                         }
-                        console.log($scope.imageList);
                     }
                 };
 
                 $scope.removeImage = function (image, index) {
-
                     $scope.model[$scope.name].deleteImageSet.push(image);
                     removeImageClient(index);
 

@@ -5,7 +5,6 @@ angular
 
 function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
-
     $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
 
     $scope.user = {};
@@ -47,7 +46,7 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
         }
     }
 
-    $scope.socialSign = function(provider, redirectUrl) {
+    $scope.socialSign = function(provider, redirectUrl, confirmRequired) {
 
         // Close modal first for faster feeling
         var redirect = true;
@@ -58,11 +57,18 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
         // do callback ex redirect to page
         redirectUrl = redirectUrl || 'profile';
-        var cb = function () {
-            //if (redirect) {
-                $location.path(redirectUrl);
-            //}
-            //$window.location.reload();
+        var cb = function (err, model) {
+            if (model.is_new && confirmRequired) {
+                if (redirectUrl) {
+                    $location.path('/profile/social-confirm').search({next: redirectUrl});
+                }
+                else {
+                    $location.path('/profile/social-confirm');
+                }
+            }
+            else {
+                $window.location.reload();
+            }
         }
 
         Auth.socialSign(provider, cb);
@@ -77,5 +83,12 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
         }
     };
 
+    $scope.$watch('user.email', function (newValue, oldValue) {
+        if (newValue != oldValue && $scope.form.email.$invalid) {
+            $scope.form.email.$setValidity('mongoose', true);
+            $scope.submitted = false;
+
+        }
+    });
 
 }

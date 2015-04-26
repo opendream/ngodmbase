@@ -21,6 +21,7 @@ angular.module('odmbase', [
   'angularFileUpload',
   'angular-ellipses',
   'facebook',
+  'googleplus',
   'angularMoment',
   'ui.bootstrap.datetimepicker',
   'ngTagsInput',
@@ -30,11 +31,13 @@ angular.module('odmbase', [
   '720kb.socialshare',
   'youtube-embed',
   'validation.match',
-  'angular-blocks'
+  'angular-blocks',
+  'wu.masonry',
+  'ngTextTruncate'
 ])
 
 
-  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$resourceProvider', 'RestangularProvider', '$provide', 'localStorageServiceProvider', 'FacebookProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $resourceProvider, RestangularProvider, $provide, localStorageServiceProvider, FacebookProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$resourceProvider', 'RestangularProvider', '$provide', 'localStorageServiceProvider', 'FacebookProvider', 'GooglePlusProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $resourceProvider, RestangularProvider, $provide, localStorageServiceProvider, FacebookProvider, GooglePlusProvider) {
     var apiVersion = '/api/v1';
     $urlRouterProvider
       .otherwise('/');
@@ -51,6 +54,11 @@ angular.module('odmbase', [
     FacebookProvider.init(FACEBOOK_APP_ID);
     FacebookProvider.setInitCustomOption('scope', FACEBOOK_EXTENDED_PERMISSIONS);
 
+     GooglePlusProvider.init({
+        clientId: GOOGLE_OAUTH2_CLIENT_ID,
+        apiKey: GOOGLE_OAUTH2_API_KEY,
+        scopes: 'https://www.googleapis.com/auth/userinfo.email'
+     });
 
     $provide.decorator('taOptions', ['$delegate', function(taOptions){
         // $delegate is the taOptions we are decorating
