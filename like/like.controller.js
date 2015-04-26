@@ -13,7 +13,7 @@ function LikeCtrl ($scope, Model, Like) {
     }
 
     $scope.likeList = [];
-    $scope.likeDataSource = Model.objects.dataSource({
+    $scope.likeDataSource = new Model.objects.dataSource({
         modelClass: Like,
         orderBy: '-id',
         params: {dst: $scope.dst.id},

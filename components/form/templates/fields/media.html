@@ -31,7 +31,7 @@
     <div class="media-field media-field-quote col-xs-12" ng-show="model.media_selected=='quote'">
 
         <div field form="form" submitted="submitted" model="model"
-             placeholder="Quote"
+             placeholder="Make Quote Here"
              name="quote"
              type="text-angular-inline"
              required="model.media_selected=='quote'"
@@ -51,18 +51,33 @@
 
     </div>
 
-    <div class="media-btn-wrapper col-sm-8 col-no-pad">
+    <div class="media-btn-wrapper">
         <div class="field-container col-no-pad" ng-class="fieldClass">
             <div class="media-field-control">
-                <button class="col-xs-4 btn btn-default btn-cube corner-bottom-left" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable>
-                  <i class="fa fa-camera"></i>Add Photos
-                </button>
-                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable>
-                  <i class="fa fa-video-camera"></i>Add Video
-                </button>
-                <button class="col-xs-4 btn btn-default btn-cube" ng-model="model.media_selected" btn-radio="'quote'" uncheckable>
-                  <i class="fa fa-quote-right"></i>Make Quote
-                </button>
+                <a href="" class="col-xs-4 btn btn-default btn-cube" title="Add Photo" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable
+                    tooltip="เพิ่มรูปภาพ"
+                    tooltip-trigger="mouseenter"
+                    tooltip-placement="top"
+                    tooltip-html="true"
+                >
+                  <i class="fa fa-camera"></i>
+                </a>
+                <a href="" class="col-xs-4 btn btn-default btn-cube" title="Add Video" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable
+                    tooltip="เพิ่มวีดีโอ"
+                    tooltip-trigger="mouseenter"
+                    tooltip-placement="top"
+                    tooltip-html="true"
+                >
+                  <i class="fa fa-video-camera"></i>
+                </a>
+                <a href="" class="col-xs-4 btn btn-default btn-cube" title="Make Quote" ng-model="model.media_selected" btn-radio="'quote'" uncheckable
+                    tooltip="สร้างข้อความ"
+                    tooltip-trigger="mouseenter"
+                    tooltip-placement="top"
+                    tooltip-html="true"
+                >
+                  <i class="fa fa-quote-right"></i>
+                </a>
             </div>   
         </div>
     </div>

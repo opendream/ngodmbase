@@ -59,6 +59,12 @@ function User (Restangular, md5, Model) {
             element.addRestangularMethod('me', 'get', 'me', undefined);
             element.addRestangularMethod('social_sign', 'post', 'social_sign', undefined);
             element.addRestangularMethod('change_password', 'post', 'change_password', undefined);
+            element.addRestangularMethod('forgot_password', 'post', 'forgot_password', undefined);
+            element.addRestangularMethod('reset_password', 'post', 'reset_password', undefined);
+
+            if (typeof RequestExtraRestangularMethod != 'undefined') {
+                element = RequestExtraRestangularMethod(element);
+            }
 
             return element;
         });

@@ -1,5 +1,5 @@
-<div ng-controller="CommentCtrl" discard-modal-on-state-change>
-    <h4>ความคิดเห็น</h4>
+<div class="" ng-controller="CommentCtrl" discard-modal-on-state-change>
+    <h4 class="text-hide">ความคิดเห็น</h4>
     <div class="comment-list">
         <a href=""
            ng-show="!commentDataSource.disableLoadMore"
@@ -15,25 +15,21 @@
         </ul>
     </div>
 
-    <form class="form" name="form" ng-submit="submitComment(form)" novalidate>
+    <div class="comment-form">
+        <form class="form" name="form" ng-submit="submitComment(form)" novalidate>
+            <div class="form-group" ng-class="{ 'has-success': form.message.$valid && (submitted || form.message.$dirty),
+                                                'has-error': form.message.$invalid && (submitted || form.message.$dirty) }">
+                <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
 
-        <div class="form-group" ng-class="{ 'has-success': form.message.$valid && (submitted || form.message.$dirty),
-                                            'has-error': form.message.$invalid && (submitted || form.message.$dirty) }">
-            <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+                <div class="field-container" class="col-md-12">
 
-            <div class="field-container" class="col-md-12">
-
-                <span>
-                    <textarea msd-elastic focus-me="param.fromCommentLink" class="form-control" name="message" ng-model="model.message" required="required">
-                    </textarea>
-                </span>
+                    <span>
+                        <textarea msd-elastic focus-me="param.fromCommentLink" class="form-control" name="message" ng-model="model.message" required="required">
+                        </textarea>
+                        <button type="submit" class="btn btn-default">ส่ง</button>
+                    </span>
+                </div>
             </div>
-
-            <div class="pull-right">
-                <button type="submit" class="btn btn-default">ส่ง</button>
-            </div>
-
-        </div>
-
-    </form>
+        </form>
+    </div>
 </div>

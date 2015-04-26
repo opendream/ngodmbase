@@ -1,0 +1,116 @@
+    <div class="container social-confirm">
+
+        <div class="social-confirm-header">
+            <h1 class="text-uppercase text-center mtd-color">Create new account</h1>
+            <hr>
+            <p class="text-center">Please fill-in and confirm your information.</p>
+        </div>
+
+        <form class="row edit-profile" name="form" ng-submit="changeProfile(form)" novalidate>
+
+
+            <div class="col-sm-12 form-group action-picture" ng-class="{ 'has-success': form.image.$valid && (submitted || form.image.$dirty),
+                                                                                'has-error': form.image.$invalid && (submitted || form.image.$dirty) }">
+
+                <div class="col-sm-12 col-no-pad">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div ng-file-drop name="image" class="picture-area" drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false">
+
+                                <div class="film hidden">
+                                    <div name="image" class="button upload-image" ng-file-select drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false">
+                                        <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                                        <span class="text-block">กดเลือกไฟล์ <br/>เพื่ออัพโหลด</span>
+                                    </div>
+                                </div> <!-- action-image -->
+
+                                <!-- fake input -->
+
+                                <span class="picture avatar-round">
+                                    <img ng-show="!user.imageDataUrl" ng-src="{{ user.getImage() }}"/>
+                                    <img ng-show="user.imageDataUrl" ng-src="{{ user.imageDataUrl }}"/>
+                                </span>
+
+                            </div> <!-- End picture area -->
+                        </div>
+                        <div class="col-sm-6 hidden">
+                            <div name="image" class="hidden button drop-image hidden-xs" ng-file-drop drag-over-class="dragover" ng-file-change="attachImage($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="false"><span>หรือ <br />ลากไฟล์รูปมาวางที่นี่ <br />เพื่อเปลี่ยนรูป</span></div>
+                            <a class="btn btn-default use-default-image" ng-show="user.image || user.imageDataUrl" href="" ng-click="removeImage()">หรือ กดเพื่อลบรูป</a>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End action picture -->
+
+            <div class="form-group" ng-class="{ 'has-success': form.display_name.$valid && form.display_name.$dirty,
+                                                'has-error': form.display_name.$invalid && form.display_name.$dirty}">
+                <label class="col-sm-12 control-label">ชื่อที่ใช้แสดง *</label>
+                <div class="col-sm-12 field-wrapper">
+                    <input type="text" name="display_name" class="form-control" ng-model="user.display_name" placeholder="USERNAME"
+                             required/>
+                    <p class="help-block" ng-show="form.display_name.$error.required && (form.display_name.$dirty || submitted)">
+                        ชื่อที่ใช้แสดง จำเป็นต้องกรอก
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-success': form.email.$valid && !errors.email.length && form.email.$dirty,
+                                                'has-error': (form.email.$invalid || errors.email.length) && form.email.$dirty}">
+                <label class="col-sm-12 control-label">อีเมล</label>
+                <div class="col-sm-12">
+                    {{ submitted }}
+                    <input type="text" name="email" class="form-control" ng-model="user.email" required ng-readonly="user.email.indexOf('unknow') < 0 && !form.email.$dirty"/>
+                    <p class="help-block" ng-show="form.email.$error.required && (form.email.$dirty || submitted)">
+                        อีเมล จำเป็นต้องกรอก
+                    </p>
+                    <p class="help-block" ng-show="errors.email.length" ng-repeat="error in errors.email">
+                        อีเมลนี้มีผู้ใช้งานแล้ว
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-success': form.password.$valid && (submitted || form.password.$dirty),
+                                                'has-error': form.password.$invalid && (submitted || form.password.$dirty) }">
+                <label class="col-sm-12 control-label">รหัสผ่าน</label>
+                <div class="col-sm-12">
+                    <input type="password" name="password" class="form-control" ng-model="user.password" placeholder="PASSWORD"
+                                 ng-minlength="6"
+                                 required/>
+                    <p class="help-block"
+                         ng-show="(form.password.$error.minlength || form.password.$error.required) && (form.password.$dirty || submitted)">
+                        รหัสผ่านต้องมากกว่า 6 ตัวอักษร.
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-success': form.confirm_password.$valid,
+                                                'has-error': form.confirm_password.$invalid && form.confirm_password.$dirty }">
+                <label class="col-sm-12 control-label">ยืนยันรหัสผ่าน</label>
+                <div class="col-sm-12">
+                    <input type="password" name="confirm_password" class="form-control" ng-model="user.confirm_password" placeholder="CONFIRM PASSWORD" match="user.password" required />
+                    <p class="help-block" ng-show="form.confirm_password.$invalid && form.confirm_password.$dirty">
+                        รหัสผ่านไม่ตรงกัน
+                    </p>
+                    <p class="help-block" ng-show="form.confirm_password.$valid">
+                        การยืนยันรหัสผ่านถูกต้อง
+                    </p>
+                </div>
+
+            </div>
+            <!-- Extra field here -->
+<!--             <div class="col-sm-12">
+                <p>In case that sometimes you couldn't login by Facebook.</p>
+            </div> -->
+
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-mtd" type="submit" ng-disabled="form.$invalid">
+                        ตกลง
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>

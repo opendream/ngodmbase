@@ -9,6 +9,8 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
 
     $scope.redirectPath = '/me';
 
+    var next = $location.search().next;
+
     var ProfileForm = {
         extraFields: [],
         beforeLoad: function () {
@@ -46,7 +48,6 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
         var user = User.one();
         _.extend(user, model);
 
-        console.log('user', user);
 
         ProfileForm.afterSave($scope);
 
@@ -55,18 +56,23 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
         Auth.isLoggedInAsync(function(loggedIn) {
           $scope.submitted = false;
 
-          if (ProfileForm.afterConfirm) {
+          if (next) {
+              $location.path(next).search({next: null});
+          }
+          else if (ProfileForm.afterConfirm) {
               ProfileForm.afterConfirm();
           }
           else {
               ProfileForm.defaultAfterConfirm();
           }
+
         });
     };
 
     ProfileForm.beforeLoad($scope);
     $scope.user = User.one().me().then(function(model) {
         $scope.user = model;
+        delete($scope.user.password);
         ProfileForm.afterLoad($scope);
     })
 
@@ -76,13 +82,22 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
     $scope.errors = {};
     $scope.success = {}
 
+    $scope.$watch('user.email', function (newValue, oldValue) {
+                    console.log($scope.form);
+
+            $scope.errors['email'] = [];
+
+    });
 
     $scope.changeProfile = function(form) {
+        $scope.form = form;
         $scope.submitted = true;
         if(form.$valid) {
             var param = {
+                email: $scope.user.email,
                 first_name: $scope.user.first_name,
                 last_name: $scope.user.last_name,
+                password: $scope.user.password
 
             };
 
@@ -97,6 +112,7 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
             ProfileForm.beforeSave($scope);
 
             var data_encoded = $.param(param);
+
 
             $scope.user.customPUT(
                 data_encoded,
@@ -126,7 +142,7 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
             }, function (err) {
 
                 angular.forEach(err.data.error, function(message, field) {
-                    // form[field].$setValidity('mongoose', false);
+                    //form[field].$setValidity('mongoose', false);
                     $scope.errors[field] = message;
                 });
             });

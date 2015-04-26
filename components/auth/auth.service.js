@@ -1,14 +1,19 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Auth', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q', 'Facebook', '$interval', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Facebook, $interval) {
+  .factory('Auth', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Facebook, GooglePlus, $interval, $window) {
     var Auth = {};
     var currentUser = null;
     if($cookieStore.get('key')) {
       currentUser = User;
       User.one().me().then(function(model) {
         currentUser = model;
-      });
+      }, function (err) {
+          if (err.status == 403) {
+            Auth.logout();
+            $window.location('/');
+          }
+      } );
 
     }
 
@@ -85,36 +90,63 @@ angular.module('odmbase')
 
       //$scope.cancel(); // Close modal first for faster feeling
 
+      var connectServer = function (access_token) {
+        var user = User.one();
+
+        user.access_token = access_token;
+        user.provider = provider;
+
+        user.social_sign().then(function(model) {
+
+
+          Auth.setApiKey(model);
+          Auth.setCurrentUser(model);
+
+
+          callback(null, model);
+        }, function(err) {
+          callback(err, null);
+        });
+      };
+      //this.connectServer = connectServer;
+
       var providerFunction = {
         /**
         * Facebook
         */
-        facebook: function() {
+        'facebook': function() {
           Facebook.login(function(response) {
-            var accessToken = response.authResponse.accessToken;
             // Post to facebook api
-            var user = User.one();
-
-            user.access_token = accessToken;
-            user.provider = provider;
-
-
-            user.social_sign().then(function(model) {
-
-              Auth.setApiKey(model);
-              Auth.setCurrentUser(model);
-
-
-              callback(null, model);
-            }, function(err) {
-              callback(err, null);
-            });
+            connectServer(response.authResponse.accessToken)
           },
           {
             scope: FACEBOOK_EXTENDED_PERMISSIONS
           })
+        },
+
+        /**
+        * Google Plus
+        */
+        'google-oauth2': function() {
+          GooglePlus.login().then(function(response) {
+
+            connectServer(response.access_token)
+          })
+        },
+
+        /**
+        * Twitter
+        */
+        'twitter': function () {
+
+          $window.open('/account/login/twitter/', '', "width=530,height=500")
+          $window.twitterSignCallback = function(access_token) {
+            connectServer(access_token)
+          };
+
         }
       }
+
       providerFunction[provider]();
 
     };
@@ -214,8 +246,13 @@ angular.module('odmbase')
         User.one().me().then(function(model) {
           currentUser = model;
           cb(true);
-        }).catch(function() {
+        }).catch(function(err) {
           cb(false);
+          if (err.status == 403) {
+            Auth.logout();
+            $location.path('/');
+            $window.location.reload();
+          }
         });
       }
       else
@@ -267,11 +304,18 @@ angular.module('odmbase')
             User.one().me().then(function(model) {
                 currentUser = model;
                 cb(currentUser, true);
+            }, function (err) {
+                if (err.status == 403) {
+                    Auth.logout();
+                    $location.path('/');
+                    $window.location.reload();
+                }
             });
         }
         else {
             User.one(username).get().then(function (user) {
-                cb(user, Auth.getCurrentUser().id == user.id);
+                var isMe = Auth.getCurrentUser() && (Auth.getCurrentUser().id == user.id);
+                cb(user, isMe);
             });
         }
     }
@@ -279,3 +323,4 @@ angular.module('odmbase')
     return Auth;
 
   }]);
+

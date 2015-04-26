@@ -19,6 +19,18 @@ angular.module('odmbase')
         controller: 'ProfilePasswordCtrl',
         authenticate: true
       })
+      .state('profileForgotPassword', {
+        url: '/profile/password/:uid/:token',
+        templateUrl: 'static/app/odmbase/account/settings/password.html',
+        controller: 'ProfilePasswordCtrl',
+        authenticate: false
+      })
+      .state('profileSocialConfirm', {
+        url: '/profile/social-confirm',
+        templateUrl: 'static/app/odmbase/account/profile/social_confirm.html',
+        controller: 'ProfileCtrl',
+        authenticate: true
+      })
       .state('profile', {
         url: '/profile',
         templateUrl: 'static/app/account/profile/profile.html',

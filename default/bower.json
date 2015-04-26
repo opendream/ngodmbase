@@ -54,6 +54,10 @@
     "jquery-textfill": "~0.6.0",
     "jquery-htmlclean": "~1.4.0",
     "angular-validation-match": "~1.4.1",
-    "angular-blocks": "~0.1.9"
+    "angular-blocks": "~0.1.9",
+    "angular-google-plus": "~0.1.2",
+    "jquery-bridget": "~1.1.0",
+    "angular-masonry": "~0.11.0",
+    "satellizer": "~0.9.4"
   }
 }

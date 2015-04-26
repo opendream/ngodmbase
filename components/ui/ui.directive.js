@@ -8,7 +8,7 @@ angular.module('odmbase').directive('setClassWhenAtTop', function ($window) {
             var topClass = attrs.setClassWhenAtTop, // get CSS class from directive's attribute value
                 offsetTop = element.offset().top; // get element's offset top relative to document
 
-            $win.on('scroll', function (e) {
+            $win.on('scroll', function () {
                 if ($win.scrollTop() >= offsetTop) {
                     element.addClass(topClass);
                 } else {
@@ -45,7 +45,7 @@ angular.module('odmbase').directive('imageRender', function() {
             ratio: '@',
             crop: '='
         },
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
             $scope.style = $scope.style || 'ratio'; // ratio, static
             $scope.ratio = $scope.ratio || (1/1);
 
@@ -56,7 +56,7 @@ angular.module('odmbase').directive('imageRender', function() {
             else {
                 $scope.cropClass = 'image-contain'
             }
-        }
+        }]
 
     };
 });
@@ -130,7 +130,7 @@ angular.module('odmbase').directive('templateItem', function () {
             isDetail: '=?',
             param: '=?'
         },
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
             if ($scope.createdBy) {
                 $scope.model.created_by = $scope.createdBy;
             }
@@ -139,7 +139,7 @@ angular.module('odmbase').directive('templateItem', function () {
             }
 
             this.scope = $scope;
-        }
+        }]
     };
 });
 
@@ -152,7 +152,7 @@ var mediaRenderOrModalLink = {
         templateItemUrl: '=',
         param: '=?'
     },
-    controller: function($scope, Modal) {
+    controller: ['$scope', 'Modal', function($scope, Modal) {
         var _isModal;
         if ($scope.isModal) {
             _isModal = '_'.concat($scope.isModal);
@@ -165,7 +165,7 @@ var mediaRenderOrModalLink = {
             $scope.param = _.extend({model: $scope.model}, $scope.param);
             Modal.open($scope.templateItemUrl, 'lg', $scope.param);
         };
-    }
+    }]
 
 };
 
@@ -202,9 +202,9 @@ angular.module('odmbase').directive('textfill', function ($timeout) {
         textfillOnComplete: '='
       },
       template: '<span ng-bind-html="textfill"></span>',
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         $scope.textfill = $scope.textfill.replace('<p>', '').replace('</p>', '');
-      },
+      }],
       link: function (scope, element, attr) {
 
         var container = element,

@@ -18,7 +18,7 @@ function CommentCtrl ($scope, Model, Comment) {
     };
 
     $scope.commentList = [];
-    $scope.commentDataSource = Model.objects.dataSource({
+    $scope.commentDataSource = new Model.objects.dataSource({
         modelClass: Comment,
         orderBy: '-id',
         params: {dst: $scope.dst.id},

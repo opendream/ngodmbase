@@ -75,7 +75,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
             };
 
             // update all images
-
+            console.log(element['image_set']);
             angular.forEach(element['image_set'].all, createPromisesFn(element, 'put', promises));
             angular.forEach(element['image_set'].deleteImageSet, createPromisesFn(element, 'remove', deletePromsies));
 
@@ -91,6 +91,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
     };
 
     Model.request.manyToManyWithData = function (fieldList, data) {
+        if (!data || typeof(data) == 'string') {
+            return data;
+        }
+
         angular.forEach(fieldList, function (field) {
             var fieldData = null;
 
@@ -111,7 +115,10 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
         return data;
     };
 
-    Model.request.  foreignKeyWithData = function(fieldList, data, use_common) {
+    Model.request.foreignKeyWithData = function(fieldList, data, use_common) {
+        if (!data) {
+            return data;
+        }
 
         angular.forEach(fieldList, function (field) {
             if (typeof data[field] == 'object') {
@@ -183,6 +190,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
             if (self.disableLoadMore || self.busy) {
                 return;
             }
+
             self.busy = true;
 
             self.params = _.clone(params);
