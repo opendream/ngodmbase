@@ -3,7 +3,7 @@
 angular
     .module('odmbase')
     .controller('InviteCtrl', ['$scope', 'User', 'Auth', 'Credit', InviteCtrl])
-    .controller('InviteConfirmCtrl', ['$scope', '$stateParams', '$location', '$timeout', '$window', 'Auth', 'Credit', 'Modal', 'User', InviteConfirmCtrl]);
+    .controller('InviteConfirmCtrl', ['$scope', '$stateParams', '$location', '$timeout', '$window', '$controller', 'Auth', 'Credit', 'Modal', 'User', InviteConfirmCtrl]);
 
 function InviteCtrl ($scope, User, Auth, Credit) {
     Auth.getDetail(null, function (user) {
@@ -19,7 +19,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
         };
 
         var quotaInvite = $scope.user.quota_invite;
-        var numValid = 0;
+        $scope.numValid = 0;
 
 
         // initial rows
@@ -33,14 +33,14 @@ function InviteCtrl ($scope, User, Auth, Credit) {
         }
 
         function updateRemain () {
-            $scope.remain =  quotaInvite - numValid;
+            $scope.remain =  quotaInvite - $scope.numValid;
         }
         updateRemain();
 
         $scope.addMoreInvite = function ($last, $index) {
 
             $scope.inviteList[$index].inFocus = true;
-
+            console.log(quotaInvite, $scope.inviteList);
             if ($last && $scope.inviteList.length < quotaInvite) {
                 $scope.inviteList.push(_.clone(initModel));
             }
@@ -50,11 +50,11 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             var models = $scope.inviteList.splice($index, 1);
             if (models[0].isValid) {
-                numValid--;
+                $scope.numValid--;
             }
 
-            if (($scope.inviteList.length == quotaInvite-1 && numValid == quotaInvite-1) ||
-                ($scope.inviteList[$scope.inviteList.length-1].isValid && numValid < quotaInvite)) {
+            if (($scope.inviteList.length == quotaInvite-1 && $scope.numValid == quotaInvite-1) ||
+                ($scope.inviteList[$scope.inviteList.length-1].isValid && $scope.numValid < quotaInvite)) {
                 $scope.addMoreInvite(true);
             }
 
@@ -68,7 +68,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             if (validateEmail(model.email)) {
                 if (!model.isValid) {
-                    numValid++;
+                    $scope.numValid++;
                 }
                 model.isValid = true;
             }
@@ -88,7 +88,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             var updateInviteList = function ()  {
 
-                var newInviteList = []
+                var newInviteList = [];
 
                 if (numCompleteInviteList == numInviteList) {
                     angular.forEach($scope.inviteList, function(invite, ignore) {
@@ -97,9 +97,15 @@ function InviteCtrl ($scope, User, Auth, Credit) {
                         }
                     });
                     $scope.inviteList = newInviteList;
+                    swal({
+                        title: 'ชวนเพื่อนเรียบร้อยแล้ว',
+                        text: 'เพื่อนของคุณจะได้รับข้อความเชิญชวน พร้อมทั้งโคดเพื่อนำไปใช้เพิ่มสิทธิ์ให้กับการปันของ',
+                        confirmButtonText: 'คลิกเพื่อชวนเพื่อนต่อ'
+                    });
 
                 }
             }
+
 
             angular.forEach($scope.inviteList, function(invite, ignore) {
                 if (invite.isValid) {
@@ -111,6 +117,8 @@ function InviteCtrl ($scope, User, Auth, Credit) {
                     invite.credit.save().then(function (model) {
                         invite.isInvited = true;
                         numCompleteInviteList++;
+                        quotaInvite--;
+                        $scope.numValid--;
                         updateInviteList();
                     });
 
@@ -130,7 +138,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 };
 
 
-function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $windiw, Auth, Credit, Modal, User) {
+function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $window, $controller, Auth, Credit, Modal, User) {
 
     var checkCode = function (params) {
         params = params || {};
