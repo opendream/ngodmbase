@@ -2,9 +2,9 @@
 
 angular
     .module('odmbase')
-    .controller('CommentCtrl', ['$scope', 'Model', 'Comment', CommentCtrl]);
+    .controller('CommentCtrl', ['$scope', 'Model', 'Comment', '$rootScope', CommentCtrl]);
 
-function CommentCtrl ($scope, Model, Comment) {
+function CommentCtrl ($scope, Model, Comment, $rootScope) {
 
     if ($scope.param && $scope.param.model) {
         $scope.dst = $scope.param.model;
@@ -49,7 +49,11 @@ function CommentCtrl ($scope, Model, Comment) {
                 $scope.dst.comments_count++;
 
                 // Make sure server side return and update later
-                $scope.dst.comments_count = updateModel.get_dst.comments_count
+                $scope.dst.comments_count = updateModel.get_dst.comments_count;
+
+                if ($scope.dst.comments_count == 1) {
+                    $rootScope.$broadcast('updateMasonry');
+                }
 
                 form.$setPristine();
             });

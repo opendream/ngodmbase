@@ -124,6 +124,13 @@ angular.module('odmbase', [
           //$location.path('/login');
           Modal.open('/static/app/odmbase/account/modal/login_modal.html', 'LoginCtrl');
         }
+
+        if (!loggedIn) {
+          $rootScope.pageClass = 'page--unauthen' + $location.path().replace('/', '--');
+        }
+        else {
+          $rootScope.pageClass = 'page' + $location.path().replace('/', '--');
+        }
       });
     });
   }]);

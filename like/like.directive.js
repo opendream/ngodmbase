@@ -7,13 +7,15 @@ angular.module('odmbase').directive('likeLink', function () {
         scope: {
             model: '='
         },
-        controller: function ($scope, Like) {
+        controller: ['$scope', 'Like', '$rootScope', 'Auth', 'Modal', function ($scope, Like, $rootScope, Auth, Modal) {
 
             var updateClass = function () {
-                $scope.likedClass = $scope.model.is_liked? 'liked': 'like';
+                $scope.likedClass = $scope.model.is_liked ? 'liked': 'like';
             };
             $scope.$watch('model', function (newValue, oldValue) {
-                updateClass();
+                if (newValue && newValue != oldValue) {
+                    updateClass();
+                }
             });
 
             var reloadModel = function () {
@@ -26,6 +28,12 @@ angular.module('odmbase').directive('likeLink', function () {
 
 
             $scope.like = function () {
+
+                if (!Auth.isLoggedIn()) {
+                    Modal.open('/static/app/odmbase/account/modal/login_modal.html');
+                    return;
+                }
+
                 var like = Like.one();
                 like.dst = $scope.model;
 
@@ -35,6 +43,10 @@ angular.module('odmbase').directive('likeLink', function () {
 
                     like.remove().then(function (resp) {
                         reloadModel();
+
+                        if ($scope.model.likes_count == 0) {
+                            $rootScope.$broadcast('updateMasonry');
+                        }
                     });
                 }
                 else {
@@ -42,10 +54,14 @@ angular.module('odmbase').directive('likeLink', function () {
                     $scope.model.likes_count++; // For faster feeling
                     like.save().then(function (resp) {
                         reloadModel();
+
+                        if ($scope.model.likes_count == 1) {
+                            $rootScope.$broadcast('updateMasonry');
+                        }
                     });
                 }
             }
-        }
+        }]
     }
 
 });

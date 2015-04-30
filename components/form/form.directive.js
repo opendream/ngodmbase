@@ -37,11 +37,9 @@ function CommonField () {
             itemList: '=?',
             itemLabel: '@',
             itemKey: '@',
-            tagsLoad: '=',
+            tagsLoad: '=?',
             tagsDisplayProperty: '@',
-            odmChange: '=',
-            ngFocus: '=',
-            ngBlur: '=',
+            dateFormat: '@',
             disabled: '='
         },
         // TODO: split one file per one field type T_T
@@ -165,14 +163,16 @@ function CommonField () {
                             filterParam[$scope.itemKey] = newValue;
                             $scope.selectedItem = _.find($scope.itemList, filterParam);
                         }
+                    } else if (newValue == undefined && newValue != oldValue) {
+                        $scope.selectedItem = null;
                     }
                 });
 
                 $scope.$watch('itemList', function (newValue, oldValue) {
                     if (newValue != undefined && newValue != oldValue) {
-                        if (initialData && $scope.type == 'select-list') {
+                        if ($scope.model[$scope.name] && $scope.type == 'select-list') {
                             var filterParam = {};
-                            filterParam[$scope.itemKey] = initialData;
+                            filterParam[$scope.itemKey] = $scope.model[$scope.name];
                             $scope.selectedItem = _.find($scope.itemList, filterParam);
                         }
                     }
@@ -189,13 +189,14 @@ function CommonField () {
 
                 //$scope.maxUploads = $scope.maxUploads || 9999999;
 
+                $scope.min = 0;
 
                 if ($scope.model[$scope.name] && !$scope.model[$scope.name].all) {
                     $scope.model[$scope.name] = {all: []};
                 }
                 $scope.nameItem = $scope.name.replace('_set', '');
 
-                $scope.$watch('model', function (newValue, oldValue) {
+                $scope.$watch('model.' + $scope.name + '.all.length', function (newValue, oldValue) {
                     updateImageList();
                 });
 
@@ -212,6 +213,11 @@ function CommonField () {
 
 
                     $scope.numImageFiles = $scope.model[$scope.name].all.length;
+                    $scope.numImageFilesModel = $scope.model[$scope.name].all.length;
+                    if ($scope.model[$scope.name].all.length == 0) {
+                        delete $scope.numImageFilesModel;
+                    }
+
                     $scope.imageList = [];
                     $scope.model[$scope.name].deleteImageSet = [];
 
@@ -306,6 +312,15 @@ function CommonField () {
 
             }
 
+            else if ($scope.type == 'datepicker') {
+                $scope.beforeRenderDatepicker = function ($view, $dates, $leftDate, $upDate, $rightDate) {
+                    var today = new Date();
+                    today = today.setHours(0);
+                    _.each($dates, function (date) {
+                        date.selectable = (date.utcDateValue >= today);
+                    });
+                };
+            }
 
         }
     }

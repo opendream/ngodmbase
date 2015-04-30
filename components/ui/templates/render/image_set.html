@@ -1,8 +1,9 @@
 <div class="item-images">
     <ul rn-carousel rn-carousel-controls class="image carousel-images">
         <li ng-repeat="image in model.image_set.all">
+            <img ng-if="image.image_thumbnail_2x.style == 'portrait'" class="limit-height" ng-class="image.image_thumbnail_3x.style" ng-src="{{ image.image_thumbnail_3x.url }}" resize ng-style="{'max-height': Math.max(windowHeight-60, 600)}"/>
+            <img ng-if="image.image_thumbnail_2x.style != 'portrait'" class="limit-height" ng-class="image.image_thumbnail_2x.style" ng-src="{{ image.image_thumbnail_2x.url }}" resize ng-style="{'max-height': Math.max(windowHeight-60, 600)}"/>
 
-            <img ng-src="{{ image.image_thumbnail_1x.url }}" />
         </li>
     </ul>
 </div>

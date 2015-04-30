@@ -385,11 +385,30 @@ button.btn-delete {
   overflow: hidden;
 }
 
+.limit-height-wrapper {
+  text-align: center;
+  background-color: #000;
+}
+.limit-height, .carousel-images img {
+  width: auto;
+  max-width: 100%;
+}
+.limit-height.portrait {
+  max-height: 1050px;
+  width: auto;
+}
+.modal-content {
+  .limit-height.portrait {
+    max-height: 100%;
+  }
+}
+
 ul.carousel-images[rn-carousel] {
 
     width: 100%;
     margin-bottom: 0;
     background-color: #000;
+    text-align: left;
 
     li {
         position: relative;
@@ -414,6 +433,9 @@ ul.carousel-images[rn-carousel] {
         font-family: 'Glyphicons Halflings';
         font-weight: bold;
         font-size: 30px;
+    }
+    .rn-carousel-caption {
+        text-align: center;
     }
 }
 
@@ -874,6 +896,16 @@ select.form-control {
     }
 }
 
+.item-deleted {
+    padding: 40px 20px;
+    &> * {
+      text-align: center;
+    }
+    .deleted-ok {
+        font-size: 40px;
+        color: darkgreen;
+    }
+}
 
 /*
 **  Profile
@@ -884,4 +916,5 @@ select.form-control {
         content: "";
         padding-top: 100%;
     }
+
 }

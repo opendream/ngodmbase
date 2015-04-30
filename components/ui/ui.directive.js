@@ -159,6 +159,7 @@ var mediaRenderOrModalLink = {
         } else {
             _isModal = '';
         }
+        $scope.Math = Math;
         $scope.param = $scope.param || {};
         $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
         $scope.modalOpen = function () {
@@ -258,3 +259,85 @@ angular.module('odmbase').directive('activeLink', ['$location', function(locatio
         }
     };
 }]);
+
+
+angular.module('odmbase').directive('resize', function ($window) {
+    return function (scope, element) {
+        var w = angular.element($window);
+        scope.getWindowDimensions = function () {
+            return {
+                'h': w.height(),
+                'w': w.width()
+            };
+        };
+        scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
+            scope.windowHeight = newValue.h;
+            scope.windowWidth = newValue.w;
+
+            scope.style = function () {
+                return {
+                    'height': (newValue.h - 100) + 'px',
+                        'width': (newValue.w - 100) + 'px'
+                };
+            };
+
+        }, true);
+
+        w.bind('resize', function () {
+            scope.$apply();
+        });
+    }
+});
+
+angular.module('odmbase').factory('clickAnywhereButHereService', function($document){
+  var tracker = [];
+
+  return function($scope, expr) {
+    var i, t, len;
+    for(i = 0, len = tracker.length; i < len; i++) {
+      t = tracker[i];
+      if(t.expr === expr && t.scope === $scope) {
+        return t;
+      }
+    }
+    var handler = function() {
+      $scope.$apply(expr);
+    };
+
+    $document.on('click', handler);
+
+    // IMPORTANT! Tear down this event handler when the scope is destroyed.
+    $scope.$on('$destroy', function(){
+      $document.off('click', handler);
+    });
+
+    t = { scope: $scope, expr: expr };
+
+    tracker.push(t);
+    return t;
+  };
+});
+
+angular.module('odmbase').directive('clickAnywhereButHere', function($document, clickAnywhereButHereService){
+  return {
+    restrict: 'A',
+    link: function(scope, elem, attr, ctrl) {
+      var handler = function(e) {
+        e.stopPropagation();
+      };
+      elem.on('click', handler);
+
+      scope.$on('$destroy', function(){
+        elem.off('click', handler);
+      });
+
+      clickAnywhereButHereService(scope, attr.clickAnywhereButHere);
+    }
+  };
+});
+
+angular.module('odmbase').filter('timeago', function() {
+    return function(date) {
+        return moment.utc(date).fromNow();
+    };
+});

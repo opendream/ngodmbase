@@ -1,19 +1,18 @@
-<div class="modal-header">
+<div class="like-modal modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
   <h2 class="modal-title">คนชอบ</h2>
-  <div class="modal-header-line"></div>
 </div>
-<div class="modal-body account-action">
+<div class="like-modal modal-body account-action">
     <div ng-controller="LikeCtrl" discard-modal-on-state-change>
         <div class="like-list">
 
-            <ul>
+            <ul class="list-unstyled">
                 <li ng-repeat="user in likeList | pluck:'src'">
                     <div ng-include="'/static/app/odmbase/account/user.item.html'">
                     </div>
                 </li>
             </ul>
-            <a href=""
+            <a class="load-more text-center" href=""
                ng-show="!likeDataSource.disableLoadMore"
                ng-click="likeDataSource.loadMore()"
             >
