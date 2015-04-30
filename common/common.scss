@@ -894,6 +894,15 @@ select.form-control {
     .glyphicon-ok-sign {
         color: dodgerblue;
     }
+    .invite_message {
+        color: #999;
+        font-size: 0.9em;
+        textarea {
+            color: #999;
+            font-size: 0.9em;
+            border-color: #EEE;
+        }
+    }
 }
 
 .item-deleted {

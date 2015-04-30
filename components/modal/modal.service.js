@@ -15,7 +15,9 @@ angular.module('odmbase')
       controller: 'ModalInstanceCtrl',
       size: size,
       windowClass: 'odm-modal',
-      resolve: {param: param}
+      resolve: {param: param},
+      keyboard: false,
+      backdrop : 'static'
     });
 
     $('#content-wrapper').addClass('blur');
@@ -34,6 +36,8 @@ angular.module('odmbase')
 
 angular.module('odmbase').controller('ModalInstanceCtrl', function ($scope, $modalInstance, param) {
   $scope.param = param || {};
+  $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
+  $scope.LOGIN_TEMPLATE = LOGIN_TEMPLATE;
 
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');

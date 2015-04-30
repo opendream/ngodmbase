@@ -3,7 +3,7 @@
 angular
     .module('odmbase')
     .controller('InviteCtrl', ['$scope', 'User', 'Auth', 'Credit', InviteCtrl])
-    .controller('InviteConfirmCtrl', ['$scope', '$stateParams', '$location', '$timeout', '$window', 'Auth', 'Credit', 'Modal', InviteConfirmCtrl]);
+    .controller('InviteConfirmCtrl', ['$scope', '$stateParams', '$location', '$timeout', '$window', '$controller', 'Auth', 'Credit', 'Modal', 'User', InviteConfirmCtrl]);
 
 function InviteCtrl ($scope, User, Auth, Credit) {
     Auth.getDetail(null, function (user) {
@@ -15,11 +15,11 @@ function InviteCtrl ($scope, User, Auth, Credit) {
         $scope.inviteList = [];
 
         $scope.inviteModel = {
-            message: 'ข้อความชวนเชิญ ...' // TODO: content
+            message: 'ฉันอยากจะแบ่งปันเรื่องดีๆให้กับคุณ จากเว็บไซต์ปันใจ'
         };
 
         var quotaInvite = $scope.user.quota_invite;
-        var numValid = 0;
+        $scope.numValid = 0;
 
 
         // initial rows
@@ -33,14 +33,14 @@ function InviteCtrl ($scope, User, Auth, Credit) {
         }
 
         function updateRemain () {
-            $scope.remain =  quotaInvite - numValid;
+            $scope.remain =  quotaInvite - $scope.numValid;
         }
         updateRemain();
 
         $scope.addMoreInvite = function ($last, $index) {
 
             $scope.inviteList[$index].inFocus = true;
-
+            console.log(quotaInvite, $scope.inviteList);
             if ($last && $scope.inviteList.length < quotaInvite) {
                 $scope.inviteList.push(_.clone(initModel));
             }
@@ -50,11 +50,11 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             var models = $scope.inviteList.splice($index, 1);
             if (models[0].isValid) {
-                numValid--;
+                $scope.numValid--;
             }
 
-            if (($scope.inviteList.length == quotaInvite-1 && numValid == quotaInvite-1) ||
-                ($scope.inviteList[$scope.inviteList.length-1].isValid && numValid < quotaInvite)) {
+            if (($scope.inviteList.length == quotaInvite-1 && $scope.numValid == quotaInvite-1) ||
+                ($scope.inviteList[$scope.inviteList.length-1].isValid && $scope.numValid < quotaInvite)) {
                 $scope.addMoreInvite(true);
             }
 
@@ -68,7 +68,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             if (validateEmail(model.email)) {
                 if (!model.isValid) {
-                    numValid++;
+                    $scope.numValid++;
                 }
                 model.isValid = true;
             }
@@ -88,7 +88,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
             var updateInviteList = function ()  {
 
-                var newInviteList = []
+                var newInviteList = [];
 
                 if (numCompleteInviteList == numInviteList) {
                     angular.forEach($scope.inviteList, function(invite, ignore) {
@@ -97,20 +97,28 @@ function InviteCtrl ($scope, User, Auth, Credit) {
                         }
                     });
                     $scope.inviteList = newInviteList;
+                    swal({
+                        title: 'ชวนเพื่อนเรียบร้อยแล้ว',
+                        text: 'เพื่อนของคุณจะได้รับข้อความเชิญชวน พร้อมทั้งโคดเพื่อนำไปใช้เพิ่มสิทธิ์ให้กับการปันของ',
+                        confirmButtonText: 'คลิกเพื่อชวนเพื่อนต่อ'
+                    });
 
                 }
             }
+
 
             angular.forEach($scope.inviteList, function(invite, ignore) {
                 if (invite.isValid) {
                     var credit = Credit.one();
                     credit.email = invite.email;
-                    credit.message = $scope.message;
-
+                    credit.message = $scope.inviteModel.message;
                     invite.credit = credit;
+
                     invite.credit.save().then(function (model) {
                         invite.isInvited = true;
                         numCompleteInviteList++;
+                        quotaInvite--;
+                        $scope.numValid--;
                         updateInviteList();
                     });
 
@@ -130,7 +138,7 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 };
 
 
-function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $windiw, Auth, Credit, Modal) {
+function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $window, $controller, Auth, Credit, Modal, User) {
 
     var checkCode = function (params) {
         params = params || {};
@@ -142,7 +150,10 @@ function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $windiw, 
             if (model.is_used) {
                 swal({
                     title: "โคดนี้เคยถูกใช้งานไปแล้ว",
-                    confirmButtonText: 'คลิกเพื่อกลับไปยังหน้าแรก'
+                    confirmButtonText: 'คลิกเพื่อกลับไปยังหน้าแรก',
+                    allowEscapeKey: false,
+                    type: 'error'
+
                 }, function (isConfirm) {
                     if (isConfirm) {
                         $timeout(function () {
@@ -154,20 +165,29 @@ function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $windiw, 
             }
             else if (!Auth.isLoggedIn()) {
 
-                Modal.open('/static/app/odmbase/account/modal/signup_modal.html', null, {
-                    email: model.email,
-                    redirectUrl: $location.path(),
-                    successCallback: function () {
-                      console.log('successCallback');
-                      checkCode({force_used: true});
+                User.one().get({email: model.email}).then(function (resp) {
+                    var templateUrl = '/static/app/odmbase/account/modal/signup_modal.html';
+                    if (resp.objects.length) {
+                        templateUrl = '/static/app/odmbase/account/modal/login_modal.html';
                     }
+
+                    Modal.open(templateUrl, null, {
+                        email: model.email,
+                        redirectUrl: $location.path(),
+                        successCallback: function () {
+                            checkCode({force_used: true});
+                        }
+                    });
                 });
+
 
             }
             else {
                 swal({
                     title: "คุณได้รับสิทธิ์ในการโพสต์ของเพิ่ม " + model.unit + " ชิ้น",
-                    confirmButtonText: 'คลิกเพื่อทำการโพสต์ของ'
+                    confirmButtonText: 'คลิกเพื่อทำการโพสต์ของ',
+                    allowEscapeKey: false,
+                    type: 'success'
                 }, function (isConfirm) {
                     if (isConfirm) {
                         $timeout(function () {

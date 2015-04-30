@@ -9,7 +9,16 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
     $scope.LOGIN_TEMPLATE = LOGIN_TEMPLATE;
     $scope.user = {};
     $scope.errors = {};
-    $scope.login = function(form, cb) {
+
+    if ($scope.param && $scope.param.email) {
+        $scope.user.email = $scope.param.email;
+    }
+
+    $scope.login = function(form, cb, redirectUrl, successCallback) {
+
+        redirectUrl = redirectUrl || ($scope.param && $scope.param.redirectUrl);
+        successCallback = successCallback || ($scope.param && $scope.param.successCallback);
+
         $scope.submitted = true;
 
         if(form.$valid) {
@@ -25,14 +34,20 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
                     redirect =false;
                 }
 
-                // do callback ex redirect to page
-                cb = cb || function () {
-                    if (redirect) {
-                        $location.path('/');
-                    }
-                    $window.location.reload();
+                if (successCallback) {
+                    successCallback();
                 }
-                cb();
+                else {
+                                    // do callback ex redirect to page
+                    cb = cb || function () {
+                        if (redirect) {
+                            $location.path(redirectUrl || '/');
+                        }
+                        $window.location.reload();
+                    }
+                    cb();
+
+                }
             })
             .catch( function(err) {
                 $scope.errors.other = err.error;

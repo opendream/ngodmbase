@@ -6,7 +6,6 @@ angular
 function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
     $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
-
     $scope.user = {};
     $scope.errors = {};
     if ($scope.param && $scope.param.email) {

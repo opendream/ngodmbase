@@ -4,11 +4,11 @@
         <h1 class="page-title">ชวนเพื่อน</h1>
         <div class="alert alert-warning">
         ทางเราขอจำกัดจำนวนการชวนเพื่อนของคุณ เพื่อที่จะให้สิทธิ์ผู้ที่จะมาปันของก่อน <br/>
-        กรุณาชวนเพื่อนที่คุณคิดว่าเขาจะมีของที่ไม่ได้ใช้และอยากแบ่งปันก่อนนะคะ <br/><br/>
+        กรุณาชวนเพื่อนที่คุณคิดว่าเขาจะมีของที่ไม่ได้ใช้และอยากแบ่งปันก่อนนะคะ <br/>
 
-        ผู้ที่ได้รับการเชิญจากคุณ จะได้สิทธิ์ในการโพสต์ของเพิ่มอีก 5 ชิ้น<br/>
-        คุณจะสามารถชวนเพื่อนได้อีก {{ remain }} คน
+        ผู้ที่ได้รับการเชิญจากคุณ จะได้สิทธิ์เริ่มต้นในการโพสต์ของ 5 ชิ้น<br/>
         </div>
+        <h5>คุณเหลือสิทธิ์ในการชวนเพื่อนได้อีก {{ remain }} คน</h5>
         <form class="form" name="form" ng-submit="sendInvite(form)" novalidate>
             <div class="form-group" ng-class="{valid: model.isValid == true, invalid: model.isValid == false}" ng-repeat="model in inviteList track by $index">
                 <span ng-show="!model.isInvited && (model.inFocus || model.isValid != false)" class="glyphicon glyphicon-user user-icon" ng-class="{'in-focus': model.inFocus}"> </span>
@@ -27,7 +27,7 @@
                 <span ng-show="model.isValid" ng-click="deleteInvite($index)" class="glyphicon glyphicon-remove-circle delete"> </span>
             </div>
 
-            <div field form="form" submitted="submitted" model="inviteModel"
+            <div field class="invite_message" form="form" submitted="submitted" model="inviteModel"
                  label="ข้อความ"
                  name="message"
                  type="textarea"
@@ -37,7 +37,7 @@
 
 <!--             <button class="btn btn-default">ส่งคำชวน</button> -->
             <div class="btn-action-wrapper">
-              <button class="btn-green" type="submit">
+              <button class="btn-green" type="submit" ng-disabled="numValid == 0">
                 ส่งคำชวน
               </button>
             </div>
