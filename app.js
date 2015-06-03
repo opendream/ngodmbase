@@ -34,7 +34,7 @@ angular.module('odmbase', [
   'angular-blocks',
   'wu.masonry',
   'ngTextTruncate',
-  'sticky'
+  'sticky',
   'pasvaz.bindonce',
   'timer',
   'nl2br',
