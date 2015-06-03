@@ -256,6 +256,14 @@ img {
   text-overflow: ellipsis;
 }
 
+.loading {
+  text-align: center;
+  margin-bottom: 30px;
+  img {
+    width: auto;
+  }
+}
+
 // btn
 
 .btn-round {
@@ -385,16 +393,39 @@ button.btn-delete {
   overflow: hidden;
 }
 
+.limit-height-wrapper {
+  text-align: center;
+  background-color: #000;
+}
+.limit-height, .carousel-images img {
+  width: auto;
+  max-width: 100%;
+}
+.limit-height.portrait {
+  max-height: 1050px;
+  width: auto;
+}
+.modal-content {
+  .limit-height.portrait {
+    max-height: 100%;
+  }
+}
+
 ul.carousel-images[rn-carousel] {
 
     width: 100%;
     margin-bottom: 0;
     background-color: #000;
+    text-align: left;
+
+    font-size: 0;
 
     li {
         position: relative;
         margin-right: -100%;
         vertical-align: middle;
+
+        font-size: 14px;
     }
     .rn-carousel-control {
         top: 50%;
@@ -402,7 +433,9 @@ ul.carousel-images[rn-carousel] {
         text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
         color: #FFF;
     }
-
+    .rn-carousel-control-next {
+      right: 0;
+    }
     .rn-carousel-control.rn-carousel-control-next:before {
         content: "\e258";
         font-family: 'Glyphicons Halflings';
@@ -415,7 +448,14 @@ ul.carousel-images[rn-carousel] {
         font-weight: bold;
         font-size: 30px;
     }
+    .rn-carousel-caption {
+        text-align: center;
+    }
 }
+
+
+
+
 
 
 .vcenter {
@@ -882,6 +922,26 @@ select.form-control {
     }
 }
 
+.item-deleted {
+    padding: 40px 20px;
+    &> * {
+      text-align: center;
+    }
+    .deleted-ok {
+        font-size: 40px;
+        color: darkgreen;
+    }
+}
+
+.not-link {
+    cursor: initial;
+}
+.is-link {
+    cursor: pointer;
+    &:hover {
+        color: #337AB7;
+    }
+}
 
 /*
 **  Profile
@@ -892,4 +952,109 @@ select.form-control {
         content: "";
         padding-top: 100%;
     }
+
+}
+
+.alert {
+    overflow: hidden;
+}
+
+
+/* Holy ask crosalot */
+*[odm-carousel-scrollable] {
+    overflow: hidden;
+
+    ul {
+        width: 100%;
+        list-style: none;
+        margin-left: 0px;
+        padding-left: 0px;
+        white-space: nowrap;
+        font-size: 0px;
+        -ms-touch-action: pan-y;
+        touch-action: pan-y;
+        overflow: scroll;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 20px;
+        margin-bottom: -20px;
+
+        li {
+            display: inline-block;
+            white-space: initial;
+            font-size: initial;
+            padding: 2px;
+            box-sizing: border-box;
+            position: static;
+            -webkit-transform: none !important;
+            float: none;
+            vertical-align: top;
+
+            & > * {
+              display: inline-block;
+              width: 100%;
+            }
+        }
+    }
+
+    .carousel-control {
+        top: 50%;
+        margin-top: -15px;
+        text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
+        color: #FFF;
+    }
+
+    .carousel-control.carousel-control-next {
+      right: 0;
+      left: initial;
+    }
+
+    .carousel-control.carousel-control-next:before {
+        content: "\e258";
+        font-family: 'Glyphicons Halflings';
+        font-weight: bold;
+        font-size: 30px;
+    }
+    .carousel-control.carousel-control-prev:before {
+        content: "\e257";
+        font-family: 'Glyphicons Halflings';
+        font-weight: bold;
+        font-size: 30px;
+    }
+    .carousel-caption {
+      text-align: center;
+    }
+}
+
+.live-search-result {
+    list-style: none;
+    margin-left: 40px;
+    padding-left: 15px;
+    li {
+        list-style: none;
+    }
+
+    background-color: #FFF;
+    ul {
+        margin-left: 0;
+        padding-left: 0;
+
+    }
+}
+.live-search-media {
+    width: 40px;
+    display: inline-block;
+}
+.live-search-text {
+    display: inline-block;
+    font-size: 20px;
+}
+.live-search-result .live-search-result-item.live-search-heading {
+    margin-top: 0;
+    background-color: #e2e2e2;
+}
+.live-search-heading i {
+    margin: 0 20px 0 10px;
+    font-size: 15px;
+    color: #555;
 }

@@ -1,6 +1,6 @@
-<div class="user-list-item row">
-    <div class="col-xs-2">
-        <div class="field-created_by_image">
+<div class="user-list-item media">
+    <div class="media-left media-middle">
+        <div class="field-created_by_image avatar-medium">
             <a ng-href="/{{ user.username }}">
                 <div image-render
                     url="user.getImage()"
@@ -9,7 +9,7 @@
             </a>
         </div>
     </div>
-    <div class="col-xs-10">
+    <div class="media-body media-middle">
         <a ng-href="{{ user.absolute_url }}">
             <strong>
                 {{ user.unicode_string }}

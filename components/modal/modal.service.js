@@ -38,6 +38,11 @@ angular.module('odmbase').controller('ModalInstanceCtrl', function ($scope, $mod
   $scope.param = param || {};
   $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
   $scope.LOGIN_TEMPLATE = LOGIN_TEMPLATE;
+  $scope.FORGOT_PASSWORD_TEMPLATE = FORGOT_PASSWORD_TEMPLATE;
+
+  //if ($scope.param.model) {
+  //    $scope.model = $scope.param.model;
+  //}
 
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');

@@ -2,14 +2,30 @@
 
 angular
     .module('odmbase')
-    .factory('ProfileForm', ['$rootScope', 'User', 'Auth', '$upload', '$timeout', '$location', ProfileForm]);
+    .factory('ProfileForm', ['$rootScope', 'User', 'Auth', '$upload', '$timeout', '$location', '$window', '$translate', ProfileForm]);
 
 
-function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
+function ProfileForm($scope, User, Auth, $upload, $timeout, $location, $window, $translate) {
 
     $scope.redirectPath = '/me';
 
     var next = $location.search().next;
+    var swalTitle;
+    var confirmButtonText;
+
+    function updateTranslate() {
+        $translate('GLOBAL.SWAL_SAVED_TITLE').then(function (translation) {
+            swalTitle = translation;
+        });
+        $translate('ACCOUNT.PROFILE.SWAL_SAVED_CONFIRM_BUTTON_TEXT').then(function (translation) {
+            confirmButtonText = translation;
+        });
+    }
+    updateTranslate();
+
+    $scope.$on('$translateChangeSuccess', function () {
+        updateTranslate();
+    });
 
     var ProfileForm = {
         extraFields: [],
@@ -28,8 +44,8 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
         afterConfirm: null,
         defaultAfterConfirm: function () {
             swal({
-                title: "บันทึกข้อมูลแล้ว",
-                confirmButtonText: 'คลิกเพื่อไปดูหน้าโปรไฟล์ของคุณ'
+                title: swalTitle,
+                confirmButtonText: confirmButtonText
             }, function (isConfirm) {
                 if (isConfirm) {
                     $timeout(function () {
@@ -73,6 +89,9 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
     $scope.user = User.one().me().then(function(model) {
         $scope.user = model;
         delete($scope.user.password);
+        if ($scope.user.email.indexOf('unknow') == 0) {
+            $scope.user.email = '';
+        }
         ProfileForm.afterLoad($scope);
     })
 
@@ -83,7 +102,6 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
     $scope.success = {}
 
     $scope.$watch('user.email', function (newValue, oldValue) {
-                    console.log($scope.form);
 
             $scope.errors['email'] = [];
 
@@ -189,7 +207,10 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location) {
         $scope.user.image = null;
         $scope.user.get_image = null;
         removeImage = true;
-    }
+    };
+
+    Auth.$scope = $scope;
+    $scope.socialSign = Auth.socialSign;
 
     return ProfileForm;
 

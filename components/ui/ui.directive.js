@@ -19,6 +19,133 @@ angular.module('odmbase').directive('setClassWhenAtTop', function ($window) {
     };
 });
 
+angular.module('odmbase').directive('outviewHidden', function ($timeout) {
+    return {
+        restrict: 'A',
+        scope: {
+            'viewport': '@'
+        },
+        link: function (scope, element) {
+            if (!Modernizr.touch) return;
+
+            var viewport = angular.element(scope.viewport);
+
+            var processingTimer = null,
+                processingDelay = 50; // 50ms
+
+            viewport.on('scroll', function (e) {
+                if (processingTimer) clearTimeout(processingTimer);
+                processingTimer = $timeout(function () {
+                    process();
+                }, processingDelay);
+
+                function process() {
+                    var images = $('img', element),
+                        dummies = $('.img-outview', element),
+                        elmHeight = element.height(),
+                        elmTop = element.offset().top,
+                        viewportTop = viewport.offset().top,
+                        viewportScrollTop = viewport.scrollTop(),
+                        viewportHeight = viewport[0].offsetHeight,
+                        offset = viewportHeight;
+
+                    // console.log('DEBUG: check to hide images', element, elmHeight, elmTop, viewportScrollTop, viewportHeight);
+                    if (elmHeight + elmTop < viewportTop - offset) {
+                        // console.log('DEBUG: over viewport', element[0], elmHeight, elmTop, viewportScrollTop);
+                        sendImagesToAnotherUniverse(images);
+                        // element.css('visibility', 'hidden');
+                    }
+                    else if (elmTop > viewportTop + viewportHeight + offset) {
+                        // console.log('DEBUG: below viewport', element[0], elmTop, viewportScrollTop, viewportHeight);
+                        sendImagesToAnotherUniverse(images);
+                        // element.css('visibility', 'hidden');
+                    }
+                    else {
+                        // TODO: bring img back.
+                        // console.log('DEBUG: in viewport');
+                        // element.css('visibility', 'visible');
+                        $(dummies).each(function (index, dummy) {
+                            // console.log('DEBUG: bringing back img');
+                            $(dummy).append($(dummy).data('img'));
+                        });
+                    }
+                }
+            });
+        }
+    };
+});
+
+angular.module('odmbase').directive('outviewHiddenWindow', function ($timeout) {
+    function getBox(element) {
+        return $(element)[0].getBoundingClientRect();
+    }
+
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            if (!Modernizr.touch) return;
+
+            var viewport = $(window);
+
+            var processingTimer = null,
+                processingDelay = 50; // 50ms
+
+            viewport.on('scroll', function (e) {
+                if (processingTimer) clearTimeout(processingTimer);
+                processingTimer = $timeout(function () {
+                    process();
+                }, processingDelay);
+
+                function process() {
+                    var images = $('img', element),
+                        dummies = $('.img-outview', element),
+                        box = getBox(element),
+                        viewportHeight = viewport.height(),
+                        offset = viewportHeight;
+
+                    if (box.bottom < -offset) {
+                        sendImagesToAnotherUniverse(images);
+                    }
+                    else if (box.top > viewportHeight + offset) {
+                        sendImagesToAnotherUniverse(images);
+                    }
+                    else {
+                        $(dummies).each(function (index, dummy) {
+                            if ($(dummy).children().length === 0) {
+                                $(dummy).append($(dummy).data('img'));
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    };
+});
+
+function sendImagesToAnotherUniverse(images) {
+    $(images).each(function (index, img) {
+        var dummy;
+
+        if (!$(img).data('dummy')) {
+            dummy = $('<div class="img-outview"></div>');
+            dummy.attr('id', Math.random() * 10);
+            dummy.css('min-height', img.offsetHeight);
+            dummy.css('min-width', img.offsetWidth);
+            dummy.data('img', img);
+
+            $(img).wrap(dummy);
+            $(img).data('dummy', $(img).parent('.img-outview'));
+        }
+        else {
+            dummy = $(img).data('dummy');
+        }
+
+        // console.log('DEBUG: check for detaching img from dummy', img, dummy);
+        if (dummy.children('img').length > 0) {
+            $(img).detach();
+        }
+    });
+}
 
 angular.module('odmbase').directive('lineBreaks', function() {
     return {
@@ -149,21 +276,56 @@ var mediaRenderOrModalLink = {
         model: '=',
         media: '=',
         isModal: '@',
+        isDirect: '=?',
         templateItemUrl: '=',
-        param: '=?'
+        param: '=?',
+        loginRequired: '='
     },
-    controller: ['$scope', 'Modal', function($scope, Modal) {
+    controller: ['$scope', 'Modal', 'Auth', '$location', '$window', function($scope, Modal, Auth, $location, $window) {
+
+
         var _isModal;
         if ($scope.isModal) {
             _isModal = '_'.concat($scope.isModal);
         } else {
             _isModal = '';
         }
+        $scope.Math = Math;
         $scope.param = $scope.param || {};
-        $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
-        $scope.modalOpen = function () {
+
+        var modalSize;
+        $scope.$watch('model.media_selected', function (newVal, oldVal) {
+            if (newVal) {
+                modalSize = 'lg';
+                $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
+            } else {
+                var _default = 'default';
+                modalSize = 'sm';
+                $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat(_default, '.html');
+            }
+        });
+
+        $scope.modalOpen = function ($event) {
+            if ($scope.isDirect) {
+                $location.path($scope.model.absolute_url);
+                return;
+            }
+            else if ($window.ga) {
+                $window.ga('send', 'pageview', { page: $scope.model.absolute_url });
+            }
+
+            if ($event) {
+                $event.preventDefault();
+            }
+
+
+            if ($scope.loginRequired && !Auth.isLoggedIn()) {
+                Modal.open('/static/app/odmbase/account/modal/login_modal.html');
+                return;
+            }
+
             $scope.param = _.extend({model: $scope.model}, $scope.param);
-            Modal.open($scope.templateItemUrl, 'lg', $scope.param);
+            Modal.open($scope.templateItemUrl, modalSize, $scope.param);
         };
     }]
 
@@ -183,7 +345,7 @@ angular.module('odmbase').directive('mediaModalLink', function () {
     var mediaModalLink = _.cloneDeep(mediaRenderOrModalLink);
 
     mediaModalLink['transclude'] = true;
-    mediaModalLink['template'] = '<a href="" ng-click="modalOpen()"><span ng-transclude></span></a>';
+    mediaModalLink['template'] = '<a ng-href="{{ model.absolute_url }}" ng-click="modalOpen($event)"><span ng-transclude></span></a>';
 
     return mediaModalLink;
 });
@@ -258,3 +420,179 @@ angular.module('odmbase').directive('activeLink', ['$location', function(locatio
         }
     };
 }]);
+
+
+angular.module('odmbase').directive('resize', function ($window) {
+    return function (scope, element) {
+        var w = angular.element($window);
+        scope.getWindowDimensions = function () {
+            return {
+                'h': w.height(),
+                'w': w.width()
+            };
+        };
+        scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
+            scope.windowHeight = newValue.h;
+            scope.windowWidth = newValue.w;
+
+            scope.style = function () {
+                return {
+                    'height': (newValue.h - 100) + 'px',
+                        'width': (newValue.w - 100) + 'px'
+                };
+            };
+
+        }, true);
+
+        w.bind('resize', function () {
+            scope.$apply();
+        });
+    }
+});
+
+angular.module('odmbase').factory('clickAnywhereButHereService', function($document){
+  var tracker = [];
+
+  return function($scope, expr) {
+    var i, t, len;
+    for(i = 0, len = tracker.length; i < len; i++) {
+      t = tracker[i];
+      if(t.expr === expr && t.scope === $scope) {
+        return t;
+      }
+    }
+    var handler = function() {
+      $scope.$apply(expr);
+    };
+
+    $document.on('click', handler);
+
+    // IMPORTANT! Tear down this event handler when the scope is destroyed.
+    $scope.$on('$destroy', function(){
+      $document.off('click', handler);
+    });
+
+    t = { scope: $scope, expr: expr };
+
+    tracker.push(t);
+    return t;
+  };
+});
+
+angular.module('odmbase').directive('clickAnywhereButHere', function($document, clickAnywhereButHereService){
+  return {
+    restrict: 'A',
+    link: function(scope, elem, attr, ctrl) {
+      var handler = function(e) {
+        e.stopPropagation();
+      };
+      elem.on('click', handler);
+
+      scope.$on('$destroy', function(){
+        elem.off('click', handler);
+      });
+
+      clickAnywhereButHereService(scope, attr.clickAnywhereButHere);
+    }
+  };
+});
+
+angular.module('odmbase').filter('timeago', function() {
+    return function(date) {
+        return moment.utc(date).fromNow();
+    };
+});
+
+
+angular.module('odmbase').directive('odmCarouselScrollable', ['$window', function($window) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs, controller) {
+
+            var currentScrollLeft = 0;
+            var $ul = $(element).children('ul');
+
+            angular.element($window).bind('resize',function(){
+                $ul.animate({scrollLeft:0}, '0', 'swing', function() {
+                    scope.$apply(function () {
+                        currentScrollLeft = 0;
+                        updateControl();
+                    });
+                });
+
+            });
+
+            scope.next = function () {
+                $ul.animate((function () { return {scrollLeft:currentScrollLeft+$(element).width()}})(), '0', 'swing', function() {
+                    scope.$apply(function () {
+                        currentScrollLeft = $ul.scrollLeft();
+                        updateControl();
+                    });
+
+                });
+            };
+            scope.prev = function () {
+                $ul.animate((function () { return {scrollLeft:currentScrollLeft-$(element).width()}})(), '0', 'swing', function() {
+                    scope.$apply(function () {
+                        currentScrollLeft = $ul.scrollLeft();
+                        updateControl();
+                    });
+
+                });
+            };
+
+            function updateControl () {
+                var sumWidth = 0;
+                $('li', $ul).each(function (i, item) {
+                    sumWidth += $(item).outerWidth();
+                });
+                scope.showPrev = currentScrollLeft >= $(element).width()-1;
+                scope.showNext = currentScrollLeft + $(element).width() < sumWidth-1;
+            }
+            setTimeout(updateControl, 1000);
+
+        }
+    };
+}]);
+
+
+app.directive('ngUp', function() {
+    return {
+        scope: {
+            select: "&"
+        },
+        link: function(scope, element, attrs) {
+            element.on("keyup", "[selectable]", function(event) {
+
+                var $this = $(this);
+                var selectedElement = {};
+
+                scope.$apply(function() {
+                    if (event.which === 40) {
+                        selectedElement = $this.next("[selectable]");
+                        if (selectedElement.length > 0) {
+                            scope.select({
+                                element: selectedElement
+                            });
+                        }
+                    } else if (event.which === 38) {
+                        selectedElement = $this.prev("[selectable]");
+                        if (selectedElement.length > 0) {
+                            scope.select({
+                                element: $this.prev("[selectable]")
+                            });
+                        }
+                    } else {
+
+                    }
+                });
+
+                if (selectedElement.length > 0) {
+                    $this.blur();
+                    selectedElement.focus();
+                }
+
+            });
+        }
+    }
+});

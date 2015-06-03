@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Auth', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Facebook, GooglePlus, $interval, $window) {
+  .factory('Auth', ['$location', '$rootScope', '$http', 'User', 'Modal', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', function Auth($location, $rootScope, $http, User, Modal, $cookieStore, $q, Facebook, GooglePlus, $interval, $window) {
     var Auth = {};
     var currentUser = null;
     if($cookieStore.get('key')) {
@@ -85,7 +85,7 @@ angular.module('odmbase')
       currentUser = {};
     };
 
-    Auth.socialSign = function (provider, callback) {
+    Auth._socialSign = function (provider, callback) {
       var callback = callback || angular.noop;
 
       //$scope.cancel(); // Close modal first for faster feeling
@@ -140,15 +140,68 @@ angular.module('odmbase')
         'twitter': function () {
 
           $window.open('/account/login/twitter/', '', "width=530,height=500")
-          $window.twitterSignCallback = function(access_token) {
+          $window.socialSignCallback = function(access_token) {
+            connectServer(access_token)
+          };
+
+        },
+        /**
+        * Instagram
+        */
+        'instagram': function () {
+
+          $window.open('/account/login/instagram/', '', "width=530,height=500")
+          $window.socialSignCallback = function(access_token) {
             connectServer(access_token)
           };
 
         }
-      }
+
+      };
+
+      $rootScope.accessDenied = false;
+      $rootScope.pageNotFound = false;
 
       providerFunction[provider]();
 
+    };
+
+    Auth.socialSign = function(provider, redirectUrl, confirmRequired, confirmWithModal, notReloadPageAfterSign) {
+
+        console.log(Auth.successCallback);
+        // Close modal first for faster feeling
+        var redirect = true;
+        if (Auth.$scope && Auth.$scope.cancel) {
+            Auth.$scope.cancel();
+            redirect =false;
+        }
+
+        // do callback ex redirect to page
+        redirectUrl = redirectUrl || 'profile';
+        var cb = function (err, model) {
+            if (model.is_new && confirmRequired) {
+                if (confirmWithModal) {
+                    Modal.open('/static/app/odmbase/account/modal/social_confirm_modal.html', null, {next: redirectUrl, successCallback: Auth.successCallback});
+                }
+                else {
+
+                    if (redirectUrl) {
+                        $location.path('/profile/social-confirm').search({next: redirectUrl});
+                    }
+                    else {
+                        $location.path('/profile/social-confirm');
+                    }
+                }
+            }
+            else if (notReloadPageAfterSign) {
+                Auth.successCallback(model)
+            }
+            else {
+                $window.location.reload();
+            }
+        };
+
+        Auth._socialSign(provider, cb);
     };
 
     /**
@@ -245,7 +298,7 @@ angular.module('odmbase')
       if(currentUser && currentUser.hasOwnProperty('one') && !currentUser.hasOwnProperty('username')) {
         User.one().me().then(function(model) {
           currentUser = model;
-          cb(true);
+          cb(true, model);
         }).catch(function(err) {
           cb(false);
           if (err.status == 403) {
