@@ -303,7 +303,7 @@ button.btn-delete {
 	}
 }
 
-.help-block { 
+.help-block {
   font-size: 12px;
   color: #b46d7b;
 }
@@ -535,9 +535,9 @@ select.form-control {
   padding-left: 5px;
 }
 
-.radio input[type="radio"], 
-.radio-inline input[type="radio"], 
-.checkbox input[type="checkbox"], 
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
 .checkbox-inline input[type="checkbox"] {
   margin-left: 0;
   position: static;
@@ -700,18 +700,17 @@ select.form-control {
 
     a, span {
         position: relative;
-        //line-height: 0.8em;
     }
 
     &:before {
-        content: "“";
+        content: "\201C";
         position: absolute;
         left: 0;
         z-index: 1;
     }
 
     a:after, span:after {
-        content: "”";
+        content: "\201D";
         display: inline-block;
         margin-right: -33px;
         margin-left: 10px;
@@ -758,14 +757,14 @@ select.form-control {
     }
 
     &:before {
-        content: "“";
+        content: "\201C";
         position: absolute;
         left: 0;
         z-index: 1;
     }
 
     div[contenteditable]:after {
-        content: "”";
+        content: "\201D";
         display: inline-block;
         margin-right: -33px;
         margin-left: 10px;

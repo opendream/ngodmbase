@@ -8,7 +8,7 @@ angular.module('odmbase', [
   'ui.router',
   'ui.bootstrap',
   'ngTouch',
-  'angular-loading-bar', 
+  'angular-loading-bar',
   'ngAnimate',
   'textAngular',
   'monospaced.elastic',
@@ -33,7 +33,8 @@ angular.module('odmbase', [
   'validation.match',
   'angular-blocks',
   'wu.masonry',
-  'ngTextTruncate'
+  'ngTextTruncate',
+  'sticky'
 ])
 
 
