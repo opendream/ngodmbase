@@ -55,40 +55,15 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
         }
     };
 
-    $scope.socialSign = function(provider, redirectUrl, confirmRequired) {
-
-        // Close modal first for faster feeling
-        var redirect = true;
-        if ($scope.cancel) {
-            $scope.cancel();
-            redirect =false;
-        }
-
-        // do callback ex redirect to page
-        redirectUrl = redirectUrl || 'profile';
-        var cb = function (err, model) {
-            if (model.is_new && confirmRequired) {
-                if (redirectUrl) {
-                    $location.path('/profile/social-confirm').search({next: redirectUrl});
-                }
-                else {
-                    $location.path('/profile/social-confirm');
-                }
-            }
-            else {
-                $window.location.reload();
-            }
-        }
-
-        Auth.socialSign(provider, cb);
-    };
+    Auth.$scope = $scope;
+    $scope.socialSign = Auth.socialSign;
 
     $scope.signupClick = function () {
         if($scope.$parent.openUserForm) {
             $scope.$parent.openUserForm('signup');
         }
         else {
-            Modal.open('/static/app/odmbase/account/modal/signup_modal.html', 'SignupCtrl');
+            Modal.open('/static/app/odmbase/account/modal/signup_modal.html', null, $scope.param);
         }
     };
     $scope.forgotPasswordClick = function () {
@@ -96,7 +71,7 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
             $scope.$parent.openUserForm('forgotPassword');
         }
         else {
-            Modal.open('/static/app/odmbase/account/modal/forgot_password_modal.html', 'ForgotPasswordCtrl');
+            Modal.open('/static/app/odmbase/account/modal/forgot_password_modal.html', null, $scope.param);
         }
     };
 }

@@ -13,9 +13,9 @@ function Comment (Restangular, User, Model) {
         var _buildModel = function (element) {
 
             element.src = Model.field.foreignKeyWithData(User, element.src);
-            if (element.created) {
-                element.created = typeof(element.created) == 'string' && Date(element.created);
-            }
+            //if (element.created) {
+            //    element.created = typeof(element.created) == 'string' && Date(element.created);
+            //}
             return element;
         };
 

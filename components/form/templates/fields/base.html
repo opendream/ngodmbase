@@ -1,27 +1,27 @@
 <div class="form-group" ng-class="{ 'has-success': form[name].$valid && (submitted || form[name].$dirty),
                                     'has-error': form[name].$invalid && (submitted || form[name].$dirty) }">
-  <label ng-if="label" ng-class="labelClass" for="edit-field-{{ name }}">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
+  <label ng-if="label" ng-class="labelClass" for="edit-field-{{ name }}-{{ randnum }}">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
 
   <div class="field-container" ng-class="fieldClass">
     <!-- text -->
     <span ng-if="type=='text'">
-      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+      <input id="edit-field-{{ name }}-{{ randnum }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
     </span>
 
     <!-- url -->
     <span ng-if="type=='url'">
-      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
+      <input id="edit-field-{{ name }}-{{ randnum }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" />
     </span>
 
     <!-- number -->
     <span ng-if="type=='number'">
-      <input id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
+      <input id="edit-field-{{ name }}-{{ randnum }}" class="form-control" placeholder="{{ placeholder }}" type="{{ type }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" min="{{ min }}" max="{{ max }}" step="{{ step }}"/>
       <span class="field-suffix" ng-if="suffix">{{ suffix }}</span>
     </span>
 
     <!-- text editor -->
     <span ng-if="type=='text-angular'">
-      <div text-angular id="edit-field-{{ name }}" placeholder="{{ placeholder }}" type="text" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      <div text-angular id="edit-field-{{ name }}-{{ randnum }}" placeholder="{{ placeholder }}" type="text" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
       </div>
     </span>
 
@@ -31,31 +31,31 @@
     </span>
 
     <span ng-if="type=='textarea'">
-      <textarea msd-elastic id="edit-field-{{ name }}" class="form-control" placeholder="{{ placeholder }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly">
+      <textarea msd-elastic id="edit-field-{{ name }}-{{ randnum }}" class="form-control" placeholder="{{ placeholder }}" name="{{ name }}" ng-model="model[name]" ng-required="required" ng-readonly="readonly">
       </textarea>
     </span>
 
     <!-- tags -->
     <span ng-if="type=='tags'">
-        <tags-input ng-model="model[name]" display-property="{{ tagsDisplayProperty }}" add-on-space="true" placeholder="{{ placeholder }}">
+        <tags-input ng-model="model[name]" display-property="{{ tagsDisplayProperty }}" add-on-space="true" placeholder="{{ placeholder }}" on-tag-added="onTagAdded($tag)">
             <auto-complete source="tagsLoad($query)" ng-if="tagsLoad"></auto-complete>
         </tags-input>
     </span>
 
     <span ng-if="type=='radio'">
       <span class="radio" ng-repeat="option in options track by $index">
-        <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ option.key }}" value="{{  option.key }}" ng-required="!model[name]"/>
-        <label for="radio-{{ name }}-{{ option.key }}">{{  option.value }}</label>
+        <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ option.key }}-{{ randnum }}" value="{{  option.key }}" ng-required="!model[name]"/>
+        <label for="radio-{{ name }}-{{ option.key }}-{{ randnum }}">{{  option.value }}</label>
       </span>
     </span>
 
     <span ng-if="type=='select-reference'">
-      <select id="edit-field-{{ name }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      <select id="edit-field-{{ name }}-{{ randnum }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
       </select>
     </span>
 
     <span ng-if="type=='select-multiple-reference'">
-      <select multiple ng-multiple="true" id="edit-field-{{ name }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
+      <select multiple ng-multiple="true" id="edit-field-{{ name }}-{{ randnum }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
       </select>
     </span>
 
@@ -69,6 +69,7 @@
               ng-model="model[name].allDict[item.resource_uri]"
               ng-change="selectItem(item)"
               ng-class="{checked: model[name].allDict[item.resource_uri]}"
+              ng-required="checkboxMultipleRequired()"
           />
           <label ng-click="selectItem(item)">
             <span ng-if="itemTemplateUrl" ng-include="itemTemplateUrl"></span>
@@ -90,19 +91,33 @@
               {{ selectedItem[itemLabel] }}
           </span>
           <span class="text truncate" ng-if="!selectedItem">
-              เลือก{{ label }}
+              {{ 'FORM.SELECT' | translate }}{{ label }}
           </span>
           <span class="caret caret-down-border">
           </span>
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="{{ model.route }}-{{ name }}-drop">
         <li class="radio" ng-class="{checked: model[name]}" ng-click="selectSingleItem(item)" ng-repeat="item in itemList track by $index">
-          <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ item[itemKey] }}" ng-value="item[itemKey]" ng-required="required"/>
-          <label ng-if="itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}" template-item
+          <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}" ng-value="item[itemKey]" ng-required="required"/>
+          <label ng-if="itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}" template-item
                  template-url="itemTemplateUrl"
                  model="item">
           </label>
-          <label ng-if="!itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}">{{ item[itemLabel] }}</label>
+          <label ng-if="!itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}">{{ item[itemLabel] }}</label>
+        </li>
+      </ul>
+    </span>
+
+    <span ng-if="type == 'radio-list-reference'" class="radio-list">
+
+      <ul class="list-unstyled">
+        <li class="radio {{ itemClass }}" ng-class="{checked: model[name] == item[itemKey]}" ng-click="selectSingleItem(item)" ng-repeat="item in itemList track by $index">
+          <input type="radio" name="{{ name }}" ng-model="model[name]" id="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}" ng-value="item[itemKey]" ng-required="required"/>
+          <label ng-if="itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}" template-item
+                 template-url="itemTemplateUrl"
+                 model="item">
+          </label>
+          <label ng-if="!itemTemplateUrl" for="radio-{{ name }}-{{ item[itemKey] }}-{{ randnum }}">{{ item[itemLabel] }}</label>
         </li>
       </ul>
     </span>
@@ -127,10 +142,10 @@
                   </div>
                 </div>
 
-                <div ng-show="$index==numImageFiles" name="{{ nameItem }}" class="drop-image" ng-file-drop drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="true">
-                  <div name="{{ nameItem }}" class="select-image glyphicon" ng-file-select drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.png" type="file" ng-multiple="true">
+                <div ng-show="$index==numImageFiles" name="{{ nameItem }}" class="drop-image" ng-file-drop drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true">
+                  <div name="{{ nameItem }}" class="select-image glyphicon" ng-file-select drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true">
                     <div class="glyphicon glyphicon-plus add-image-image"></div>
-                    <div class="add-image-label">เพิ่มภาพ</div>
+                    <div class="add-image-label">{{ 'FORM.IMAGE.ADD' | translate }}</div>
                   </div>
                 </div>
 
@@ -140,7 +155,7 @@
             </div>
           </div>
           <div ng-show="$index==0" class="help-block">
-            <div>รูปหลัก</div>
+            <div>{{ 'FORM.IMAGE.MAIN' | translate }}</div>
           </div>
         </div>
       </div>
@@ -149,15 +164,15 @@
 
     <span ng-if="type=='datepicker'">
       <div class="dropdown">
-        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+        <a class="dropdown-toggle" id="datepicker-{{ model[name] }}-{{ randnum }}" role="button" data-toggle="dropdown" data-target="#" href="#">
           <div class="input-group">
-            <input type="text" class="form-control" data-ng-model="model[name]" date-parser="{{ dateFormat }}" />
+            <input type="text" class="form-control" class="form-control" name="{{ name }}" ng-model="model[name]" date-parser="{{ dateFormat }}" ng-required="required" />
             <span class="input-group-addon tsoft-color"><i class="glyphicon glyphicon-calendar"></i></span>
           </div>
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
           <datetimepicker data-ng-model="model[name]"
-                          data-datetimepicker-config="{dropdownSelector: '#dropdown2', minView: 'day' }"
+                          data-datetimepicker-config="{dropdownSelector: '#datepicker-{{ model[name] }}', minView: 'day' }"
                           data-before-render="beforeRenderDatepicker($view, $dates, $leftDate, $upDate, $rightDate)"
                           ng-required="required"
                           ng-readonly="readonly"
@@ -173,9 +188,12 @@
   <p class="help-block" ng-show="help" ng-class="helpClass">
       {{ help }}
   </p>
-
   <p class="help-block" ng-show="form[name].$error.required && (submitted || form[name].$dirty)" ng-class="helpClass">
-    {{ label }} จำเป็นต้องกรอก
+    {{ label }} {{ 'ERROR.IS_REQUIRED' | translate }}
+  </p>
+
+  <p class="help-block" ng-show="form[name+'[]'].$error.required && (submitted || form[name+'[]'].$dirty)" ng-class="helpClass">
+    {{ label }} {{ 'ERROR.IS_REQUIRED' | translate }}
   </p>
 
   <p class="help-block" ng-show="isNotValid && key != 'required' && key != 'mongoose' && (submitted || form[name].$dirty)"  ng-class="helpClass" ng-repeat="(key, isNotValid) in form[name].$error">

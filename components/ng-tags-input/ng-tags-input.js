@@ -297,6 +297,9 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig","tiUt
                 }
             };
 
+            setTimeout(function () {
+
+
             events
                 .on('tag-added', scope.onTagAdded)
                 .on('invalid-tag', scope.onInvalidTag)
@@ -374,6 +377,8 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig","tiUt
                         }
                     }
                 });
+
+            }, 100);
         }
     };
 }]);

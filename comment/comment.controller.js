@@ -2,9 +2,9 @@
 
 angular
     .module('odmbase')
-    .controller('CommentCtrl', ['$scope', 'Model', 'Comment', '$rootScope', CommentCtrl]);
+    .controller('CommentCtrl', ['$scope', 'Model', 'Comment', '$rootScope', 'Auth', 'Modal', CommentCtrl]);
 
-function CommentCtrl ($scope, Model, Comment, $rootScope) {
+function CommentCtrl ($scope, Model, Comment, $rootScope, Auth, Modal) {
 
     if ($scope.param && $scope.param.model) {
         $scope.dst = $scope.param.model;
@@ -12,6 +12,10 @@ function CommentCtrl ($scope, Model, Comment, $rootScope) {
     else {
         $scope.dst = $scope.$parent.model;
     }
+
+    $scope.modal = Modal;
+
+    $scope.isLoggedIn = Auth.isLoggedIn();
 
     $scope.model = {
         dst: $scope.dst.common_resource_uri
@@ -56,6 +60,7 @@ function CommentCtrl ($scope, Model, Comment, $rootScope) {
                 }
 
                 form.$setPristine();
+                $rootScope.$broadcast('comment.submit.success');
             });
 
         }

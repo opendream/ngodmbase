@@ -1,14 +1,18 @@
-<div class="" ng-controller="CommentCtrl" discard-modal-on-state-change>
-    <h4 class="text-hide">ความคิดเห็น</h4>
+<div class="comment-wrapper" ng-controller="CommentCtrl" discard-modal-on-state-change>
+    <h4 class="text-hide">{{ 'COMMENT.COMMENT' | translate }}</h4>
     <div class="comment-list">
         <a href=""
-           ng-show="!commentDataSource.disableLoadMore"
+           ng-show="!commentDataSource.busy && !commentDataSource.disableLoadMore"
            ng-click="commentDataSource.loadMore()"
+           class="ng-hide"
+           translate="COMMENT.SEE_MORE_COMMENT_PREVIOUS"
+           translate-value-remain="{{ commentDataSource.remain || '...' }}"
+           translate-interpolation="messageformat"
         >
-            ดูอีก {{ commentDataSource.remain }} ความคิดเห็นก่อนหน้า
         </a>
+        <div ng-show="commentDataSource.busy && !commentDataSource.disableLoadMore" class="loading list-loading" style="width: 100%;"><img src="/static/images/loading.gif" alt="Loading ..." width="40" height="40"/></div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="model in commentList">
+            <li class="list-group-item" ng-repeat="model in commentList | orderBy : 'created'">
                 <div ng-include="'/static/app/odmbase/comment/comment.item.html'">
                 </div>
             </li>
@@ -16,7 +20,7 @@
     </div>
 
     <div class="comment-form">
-        <form class="form" name="form" ng-submit="submitComment(form)" novalidate>
+        <form ng-show="isLoggedIn" class="form" name="form" ng-submit="submitComment(form)" novalidate>
             <div class="form-group" ng-class="{ 'has-success': form.message.$valid && (submitted || form.message.$dirty),
                                                 'has-error': form.message.$invalid && (submitted || form.message.$dirty) }">
                 <label ng-if="label" ng-class="labelClass">{{ label }} <span ng-if="required" class="required-lable">*</span></label>
@@ -26,10 +30,11 @@
                     <span>
                         <textarea msd-elastic focus-me="param.fromCommentLink" class="form-control" name="message" ng-model="model.message" required="required">
                         </textarea>
-                        <button type="submit" class="btn btn-default">ส่ง</button>
+                        <button type="submit" class="btn btn-default">{{ 'COMMENT.SEND' | translate }}</button>
                     </span>
                 </div>
             </div>
         </form>
+        <span ng-hide="isLoggedIn">{{ 'COMMENT.PLEASE' | translate }} <a href="" ng-click="modal.open('/static/app/odmbase/account/modal/login_modal.html')">{{ 'ACCOUNT.LOGIN.SUBMIT_BUTTON' | translate }}</a> {{ 'GLOBAL.OR' | translate }} <a href="" ng-click="modal.open('/static/app/odmbase/account/modal/signup_modal.html')">{{ 'ACCOUNT.REGISTER' | translate }}</a> {{ 'COMMENT.BEFORE_COMMENT' | translate }}</span>
     </div>
 </div>

@@ -15,24 +15,28 @@ angular.module('odmbase')
       })
       .state('profilePassword', {
         url: '/profile/password',
+        title: 'เปลี่ยนรหัสผ่าน',
         templateUrl: 'static/app/odmbase/account/settings/password.html',
         controller: 'ProfilePasswordCtrl',
         authenticate: true
       })
       .state('profileForgotPassword', {
         url: '/profile/password/:uid/:token',
+        title: 'เปลี่ยนรหัสผ่าน',
         templateUrl: 'static/app/odmbase/account/settings/password.html',
         controller: 'ProfilePasswordCtrl',
         authenticate: false
       })
       .state('profileSocialConfirm', {
         url: '/profile/social-confirm',
+        title: 'กรุณายืนยันข้อมูลของคุณ',
         templateUrl: 'static/app/odmbase/account/profile/social_confirm.html',
-        controller: 'ProfileCtrl',
+        //controller: 'ProfileCtrl',
         authenticate: true
       })
       .state('profile', {
         url: '/profile',
+        title: 'แก้ไขข้อมูลของคุณ',
         templateUrl: 'static/app/account/profile/profile.html',
         controller: 'ProfileCtrl',
         authenticate: true

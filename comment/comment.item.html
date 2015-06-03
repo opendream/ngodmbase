@@ -16,6 +16,8 @@
         <p class="field-message">
             {{ model.message }}
         </p>
-        <span class="field-created" am-time-ago="model.created"></span>
+        <span class="field-created">
+            {{ model.created | timeago }}
+        </span>
     </div>
 </div>

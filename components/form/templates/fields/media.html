@@ -2,12 +2,12 @@
 
     <div class="media-field media-field-image col-xs-12" ng-show="model.media_selected=='image_set'">
           <div field form="form" submitted="submitted" model="model"
-               label="รูปภาพ"
+               label="{{ 'FORM.IMAGE.LABEL' | translate }}"
                name="image_set"
                type="image-set"
                error="{min: 'ต้องมีรูปไม่น้อยกว่า 1 รูป'}"
                required="model.media_selected=='image_set'"
-               help="กรุณาตรวจสอบรูปของคุณที่กำลังอัพโหลด โดยจะต้องไม่เกิน 2MB ถ้าเกินระบบจะลบรูปออกโดยอัตโนมัติ"
+               help="{{ 'ERROR.IMAGE_SIZE' | translate }}"
                label-class="col-md-12"
                field-class="col-md-12"
                help-class="col-md-12 pull-left">
@@ -31,7 +31,7 @@
     <div class="media-field media-field-quote col-xs-12" ng-show="model.media_selected=='quote'">
 
         <div field form="form" submitted="submitted" model="model"
-             placeholder="Make Quote Here"
+             placeholder="{{ 'FORM.QUOTE.QUOTE_PLACEHOLDER' | translate }}"
              name="quote"
              type="textarea"
              required="model.media_selected=='quote'"
@@ -41,7 +41,7 @@
         <div class="quote-source">
             <span>— </span>
             <span field form="form" submitted="submitted" model="model"
-                 placeholder="Source"
+                 placeholder="{{ 'FORM.QUOTE.SOURCE_PLACEHOLDER' | translate }}"
                  name="quote_source"
                  type="text"
                  required="false"
@@ -55,7 +55,7 @@
         <div class="field-container col-no-pad" ng-class="fieldClass">
             <div class="media-field-control">
                 <a href="" class="col-xs-4 btn btn-default btn-cube" title="Add Photo" ng-model="model.media_selected" btn-radio="'image_set'" uncheckable
-                    tooltip="เพิ่มรูปภาพ"
+                    tooltip="{{ 'FORM.MEDIA.ADD_IMAGE' | translate }}"
                     tooltip-trigger="mouseenter"
                     tooltip-placement="top"
                     tooltip-html="true"
@@ -63,7 +63,7 @@
                   <i class="fa fa-camera"></i>
                 </a>
                 <a href="" class="col-xs-4 btn btn-default btn-cube" title="Add Video" ng-model="model.media_selected" btn-radio="'youtube'" uncheckable
-                    tooltip="เพิ่มวีดีโอ"
+                    tooltip="{{ 'FORM.MEDIA.ADD_VDO' | translate }}"
                     tooltip-trigger="mouseenter"
                     tooltip-placement="top"
                     tooltip-html="true"
@@ -71,7 +71,7 @@
                   <i class="fa fa-video-camera"></i>
                 </a>
                 <a href="" class="col-xs-4 btn btn-default btn-cube" title="Make Quote" ng-model="model.media_selected" btn-radio="'quote'" uncheckable
-                    tooltip="สร้างข้อความ"
+                    tooltip="{{ 'FORM.MEDIA.ADD_QUOTE' | translate }}"
                     tooltip-trigger="mouseenter"
                     tooltip-placement="top"
                     tooltip-html="true"

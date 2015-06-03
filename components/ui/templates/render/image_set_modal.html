@@ -1,5 +1,5 @@
 <div class="item-modal-images">
-    <a href="" ng-click="modalOpen()">
+    <a href="" ng-click="modalOpen($event)">
         <div class="limit-height-wrapper">
 
             <img ng-if="model.image_set.all[0].image_thumbnail_2x.style == 'portrait'" class="limit-height" ng-class="model.image_set.all[0].image_thumbnail_3x.style" ng-src="{{ model.image_set.all[0].image_thumbnail_3x.url }}" />
