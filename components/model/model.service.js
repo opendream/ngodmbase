@@ -157,6 +157,7 @@ angular.module('odmbase').factory('Model', ['$q', 'Image', '$injector', function
             angular.forEach(dataList, function (data) {
 
                 callback(data);
+
                 var args = data.resource_uri.split('/');
                 _.merge(data, modelClass.one(args[args.length-2]));
             });

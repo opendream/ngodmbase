@@ -110,6 +110,7 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location, $window, 
     $scope.changeProfile = function(form) {
         $scope.form = form;
         $scope.submitted = true;
+
         if(form.$valid) {
             var param = {
                 email: $scope.user.email,
@@ -139,7 +140,7 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location, $window, 
                 {'Content-Type': "application/x-www-form-urlencoded"}
             ).then(function (model) {
 
-                if (image) {
+                if (!removeImage && image) {
                     $upload.upload({
                         url: '/api/v1/user/' + $scope.user.id +'/set_image/',
                         file: image,
@@ -189,6 +190,7 @@ function ProfileForm($scope, User, Auth, $upload, $timeout, $location, $window, 
     }
 
     $scope.attachImage = function (files) {
+        removeImage = false;
         if (files && files.length) {
             image = files[0];
             generateThumb(image, function (image) {

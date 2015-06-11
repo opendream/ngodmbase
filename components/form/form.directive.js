@@ -150,7 +150,7 @@ function CommonField () {
             }
 
             else if ($scope.type == 'select-reference') {
-
+                $scope.selectedItem = false;
                 $scope.referenceModel.one().get($scope.params).then(function (data) {
                     $scope.itemList = data.objects;
                 });
@@ -385,8 +385,12 @@ function CommonField () {
                                     $scope.imageList[$scope.numImageFiles] = null;
                                 }
                             }).success(function (data, status, headers, config) {
+                                console.log($scope.imageList);
                                 $scope.model[$scope.name].all.push(data);
                                 $scope.form[$scope.name].$dirty = true;
+                                if (!$scope.imageList[config.index]) {
+                                    $scope.imageList[config.index] = {};
+                                }
                                 $scope.imageList[config.index]['data'] = data;
                             }).error(function (data, status, headers, config) {
                                 if (status == 413) {

@@ -11,19 +11,19 @@ function InviteCtrl ($scope, User, Auth, Credit) {
         $scope.user = user;
         var initModel = {email: '', display:'', isValid: null};
 
-        $scope.user.quota_invite = 6; // TODO: receive from user model
+        // $scope.user.quota_invite = 6; // TODO: receive from user model
         $scope.inviteList = [];
 
         $scope.inviteModel = {
             message: 'ฉันอยากจะแบ่งปันเรื่องดีๆให้กับคุณ จากเว็บไซต์ปันใจ'
         };
 
-        var quotaInvite = $scope.user.quota_invite;
+        var quotaInvite = $scope.user.quota_invite_user;
         $scope.numValid = 0;
 
 
         // initial rows
-        for (var i=0; i < Math.min(quotaInvite-1, 3); i++) {
+        for (var i=0; i < Math.min(quotaInvite, 3); i++) {
             $scope.inviteList.push(_.clone(initModel));
         }
 
@@ -62,24 +62,43 @@ function InviteCtrl ($scope, User, Auth, Credit) {
 
         };
 
+        var checkSameEmail = function(email){
+            var result = false;
+            angular.forEach($scope.inviteList, function(invite, ignore) {
+                if (invite.isValid && email == invite.email) {
+                    result = true;
+                }
+            });
+            return result;
+        };
+
         $scope.checkValid = function (model, $index) {
 
             $scope.inviteList[$index].inFocus = false;
-
             if (validateEmail(model.email)) {
-                if (!model.isValid) {
-                    $scope.numValid++;
+                if(model.email === $scope.user.email){
+                    model.isValid = false;
+                } 
+                // To Do: Check same email invite
+                else if (checkSameEmail(model.email)){
+                    if (!model.isValid) {
+                        model.isValid = false;
+                    } 
+                } 
+                else {
+                    if (!model.isValid) {
+                        $scope.numValid++;
+                    }
+                    model.isValid = true;
                 }
-                model.isValid = true;
             }
             else if (model.email) {
                 model.isValid = false;
-            }
+            } 
 
             updateRemain();
 
         };
-
         $scope.sendInvite = function (form) {
             $scope.submitted = true;
 
@@ -91,17 +110,26 @@ function InviteCtrl ($scope, User, Auth, Credit) {
                 var newInviteList = [];
 
                 if (numCompleteInviteList == numInviteList) {
+                    var success = 0;
                     angular.forEach($scope.inviteList, function(invite, ignore) {
-                        if (!invite.isInvited) {
+                        if (!invite.isInvited || !invite.isValid) {
+                            // console.log(invite);
                             newInviteList.push(invite);
+                        } else {
+                            success++;
                         }
                     });
                     $scope.inviteList = newInviteList;
-                    swal({
-                        title: 'ชวนเพื่อนเรียบร้อยแล้ว',
-                        text: 'เพื่อนของคุณจะได้รับข้อความเชิญชวน พร้อมทั้งโค้ดเพื่อนำไปใช้เพิ่มสิทธิ์ให้กับการปันของ',
-                        confirmButtonText: 'คลิกเพื่อชวนเพื่อนต่อ'
-                    });
+                    if (success) {
+                        $scope.user.quota_invite_user = $scope.remain;
+                        if ($scope.user.quota_invite_user > 0) {
+                            swal({
+                                title: 'ชวนเพื่อนเรียบร้อยแล้ว',
+                                text: 'เพื่อนของคุณจะได้รับข้อความเชิญชวน พร้อมทั้งโค้ดเพื่อนำไปใช้เพิ่มสิทธิ์ให้กับการปันของ',
+                                confirmButtonText: 'คลิกเพื่อชวนเพื่อนต่อ'
+                            });
+                        }
+                    }
 
                 }
             }
@@ -218,8 +246,11 @@ function InviteConfirmCtrl ($scope, $stateParams, $location, $timeout, $window, 
 
     } ;
 
+    $scope.user = null;
     if (Auth.isLoggedIn()) {
         Auth.getDetail(null, function (user) {
+            $scope.user = user;
+
             // TODO: check is code.dst not equal logged in user
             checkCode({force_used: true});
         });
