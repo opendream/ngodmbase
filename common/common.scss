@@ -393,6 +393,10 @@ button.btn-delete {
   overflow: hidden;
 }
 
+*[image-render] {
+  font-size: 0px;
+}
+
 .limit-height-wrapper {
   text-align: center;
   background-color: #000;
@@ -426,6 +430,7 @@ ul.carousel-images[rn-carousel] {
         vertical-align: middle;
 
         font-size: 14px;
+        text-align: center;
     }
     .rn-carousel-control {
         top: 50%;
@@ -434,7 +439,7 @@ ul.carousel-images[rn-carousel] {
         color: #FFF;
     }
     .rn-carousel-control-next {
-      right: 0;
+      right: 0.5em;
     }
     .rn-carousel-control.rn-carousel-control-next:before {
         content: "\e258";

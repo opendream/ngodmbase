@@ -1,5 +1,5 @@
 angular
-    .module('mtd')
+    .module('odmbase')
     .factory('Search', ['Restangular', 'Model', '$injector', Search]);
 
 function Search (Restangular, Model, $injector) {

@@ -50,7 +50,9 @@
     </span>
 
     <span ng-if="type=='select-reference'">
+
       <select id="edit-field-{{ name }}-{{ randnum }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+           <option value="" ng-hide="model[name] !== ''">--- {{ 'FORM.SELECT' | translate }}{{ label }} ---</option>
       </select>
     </span>
 

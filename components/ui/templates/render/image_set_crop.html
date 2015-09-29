@@ -1,0 +1,19 @@
+<div class="item-images">
+    <div class="ratio-constraint dummy-image" ng-if="!model.image_set.all.length">
+    </div>
+    <ul rn-carousel rn-carousel-controls class="image carousel-images" ng-class="{'ratio-constraint': !model.image_set.all.length}">
+
+        <li ng-repeat="image in model.image_set.all">
+            <a ng-if="param.linkAble" ng-href="{{ model.absolute_url }}">
+                <div image-render url="image.image_thumbnail_1x.url"
+                    crop="true">
+                </div>
+            </a>
+            <span ng-if="!param.linkAble">
+                <div image-render url="image.image_thumbnail_1x.url"
+                    crop="true">
+                </div>
+            </span>
+        </li>
+    </ul>
+</div>

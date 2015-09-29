@@ -152,6 +152,7 @@ angular.module('odmbase', [
       $rootScope.hideNavbar = false;
       $rootScope.pageNotFound = false;
       $rootScope.accessDenied = false;
+      $rootScope.currentPath = $location.path();
 
       Auth.isLoggedInAsync(function(loggedIn, user) {
         if (next.authenticate && !loggedIn) {

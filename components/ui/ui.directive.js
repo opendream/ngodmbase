@@ -295,7 +295,7 @@ var mediaRenderOrModalLink = {
 
         var modalSize;
         $scope.$watch('model.media_selected', function (newVal, oldVal) {
-            if (newVal) {
+            if (newVal || !$scope.model.id) {
                 modalSize = 'lg';
                 $scope.templateUrl = '/static/app/odmbase/components/ui/templates/render/'.concat($scope.media, _isModal, '.html');
             } else {
