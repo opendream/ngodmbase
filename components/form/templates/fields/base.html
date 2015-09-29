@@ -54,6 +54,11 @@
       </select>
     </span>
 
+    <span ng-if="type=='select-schema'">
+      <select id="edit-field-{{ name }}-{{ randnum }}" class="form-control" name="{{ name }}" ng-options="item[1] for item in itemList track by item[0]" ng-model="model[name]" ng-required="required" ng-readonly="readonly" >
+      </select>
+    </span>
+
     <span ng-if="type=='select-multiple-reference'">
       <select multiple ng-multiple="true" id="edit-field-{{ name }}-{{ randnum }}" class="form-control" name="{{ name }}" ng-options="item.unicode_string for item in itemList track by item.resource_uri" ng-model="model[name].all" ng-required="required" ng-readonly="readonly" >
       </select>

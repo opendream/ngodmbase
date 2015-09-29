@@ -156,6 +156,19 @@ function CommonField () {
                 });
             }
 
+            else if ($scope.type == 'select-schema') {
+
+                $scope.referenceModel.one().customGET('schema').then(function (data) {
+                    $scope.itemList = [];
+
+                    $scope.model[$scope.name] = String($scope.model[$scope.name]);
+
+                    _.each(data.fields[$scope.name].choices, function (choice, i) {
+                        $scope.itemList.push([String(choice[0]), choice[1]]);
+                    })
+                });
+            }
+
             else if ($scope.type == 'select-multiple-reference') {
 
                 $scope.referenceModel.one().get().then(function (data) {

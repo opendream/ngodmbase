@@ -27,7 +27,7 @@ function ForgotPasswordCtrl ($scope, Auth, $location, Modal, $window, User) {
             $scope.$parent.openUserForm('signup');
         }
         else {
-            Modal.open('/static/app/odmbase/account/modal/signup_modal.html', 'SignupCtrl');
+            Modal.open('/static/app/odmbase/account/modal/signup_modal.html', null, $scope.param);
         }
     };
     $scope.loginClick = function () {
@@ -35,7 +35,7 @@ function ForgotPasswordCtrl ($scope, Auth, $location, Modal, $window, User) {
             $scope.$parent.openUserForm('login');
         }
         else {
-            Modal.open('/static/app/odmbase/account/modal/login_modal.html', 'LoginCtrl');
+            Modal.open('/static/app/odmbase/account/modal/login_modal.html', null, $scope.param);
         }
     };
 }

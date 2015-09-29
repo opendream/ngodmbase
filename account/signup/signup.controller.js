@@ -1,9 +1,9 @@
 'use strict';
 angular
     .module('odmbase')
-    .controller('SignupCtrl', ['$scope', 'Auth', '$location', 'Modal', '$window', SignupCtrl ]);
+    .controller('SignupCtrl', ['$scope', 'Auth', '$location', 'Modal', '$window', '$state', SignupCtrl ]);
 
-function SignupCtrl ($scope, Auth, $location, Modal, $window) {
+function SignupCtrl ($scope, Auth, $location, Modal, $window, $state) {
 
     $scope.SIGNUP_TEMPLATE = SIGNUP_TEMPLATE;
     $scope.user = {};
@@ -14,8 +14,12 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
 
     $scope.register = function(form, redirectUrl, successCallback) {
 
-        redirectUrl = redirectUrl || ($scope.param && $scope.param.redirectUrl);
+        console.log(redirectUrl);
+        console.log($scope.param);
+
+        redirectUrl = ($scope.param && $scope.param.redirectUrl) || redirectUrl;
         successCallback = successCallback || ($scope.param && $scope.param.successCallback);
+        var reload = ($scope.param && $scope.param.reload)
 
         $scope.submitted = true;
         if(form.$valid) {
@@ -46,11 +50,16 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window) {
                         // do callback ex redirect to page
                         redirectUrl = redirectUrl || 'profile';
                         $location.path(redirectUrl);
+                        console.log('$state.$current', $state.$current);
+                        setTimeout(function () {
+                            $state.go($state.$current, null, { reload: true });
+                        }, 100);
+
                     }
                 }
             });
         }
-    }
+    };
 
     Auth.$scope = $scope;
     Auth.successCallback = $scope.param && $scope.param.successCallback;
