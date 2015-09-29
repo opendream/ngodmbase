@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Auth', ['$location', '$rootScope', '$http', 'User', 'Modal', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', function Auth($location, $rootScope, $http, User, Modal, $cookieStore, $q, Facebook, GooglePlus, $interval, $window) {
+  .factory('Auth', ['$location', '$rootScope', '$http', 'User', 'Modal', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', '$state', function Auth($location, $rootScope, $http, User, Modal, $cookieStore, $q, Facebook, GooglePlus, $interval, $window, $state) {
     var Auth = {};
     var currentUser = null;
     if($cookieStore.get('key')) {
@@ -103,6 +103,14 @@ angular.module('odmbase')
           Auth.setCurrentUser(model);
 
 
+          $rootScope.accessDenied = false;
+          $rootScope.pageNotFound = false;
+
+
+          if (Auth.$scope && Auth.$scope.cancel) {
+              Auth.$scope.cancel();
+          }
+
           callback(null, model);
         }, function(err) {
           callback(err, null);
@@ -159,8 +167,6 @@ angular.module('odmbase')
 
       };
 
-      $rootScope.accessDenied = false;
-      $rootScope.pageNotFound = false;
 
       providerFunction[provider]();
 
@@ -169,15 +175,10 @@ angular.module('odmbase')
     Auth.socialSign = function(provider, redirectUrl, confirmRequired, confirmWithModal, notReloadPageAfterSign) {
 
         console.log(Auth.successCallback);
-        // Close modal first for faster feeling
-        var redirect = true;
-        if (Auth.$scope && Auth.$scope.cancel) {
-            Auth.$scope.cancel();
-            redirect =false;
-        }
+
 
         // do callback ex redirect to page
-        redirectUrl = redirectUrl || 'profile';
+        redirectUrl = (Auth.$scope && Auth.$scope.param && Auth.$scope.param.redirectUrl) || redirectUrl || 'profile';
         var cb = function (err, model) {
             if (model.is_new && confirmRequired) {
                 if (confirmWithModal) {
@@ -197,7 +198,8 @@ angular.module('odmbase')
                 Auth.successCallback(model)
             }
             else {
-                $window.location.reload();
+                //$window.location.reload();
+                $state.go($state.$current, null, { reload: true });
             }
         };
 
@@ -304,7 +306,8 @@ angular.module('odmbase')
           if (err.status == 403) {
             Auth.logout();
             $location.path('/');
-            $window.location.reload();
+            //$window.location.reload();
+            $state.go($state.$current, null, { reload: true });
           }
         });
       }
@@ -361,7 +364,8 @@ angular.module('odmbase')
                 if (err.status == 403) {
                     Auth.logout();
                     $location.path('/');
-                    $window.location.reload();
+                    //$window.location.reload();
+                    $state.go($state.$current, null, { reload: true });
                 }
             });
         }

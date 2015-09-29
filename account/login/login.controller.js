@@ -2,9 +2,9 @@
 
 angular
     .module('odmbase')
-    .controller('LoginCtrl', ['$scope', 'Auth', '$location', 'Modal', '$window', LoginCtrl]);
+    .controller('LoginCtrl', ['$scope', 'Auth', '$location', 'Modal', '$window', '$state', LoginCtrl]);
 
-function LoginCtrl ($scope, Auth, $location, Modal, $window) {
+function LoginCtrl ($scope, Auth, $location, Modal, $window, $state) {
 
     $scope.LOGIN_TEMPLATE = LOGIN_TEMPLATE;
     $scope.user = {};
@@ -16,7 +16,7 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
 
     $scope.login = function(form, cb, redirectUrl, successCallback) {
 
-        redirectUrl = redirectUrl || ($scope.param && $scope.param.redirectUrl);
+        redirectUrl = ($scope.param && $scope.param.redirectUrl) || redirectUrl;
         successCallback = successCallback || ($scope.param && $scope.param.successCallback);
 
         $scope.submitted = true;
@@ -43,7 +43,9 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window) {
                         if (redirect) {
                             $location.path(redirectUrl || '/');
                         }
-                        $window.location.reload();
+                        //$window.location.reload();
+                        $state.go($state.$current, null, { reload: true });
+
                     }
                     cb();
 

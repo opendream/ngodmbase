@@ -181,7 +181,7 @@ angular.module('odmbase').config(['$translateProvider', function ($translateProv
                 LOGIN_QUESTION: 'มีบัญชีผู้ใช้แล้ว?',
                 FORGOT_PASSWORD_QUESTION: 'ลืมรหัสผ่าน?',
                 LOGIN_LINK: 'เข้าสู่ระบบ',
-                SIGNUP_LINK: 'สร้างบัญชีผู้ใช้ใหม'
+                SIGNUP_LINK: 'สร้างบัญชีผู้ใช้ใหม่'
             },
             LOGIN: {
                 OR_LOGIN_EMAIL: 'หรือเข้าสู่ระบบผ่านอีเมล',

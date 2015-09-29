@@ -158,7 +158,11 @@ angular.module('odmbase', [
         if (next.authenticate && !loggedIn) {
           //$location.path('/login');
           $rootScope.accessDenied = true;
-          Modal.open('/static/app/odmbase/account/modal/login_modal.html', null, {'hideCloseButton': true});
+          Modal.open('/static/app/odmbase/account/modal/login_modal.html', null, {
+              'hideCloseButton': true,
+              redirectUrl: next.url,
+              reload: true
+          });
         }
 
         if (next.superuser && !user.is_superuser) {

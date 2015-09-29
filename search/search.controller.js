@@ -2,7 +2,7 @@
 
 angular
     .module('odmbase')
-    .controller('SearchCtrl', ['$scope', '$location', 'Model', 'Search', 'User', 'Auth', SearchCtrl])
+    .controller('SearchCtrl', ['$scope', '$location', 'Model', 'Search', 'User', 'Auth', 'Device', SearchCtrl])
     .controller('SearchBoxCtrl', ['$scope', '$location', 'Model', 'Search', 'User', '$timeout', SearchBoxCtrl]);
 
 
@@ -51,7 +51,7 @@ function searchHelper ($scope, $location, Model, Search, User, content_type, cle
 // TODO: move to settings
 var SEARCH_CONTENT_TYPES = ['goals.Goal', 'goals.TeamGoal', 'updates.Update'];
 
-function SearchCtrl ($scope, $location, Model, Search, User, Auth) {
+function SearchCtrl ($scope, $location, Model, Search, User, Auth, Device) {
 
     $scope.isLoggedIn = Auth.isLoggedIn();
 
@@ -60,7 +60,11 @@ function SearchCtrl ($scope, $location, Model, Search, User, Auth) {
         searchHelper($scope, $location, Model, Search, User, SEARCH_CONTENT_TYPES, false, false);
     });
 
-
+    // check for preload
+    $scope.scrollDistance = 0;
+    if (!Device.isMobileOrTouchDevice) {
+        $scope.scrollDistance = 5;
+    }
 }
 
 function SearchBoxCtrl ($scope, $location, Model, Search, User, $timeout) {
