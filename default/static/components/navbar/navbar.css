@@ -1,0 +1,70 @@
+/* line 1, navbar.scss */
+.navbar-brand {
+  display: block;
+  background: url(/static/images/default/default.png) no-repeat 15px;
+  height: 65px;
+  width: 160px;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+
+/* line 9, navbar.scss */
+.my-nav {
+  padding: 20px 0;
+  font-size: 1.1em;
+}
+
+/* line 14, navbar.scss */
+.my-nav li.last {
+  border: 0;
+}
+
+/* line 17, navbar.scss */
+.my-nav a {
+  color: #999;
+  line-height: 30px;
+}
+
+/* line 21, navbar.scss */
+.my-nav a:hover {
+  color: #000;
+}
+
+/* line 25, navbar.scss */
+.badge {
+  background-color: #b5be00;
+  position: absolute;
+  right: 0;
+  top: 0px;
+}
+
+/* line 31, navbar.scss */
+.nav > li > a:hover, .nav > li > a:focus {
+  background-color: transparent;
+}
+
+/* line 34, navbar.scss */
+.img-avatar-small-border {
+  width: 34px;
+  height: 34px;
+  display: block;
+  border: 1px solid #E6BBC0;
+  padding: 1px;
+  float: left;
+}
+
+/* line 43, navbar.scss */
+.img-avatar-small {
+  width: 30px;
+  height: 30px;
+  display: block;
+  background-size: cover;
+  background-position: center;
+}
+
+/* line 51, navbar.scss */
+.gravatar span.unicode-string {
+  float: left;
+  margin-left: 10px;
+  line-height: 34px;
+}

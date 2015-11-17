@@ -1,0 +1,37 @@
+/* parallax */
+/* line 5, parallax.directive.scss */
+.odm-parallax {
+  position: relative;
+  display: table;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* line 12, parallax.directive.scss */
+.parallax-section {
+  display: table-row;
+  overflow: hidden;
+}
+
+/* line 18, parallax.directive.scss */
+.parallax-story {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* line 25, parallax.directive.scss */
+.parallax-bg {
+  width: 100%;
+  color: white;
+  overflow: hidden;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  display: table-cell;
+  position: absolute;
+  height: 1000px;
+}

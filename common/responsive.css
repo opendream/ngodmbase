@@ -1,0 +1,10 @@
+@media screen and (max-width: 991px) {
+  /* TODO move to custom dir */
+}
+@media screen and (max-width: 767px) {
+  /* line 8, responsive.scss */
+  .banner {
+    background: none;
+    height: auto;
+  }
+}

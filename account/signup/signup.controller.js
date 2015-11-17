@@ -82,6 +82,14 @@ function SignupCtrl ($scope, Auth, $location, Modal, $window, $state) {
 
         }
     });
+    $scope.forgotPasswordClick = function () {
+        if($scope.$parent.openUserForm) {
+            $scope.$parent.openUserForm('forgotPassword');
+        }
+        else {
+            Modal.open('/static/app/odmbase/account/modal/forgot_password_modal.html', null, $scope.param);
+        }
+    };
     /*
     $scope.$watch('user.display_name', function (newValue, oldValue) {
         $scope.submitted = false;

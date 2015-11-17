@@ -8,11 +8,6 @@
          กรุณากรอกอีเมลและรหัสผ่าน
       </div>
 
-      <div class="alert alert-danger" role="alert" ng-show="form.email.$error.email && submitted">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-         อีเมลไม่ถูกต้อง
-      </div>
-
       <div class="alert alert-danger" role="alert" ng-show="errors.other && submitted">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
          {{ errors.other }}
@@ -20,13 +15,32 @@
 
     </div>
 
+
     <div class="col-sm-12">
       <form class="form-horizontal" name="form" ng-submit="login(form)" novalidate>
+
+        <div class="row">
+          <div class="col-sm-7 col-sm-offset-3">
+            <a class="btn btn-facebook" href="" ng-click="socialSign('facebook')">
+              เชื่อมต่อกับ <span class="icon-fb-wrapper"><i class="fa fa-facebook"></i></span>
+            </a>
+
+            <div class="split-section">
+              <div class="text-split">หรือ เข้าสู่ระบบด้วยอีเมล</div>
+            </div>
+          </div>
+        </div>
 
         <div class="form-group row">
           <label class="col-sm-3 control-label" for="formGroupInputLarge">อีเมล</label>
           <div class="col-sm-7">
             <input type="email" name="email" class="form-control" ng-model="user.email" required>
+            <div class="alert alert-danger has-error" role="alert" ng-show="form.email.$error.email && submitted">
+              <div class="help-block">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                 อีเมลไม่ถูกต้อง
+              </div>
+            </div>
           </div>
         </div>
 
@@ -37,19 +51,22 @@
           </div>
         </div>
 
+
         <div class="row submit-group">
-          <div class="col-sm-3 col-sm-offset-7">
+          <div class="col-sm-offset-3 col-sm-7 left">
             <button class="btn-green btn-login" type="submit">
               เข้าสู่ระบบ
             </button>
+            <div class="inline-block">
+              <a href="" ng-click="forgotPasswordClick()">ลืมรหัสผ่าน ?</a>
+            </div>
           </div>
+        </div>
 
-          <div class="col-sm-3 col-sm-offset-7">
-            <a class="btn btn-facebook" href="" ng-click="socialSign('facebook')">
-              เชื่อมต่อกับ <span class="icon-fb-wrapper"><i class="fa fa-facebook"></i></span>
-            </a>
+        <div class="signup-link row">
+          <div class="col-sm-offset-3 col-sm-7 center">
+            หากคุณยังไม่เป็นสมาชิกปันใจสามารถสมัครสมาชิก <a href="" ng-click="signupClick()">ที่นี่</a>
           </div>
-
         </div>
       </form>
     </div>

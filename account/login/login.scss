@@ -10,11 +10,12 @@
 .btn-facebook {
 	@include thaisans-reg;
 	@include border-box;
-	width: 120px;
-	height: 31px;
+	width: 100%;
+	margin-bottom: 15px;
+	height: 41px;
+	padding: 5px 15px;
 	border: 1px solid #849ACA;
 	border-radius: 2px;
-	padding: 2px 15px;
 	margin-top: 10px;
 	font-size: 13px;
 	.icon-fb-wrapper {

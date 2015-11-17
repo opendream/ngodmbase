@@ -3,6 +3,11 @@
 angular.module('odmbase')
   .config(function ($stateProvider) {
     $stateProvider
+      .state('front', {
+        url: '',
+        templateUrl: "static/app/main/main.html",
+        controller: 'MainCtrl'
+      })
       .state('main', {
         url: '/',
         templateUrl: "static/app/main/main.html",

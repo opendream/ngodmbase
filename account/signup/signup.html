@@ -1,7 +1,19 @@
 <div class="modal-container modal-signup" ng-controller="SignupCtrl">
   <div class="row">
-    <div class="col-sm-12 row-cart">
+    <div class="col-sm-12">
       <form class="form-horizontal" name="form" ng-submit="register(form)" novalidate>
+
+        <div class="row">
+          <div class="col-sm-7 col-sm-offset-3">
+            <a class="btn btn-facebook" href="" ng-click="socialSign('facebook')">
+              เชื่อมต่อกับ <span class="icon-fb-wrapper"><i class="fa fa-facebook"></i></span>
+            </a>
+
+            <div class="split-section">
+              <div class="text-split">หรือ สมัครสมาชิกด้วยอีเมล</div>
+            </div>
+          </div>
+        </div>
 
         <div class="form-group row" ng-class="{ 'has-success': form.email.$valid && submitted,
                                             'has-error': form.email.$invalid && submitted }">
@@ -12,13 +24,13 @@
                  mongoose-error/>
                  
             <p class="help-block" ng-show="form.email.$error.email && submitted">
-              ใส่อีเมลไม่ถูกต้อง
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> กรอกอีเมลไม่ถูกต้อง
             </p>
             <p class="help-block" ng-show="form.email.$error.required && submitted">
-              จำเป็นต้องกรอก
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> กรุณากรอกอีเมล
             </p>
             <p class="help-block" ng-show="errors.email.length" ng-repeat="error in errors.email">
-              {{ error }}
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>{{ error }}
             </p>
           </div>  
         </div>
@@ -35,7 +47,7 @@
                  
             <p class="help-block"
                ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
-              กรุณาระบุอย่างน้อย 3 ตัวอักษร
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> กรุณาระบุรหัสผ่านอย่างน้อย 3 ตัวอักษร
             </p>
             <p class="help-block" ng-show="errors.password.length" ng-repeat="error in errors.password">
               {{ error }}
@@ -44,15 +56,19 @@
         </div>
 
         <div class="row submit-group">
-          <div class="col-sm-3 col-sm-offset-7">
+          <div class="col-sm-offset-3 col-sm-7 left">
             <button class="btn-green btn-login" type="submit">
               สมัครสมาชิก
             </button>
+            <div class="inline-block">
+              <a href="" ng-click="forgotPasswordClick()">ลืมรหัสผ่าน ?</a>
+            </div>
           </div>
-          <div class="col-sm-3 col-sm-offset-7">
-            <a class="btn btn-facebook" href="" ng-click="socialSign('facebook')">
-              เชื่อมต่อกับ <span class="icon-fb-wrapper"><i class="fa fa-facebook"></i></span>
-            </a>
+        </div>
+
+        <div class="signup-link row">
+          <div class="col-sm-offset-3 col-sm-7 center">
+            หากคุณเป็นสมาชิกปันใจแล้ว เข้าสู่ระบบ <a class="login-link" href="" ng-click="loginClick()">ที่นี่</a>
           </div>
         </div>
 

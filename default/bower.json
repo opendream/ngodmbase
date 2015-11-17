@@ -73,7 +73,7 @@
     "angular-chart.js": "~0.7.1",
     "angular-bindonce": "~0.3.3",
     "angular-nl2br": "~1.0.3",
-    "angular-tour": "~0.1.1"
+    "ng-timeago": "~0.0.2"
   },
   "resolutions": {
     "moment": "~2.10.3"

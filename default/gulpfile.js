@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
+var templateCache = require('gulp-angular-templatecache');
 
 var sass = require('gulp-ruby-sass'),
     autoprefixer = require('gulp-autoprefixer'),
@@ -57,19 +58,37 @@ gulp.task('jshint', function () {
     .pipe($.jshint.reporter('fail'));
 });
 
-gulp.task('html', [], function () {
+gulp.task('template', [], function () {
+
+    var templateRootDir = __dirname,
+        templateOptions = {
+        root: '/',
+        base: function (file) {
+            return file.path.replace(templateRootDir, '').replace(/\\/g, '/');
+        },
+        module: 'odmbase'
+    };
+
+    return gulp.src(['static/app/**/*.html', 'static/components/**/*.html', '!static/app/odmbase/default{,/**}'])
+        .pipe(templateCache(templateOptions))
+        .pipe(gulp.dest('dist/static'));
+});
+
+gulp.task('html', ['template'], function () {
   var assets = $.useref.assets({searchPath: '.'});
 
-  return gulp.src(['odmbase/templates/base.html', 'conf/templates/project_custom_script.html'])
+  return gulp.src(['odmbase/templates/base.html'])
+    .pipe($.preprocess())
     .pipe(assets)
-    .pipe($.ngAnnotate())
+    .pipe($.if('*.js', $.ngAnnotate()))
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
     .pipe(assets.restore())
     .pipe($.useref())
-    //.pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
+    .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
     .pipe(gulp.dest('dist'));
 });
+
 
 
 gulp.task('build', ['html'], function () {
@@ -79,3 +98,4 @@ gulp.task('build', ['html'], function () {
 gulp.task('default', ['wiredep', 'styles', 'watch'], function() {
 
 });
+
