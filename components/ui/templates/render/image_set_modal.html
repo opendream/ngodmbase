@@ -2,8 +2,17 @@
     <a href="" ng-click="modalOpen($event)">
         <div class="limit-height-wrapper">
 
-            <img ng-if="model.image_set.all[0].image_thumbnail_2x.style == 'portrait'" class="limit-height" ng-class="model.image_set.all[0].image_thumbnail_3x.style" ng-src="{{ model.image_set.all[0].image_thumbnail_3x.url }}" />
-            <img ng-if="model.image_set.all[0].image_thumbnail_2x.style != 'portrait'" class="limit-height" ng-class="model.image_set.all[0].image_thumbnail_2x.style" ng-src="{{ model.image_set.all[0].image_thumbnail_2x.url }}" />
+            <picture class="limit-height" ng-if="model.image_set.all[0].image_thumbnail_2x.style != 'portrait'" >
+                <source ng-srcset="{{ model.image_set.all[0].image_thumbnail_2x.url }}" media="(max-width: {{ breakPoint }}px)" class="limit-height" />
+                <source ng-srcset="{{ model.image_set.all[0].image_thumbnail_1x.url }}" media="(min-width: {{ breakPoint + 1 }}px)" class="limit-height" />
+                <img ng-srcset="{{ model.image_set.all[0].image_thumbnail_1x.url }}" class="limit-height" />
+            </picture>
+
+            <picture class="limit-height" ng-if="model.image_set.all[0].image_thumbnail_2x.style == 'portrait'">
+                <source ng-srcset="{{ model.image_set.all[0].image_thumbnail_3x.url }}" media="(max-width: {{ breakPoint }}px)" class="limit-height" />
+                <source ng-srcset="{{ model.image_set.all[0].image_thumbnail_1x.url }}" media="(min-width: {{ breakPoint + 1 }}px)" class="limit-height" />
+                <img ng-srcset="{{ model.image_set.all[0].image_thumbnail_1x.url }}" class="limit-height" />
+            </picture>
 
         </div>
     </a>

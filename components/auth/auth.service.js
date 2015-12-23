@@ -16,7 +16,23 @@ angular.module('odmbase')
       } );
 
     }
+    Auth.reloadUserData = function(callback) {
+       if($cookieStore.get('key')) {
+          currentUser = User;
+          User.one().me().then(function(model) {
+            currentUser = model;
+            Auth.setCurrentUser(currentUser);
+            callback && callback(currentUser);
+          }, function (err) {
+              if (err.status == 403) {
+                Auth.logout();
+                callback && callback(err);
+                $window.location('/');
+              }
+          } );
 
+       }
+    }
 
     Auth.setApiKey = function(data) {
       if (data && data.key && data.username) {
@@ -95,9 +111,9 @@ angular.module('odmbase')
 
         user.access_token = access_token;
         user.provider = provider;
-
+        console.log(user);
+        Auth.loading = true;
         user.social_sign().then(function(model) {
-
 
           Auth.setApiKey(model);
           Auth.setCurrentUser(model);
@@ -174,13 +190,14 @@ angular.module('odmbase')
 
     Auth.socialSign = function(provider, redirectUrl, confirmRequired, confirmWithModal, notReloadPageAfterSign) {
 
-        console.log(Auth.successCallback);
+        console.log(confirmRequired);
 
 
         // do callback ex redirect to page
         redirectUrl = (Auth.$scope && Auth.$scope.param && Auth.$scope.param.redirectUrl) || redirectUrl || 'profile';
         var cb = function (err, model) {
-            if (model.is_new && confirmRequired) {
+            Auth.loading = false;
+            if (model.is_new && confirmRequired !== false) {
                 if (confirmWithModal) {
                     Modal.open('/static/app/odmbase/account/modal/social_confirm_modal.html', null, {next: redirectUrl, successCallback: Auth.successCallback});
                 }
@@ -200,6 +217,7 @@ angular.module('odmbase')
             else {
                 //$window.location.reload();
                 $state.go($state.$current, null, { reload: true });
+                Auth.successCallback(model)
             }
         };
 
