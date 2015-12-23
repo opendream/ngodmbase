@@ -19,7 +19,7 @@ angular.module('odmbase').config(['$translateProvider', function ($translateProv
         ERROR: {
             REQUIRED: 'Required field',
             IS_REQUIRED: 'is required.',
-            IMAGE_SIZE: 'Please check your uploading image size must not exceed 2MB. If exceed, system will automatically remove it.',
+            IMAGE_SIZE: 'Automatically resize large images',
         },
         FORM: {
             SELECT: 'Select ',
@@ -59,7 +59,7 @@ angular.module('odmbase').config(['$translateProvider', function ($translateProv
         ERROR: {
             REQUIRED: 'จำเป็นต้องกรอก',
             IS_REQUIRED: 'จำเป็นต้องกรอก',
-            IMAGE_SIZE: 'กรุณาตรวจสอบรูปของคุณที่กำลังอัพโหลด โดยจะต้องไม่เกิน 2MB ถ้าเกินระบบจะลบรูปออกโดยอัตโนมัติ',
+            IMAGE_SIZE: 'ระบบจะย่อรูปที่มีขาดใหญ่เกินให้อัตโนมัติ',
         },
         FORM: {
             SELECT: 'เลือก',

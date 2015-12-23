@@ -170,11 +170,13 @@ angular.module('odmbase').directive('imageRender', function() {
             url: '=',
             elementClass: '@',
             ratio: '@',
-            crop: '='
+            crop: '=',
+            breakPoint: '=?'
         },
         controller: ['$scope', function($scope) {
             $scope.style = $scope.style || 'ratio'; // ratio, static
             $scope.ratio = $scope.ratio || (1/1);
+            $scope.breakPoint = $scope.breakPoint || 10000;
 
             $scope.padding = 1/$scope.ratio*100;
             if ($scope.crop) {
@@ -279,7 +281,8 @@ var mediaRenderOrModalLink = {
         isDirect: '=?',
         templateItemUrl: '=',
         param: '=?',
-        loginRequired: '='
+        loginRequired: '=',
+        breakPoint: '=?'
     },
     controller: ['$scope', 'Modal', 'Auth', '$location', '$window', function($scope, Modal, Auth, $location, $window) {
 
@@ -292,6 +295,10 @@ var mediaRenderOrModalLink = {
         }
         $scope.Math = Math;
         $scope.param = $scope.param || {};
+
+
+
+        $scope.breakPoint = $scope.breakPoint || 10000;
 
         var modalSize;
         $scope.$watch('model.media_selected', function (newVal, oldVal) {

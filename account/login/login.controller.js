@@ -60,6 +60,12 @@ function LoginCtrl ($scope, Auth, $location, Modal, $window, $state) {
     Auth.$scope = $scope;
     $scope.socialSign = Auth.socialSign;
 
+    $scope.$watch(function () { return  Auth.loading;}, function (newVal, oldVal) {
+    if (typeof newVal !== 'undefined') {
+        $scope.loading = Auth.loading;
+    }
+});
+
     $scope.signupClick = function () {
         if($scope.$parent.openUserForm) {
             $scope.$parent.openUserForm('signup');

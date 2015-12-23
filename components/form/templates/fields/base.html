@@ -149,8 +149,8 @@
                   </div>
                 </div>
 
-                <div ng-show="$index==numImageFiles" name="{{ nameItem }}" class="drop-image" ng-file-drop drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true">
-                  <div name="{{ nameItem }}" class="select-image glyphicon" ng-file-select drag-over-class="dragover" ng-file-change="upload($files)" ng-file-change="upload($files)" drag-over-class="dragover" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true">
+                <div ng-show="$index==numImageFiles" name="{{ nameItem }}" class="drop-image" ng-file-drop drag-over-class="dragover" ng-file-change="upload($files)" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true" ng-file-resize="{width: 100, height: 100}">
+                  <div name="{{ nameItem }}" class="select-image glyphicon" ng-file-select drag-over-class="dragover" ng-file-change="upload($files)" accept=".jpg,.jpeg,.png,.gif" type="file" ng-multiple="true" ng-file-resize="{width: 100, height: 100}">
                     <div class="glyphicon glyphicon-plus add-image-image"></div>
                     <div class="add-image-label">{{ 'FORM.IMAGE.ADD' | translate }}</div>
                   </div>

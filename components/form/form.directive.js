@@ -74,6 +74,55 @@ function dataURItoBlob(dataURI, callback) {
     }
 }
 
+function resizeImage(file, callback) {
+
+    if(file.type.match(/image.*/)) {
+        console.log('An image has been loaded');
+
+        // Load the image
+        var reader = new FileReader();
+        reader.onload = function (readerEvent) {
+            var image = new Image();
+
+            image.onload = function (imageEvent) {
+
+
+                // Resize the image
+                var canvas = document.createElement('canvas'),
+                    max_size = 1024,// TODO : pull max size from a site config
+                    width = image.width,
+                    height = image.height;
+                if (width > height) {
+                    if (width > max_size) {
+                        height *= max_size / width;
+                        width = max_size;
+                    }
+                } else {
+                    if (height > max_size) {
+                        width *= max_size / height;
+                        height = max_size;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                var dataUrl = canvas.toDataURL('image/jpeg');
+                var resizedImage = dataURItoBlob(dataUrl);
+
+                callback(resizedImage);
+
+                console.log('resizedImage', resizedImage);
+                $.event.trigger({
+                    type: "imageResized",
+                    blob: resizedImage,
+                    url: url
+                })};
+            image.src = readerEvent.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
 function CommonField () {
     return {
         restrict: 'A',
@@ -381,41 +430,49 @@ function CommonField () {
                         for (var i = 0; i < files.length; i++) {
 
                             var file = files[i];
-                            $upload.upload({
-                                url: '/api/v1/image/',
-                                file: file,
-                                fileFormDataName: 'image'
-                            }).progress(function (evt) {
-                                if (typeof evt.config.index == 'undefined') {
-                                    evt.config.index = $scope.numImageFiles;
-                                    $scope.numImageFiles++;
-                                }
-                                $scope.imageList[evt.config.index] = {
-                                    'progressPercentage': parseInt(100.0 * evt.loaded / evt.total)
-                                };
 
-                                if (!$scope.maxUploads) {
-                                    $scope.imageList[$scope.numImageFiles] = null;
-                                }
-                            }).success(function (data, status, headers, config) {
-                                console.log($scope.imageList);
-                                $scope.model[$scope.name].all.push(data);
-                                $scope.form[$scope.name].$dirty = true;
-                                if (!$scope.imageList[config.index]) {
-                                    $scope.imageList[config.index] = {};
-                                }
-                                $scope.imageList[config.index]['data'] = data;
-                            }).error(function (data, status, headers, config) {
-                                if (status == 413) {
-                                  // TODO: alert custom message
-                                }
-                                else {
-                                  // TODO: alert default message
-                                }
-                                $scope.form[$scope.name].$dirty = true;
-                                removeImageClient(config.index);
+
+                            resizeImage(file, function (resizedImage) {
+                                file = resizedImage;
+
+                                $upload.upload({
+                                    url: '/api/v1/image/',
+                                    file: file,
+                                    fileFormDataName: 'image'
+                                }).progress(function (evt) {
+                                    if (typeof evt.config.index == 'undefined') {
+                                        evt.config.index = $scope.numImageFiles;
+                                        $scope.numImageFiles++;
+                                    }
+                                    $scope.imageList[evt.config.index] = {
+                                        'progressPercentage': parseInt(100.0 * evt.loaded / evt.total)
+                                    };
+
+                                    if (!$scope.maxUploads) {
+                                        $scope.imageList[$scope.numImageFiles] = null;
+                                    }
+                                }).success(function (data, status, headers, config) {
+                                    $scope.model[$scope.name].all.push(data);
+                                    $scope.form[$scope.name].$dirty = true;
+                                    if (!$scope.imageList[config.index]) {
+                                        $scope.imageList[config.index] = {};
+                                    }
+                                    $scope.imageList[config.index]['data'] = data;
+                                }).error(function (data, status, headers, config) {
+                                    if (status == 413) {
+                                      // TODO: alert custom message
+                                    }
+                                    else {
+                                      // TODO: alert default message
+                                    }
+                                    $scope.form[$scope.name].$dirty = true;
+                                    removeImageClient(config.index);
+
+                                });
 
                             });
+
+
                         }
                     }
                 };
@@ -423,7 +480,6 @@ function CommonField () {
                 $scope.removeImage = function (image, index) {
 
                     $scope.model[$scope.name].deleteImageSet.push(image);
-                    console.log($scope.model[$scope.name].deleteImageSet);
                     removeImageClient(index);
 
                 };
