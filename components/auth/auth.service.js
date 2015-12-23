@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('odmbase')
-  .factory('Auth', ['$location', '$rootScope', '$http', 'User', 'Modal', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', '$state', 'ngCart', function Auth($location, $rootScope, $http, User, Modal, $cookieStore, $q, Facebook, GooglePlus, $interval, $window, $state, ngCart) {
+  .factory('Auth', ['$location', '$rootScope', '$http', 'User', 'Modal', '$cookieStore', '$q', 'Facebook', 'GooglePlus', '$interval', '$window', '$state', function Auth($location, $rootScope, $http, User, Modal, $cookieStore, $q, Facebook, GooglePlus, $interval, $window, $state) {
     var Auth = {};
     var currentUser = null;
     if($cookieStore.get('key')) {
@@ -83,7 +83,6 @@ angular.module('odmbase')
     Auth.logout = function() {
       $cookieStore.remove('key');
       currentUser = {};
-      ngCart.empty();
     };
 
     Auth._socialSign = function (provider, callback) {
